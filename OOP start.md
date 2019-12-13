@@ -29,30 +29,30 @@
 package day7;	
 
 class Student{							   //Student 클래스 생성(여기서 클래스 명 시작은 대문자)
-	String name;												//1속성	 3개의 속성(변수)
-	int age;													//2속성
-	String subject;												//3속성	
-	void printStudentInfo() {									//1기능	 2개의 기능(메서드)
+	String name;					//1속성	 3개의 속성(변수)
+	int age;						//2속성
+	String subject;					//3속성	
+	void printStudentInfo() {		//1기능	 2개의 기능(메서드)
 		System.out.println(name+"학생은 나이가 "+age+" 입니다.");
 	}
-	void study() {												//2기눙	 
+	void study() {					//2기능	 
 		System.out.println(name+"학생은 "+subject+" 과목을 학습합니다.");
 	}
 }
 public class StudentTest {										//public classs는 꼭 한개!
 
 	public static void main(String[] args) {
-		Student st1 = new Student();							//객체 생성 식
-		System.out.println(st1);								//값:day7.Student@15db9742
-		System.out.println(st1.name);							//기본값 Null
-		System.out.println(st1.age);							//기본값 0
-		System.out.println(st1.subject);						//기본값 Null
-		st1.printStudentInfo();									//Null 은 나이가 0 입니다.
+		Student st1 = new Student();	//객체 생성 식
+		System.out.println(st1);		//값:day7.Student@15db9742
+		System.out.println(st1.name);	//기본값 Null
+		System.out.println(st1.age);	//기본값 0
+		System.out.println(st1.subject);//기본값 Null
+		st1.printStudentInfo();			//Null 은 나이가 0 입니다.
 		st1.study();
-		st1.name="듀크";										  //여기서 입력해주면
+		st1.name="듀크";				 //여기서 입력해주면
 		st1.age=24;
 		st1.subject="HTML5";
-		st1.printStudentInfo();								//듀크는 나이가 24 입니다.
+		st1.printStudentInfo();			//듀크는 나이가 24 입니다.
 		st1.study();
 		
 		Student st2 = new Student();		
