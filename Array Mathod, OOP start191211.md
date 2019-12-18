@@ -66,14 +66,14 @@ printArray)를 작성해놓으면
 - 생성방법
 
   ```
-  클래스명 참조변수명;				//클래스명 첫글짜는 대문자
+  클래스명 참조변수명;				//클래스명 첫글자는 대문자
   참조변수명 = new 클래스명();
   
   ex) Tv t;
   	t = new Tv();
   	t.channel = 7;
   	t.channelDown();
-  	System.out.pringln(t.channel);
+  	System.out.println(t.channel);
   ```
 
 
@@ -102,10 +102,12 @@ printArray)를 작성해놓으면
 
   4. 객체 생성시 수행해야하는 기능 또는,
 
-     **객체 생성시 데이터를 전달 받아 멤버변수들의 값을 "초기화**" 하는 기능(다수데이터 입력)
+     **객체 생성시 데이터를 전달 받아 멤버변수들의 값을 "초기화**" 하는 기능
+
+     (다수데이터 입력)
 
   5. 생성자 메서드의 아규먼트 형식으로 데이터를 전달해야한다. 
-
+  
      ```
      	StudentNew(String p1,int p2, String p3){	}
      	.

@@ -28,7 +28,7 @@
 ```java
 package day7;	
 
-class Student{							   //Student 클래스 생성(여기서 클래스 명 시작은 대문자)
+class Student{			 //Student 클래스 생성(여기서 클래스 명 시작은 대문자)
 	String name;					//1속성	 3개의 속성(변수)
 	int age;						//2속성
 	String subject;					//3속성	

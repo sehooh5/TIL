@@ -1,4 +1,4 @@
-# 191210(Tue)-printf, Method
+# 191210(Tue)-printf, Method 
 
 #### about Print
 
