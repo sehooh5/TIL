@@ -4,15 +4,15 @@ public class HashMapExample1 {
     public static void main(String args[]) {
         HashMap<String, Integer> map = 
         		new HashMap<String, Integer>();
-        map.put("ÇØ¸®", new Integer(95));
-        map.put("Çì¸£¹Ì¿Â´À", 100);
-        map.put("·Ğ", 85);
-        map.put("µå·¹ÀÌÄÚ", 93);
-        map.put("³×ºô", 70);
-        map.put("Çì¸£¹Ì¿Â´À", 55); // JDK 1.5 Auto Boxing ±¸¹® //Áßº¹µÇ¼­ 55·Î ´ëÃ¼
+        map.put("í•´ë¦¬", new Integer(95));
+        map.put("í—¤ë¥´ë¯¸ì˜¨ëŠ", 100);
+        map.put("ë¡ ", 85);
+        map.put("ë“œë ˆì´ì½”", 93);
+        map.put("ë„¤ë¹Œ", 70);
+        map.put("í—¤ë¥´ë¯¸ì˜¨ëŠ", 55); // JDK 1.5 Auto Boxing êµ¬ë¬¸ //ì¤‘ë³µë˜ì„œ 55ë¡œ ëŒ€ì²´
         System.out.println(map);
-        Integer num = map.get("Çì¸£¹Ì¿Â´À");
-        System.out.println("Çì¸£¹Ì¿Â´ÀÀÇ ¼ºÀûÀº? " + num);
+        Integer num = map.get("í—¤ë¥´ë¯¸ì˜¨ëŠ");
+        System.out.println("í—¤ë¥´ë¯¸ì˜¨ëŠì˜ ì„±ì ì€? " + num);
         System.out.println(map);
     }
 }

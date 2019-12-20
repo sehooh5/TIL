@@ -3,17 +3,17 @@ import java.util.*;
 public class ArrayListExample2 {
     public static void main(String args[]) {
         ArrayList<String> list = new ArrayList<String>();
-        list.add("Æ÷µµ");            
-        list.add("µş±â");           
-        list.add("º¹¼ş¾Æ");  
+        list.add("í¬ë„");            
+        list.add("ë”¸ê¸°");           
+        list.add("ë³µìˆ­ì•„");  
         System.out.println(list);
-        list.add(2, "Å°À§"); 
+        list.add(2, "í‚¤ìœ„"); 
         System.out.println(list);
-        list.set(0, "¿À·»Áö"); 
+        list.set(0, "ì˜¤ë Œì§€"); 
         System.out.println(list);
         list.remove(1);   
         System.out.println(list);
-        list.remove("Å°À§");
+        list.remove("í‚¤ìœ„");
         System.out.println(list);
         int num = list.size();
         for (int cnt = 0; cnt < num; cnt++) {

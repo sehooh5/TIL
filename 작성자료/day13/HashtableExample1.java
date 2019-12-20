@@ -4,14 +4,14 @@ public class HashtableExample1 {
     public static void main(String args[]) {
         Hashtable<String, Integer> hashtable = 
         		new Hashtable<String, Integer>();
-        hashtable.put("ÇØ¸®", new Integer(95));
-        hashtable.put("Çì¸£¹Ì¿Â´À", new Integer(100));
-        hashtable.put("·Ğ", new Integer(85));
-        hashtable.put("µå·¹ÀÌÄÚ", new Integer(93));
-        hashtable.put("³×ºô", new Integer(70));
-        hashtable.put("Çì¸£¹Ì¿Â´À", 55); // JDK 1.5 Auto Boxing ±¸¹®
+        hashtable.put("í•´ë¦¬", new Integer(95));
+        hashtable.put("í—¤ë¥´ë¯¸ì˜¨ëŠ", new Integer(100));
+        hashtable.put("ë¡ ", new Integer(85));
+        hashtable.put("ë“œë ˆì´ì½”", new Integer(93));
+        hashtable.put("ë„¤ë¹Œ", new Integer(70));
+        hashtable.put("í—¤ë¥´ë¯¸ì˜¨ëŠ", 55); // JDK 1.5 Auto Boxing êµ¬ë¬¸
         System.out.println(hashtable);
-        Integer num = hashtable.get("Çì¸£¹Ì¿Â´À");
-        System.out.println("Çì¸£¹Ì¿Â´ÀÀÇ ¼ºÀûÀº? " + num);
+        Integer num = hashtable.get("í—¤ë¥´ë¯¸ì˜¨ëŠ");
+        System.out.println("í—¤ë¥´ë¯¸ì˜¨ëŠì˜ ì„±ì ì€? " + num);
     }
 }

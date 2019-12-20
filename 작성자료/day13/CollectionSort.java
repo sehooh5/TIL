@@ -5,21 +5,21 @@ public class CollectionSort {
       String[] array={"JAVA", "SERVLET", "JDBC", "JSP","RMI"};
       List<String> list=new ArrayList<String>();      
       Collections.addAll(list, array);
-      System.out.println("list¿¡ ÀúÀåµÈ ¸ğµç µ¥ÀÌÅÍ : "+list);
+      System.out.println("listì— ì €ì¥ëœ ëª¨ë“  ë°ì´í„° : "+list);
 
       int index=Collections.binarySearch(list,"JDBC");
-      System.out.println("\"JDBC\" °¡ ÀúÀåµÈ À§Ä¡ : "+index);
+      System.out.println("\"JDBC\" ê°€ ì €ì¥ëœ ìœ„ì¹˜ : "+index);
      
       String maxStr=Collections.max(list);
       String minStr=Collections.min(list);
-      System.out.println("ÃÖ´ë°ª:"+maxStr);
-      System.out.println("ÃÖ¼Ò°ª:"+minStr);  
+      System.out.println("ìµœëŒ€ê°’:"+maxStr);
+      System.out.println("ìµœì†Œê°’:"+minStr);  
 
       Collections.sort(list);
-      System.out.println("listÀÇ µ¥ÀÌÅÍµéÀ» ¿À¸§Â÷¼øÀ¸·Î ¼ÒÆÃÇÑ °á°ú : "+list);
+      System.out.println("listì˜ ë°ì´í„°ë“¤ì„ ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ì†ŒíŒ…í•œ ê²°ê³¼ : "+list);
    
       Collections.shuffle(list);
-      System.out.println("listÀÇ µ¥ÀÌÅÍµéÀ» ¼¯Àº °á°ú : "+list);
+      System.out.println("listì˜ ë°ì´í„°ë“¤ì„ ì„ì€ ê²°ê³¼ : "+list);
       
       List<Integer> list2=new ArrayList<Integer>();
       list2.add(10);
@@ -28,8 +28,8 @@ public class CollectionSort {
       list2.add(5);
       int maxNum =Collections.max(list2);
       int minNum=Collections.min(list2);
-      System.out.println("ÃÖ´ë°ª:"+maxNum);
-      System.out.println("ÃÖ¼Ò°ª:"+minNum);  
+      System.out.println("ìµœëŒ€ê°’:"+maxNum);
+      System.out.println("ìµœì†Œê°’:"+minNum);  
       
    }
 }

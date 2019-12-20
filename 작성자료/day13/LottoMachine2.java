@@ -16,7 +16,7 @@ public class LottoMachine2 {
 		
 		Iterator<Integer> iterator = lotto.iterator();
 		
-		System.out.printf("¿À´ÃÀÇ ·Î¶Ç¹øÈ£ : [%d",iterator.next());
+		System.out.printf("ì˜¤ëŠ˜ì˜ ë¡œë˜ë²ˆí˜¸ : [%d",iterator.next());
 		while(iterator.hasNext()) {
 			int i = iterator.next();
 			System.out.printf(", %d",i);

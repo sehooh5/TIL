@@ -3,14 +3,14 @@ import java.util.*;
 class ArrayListExample3 {
     public static void main(String args[]) {
         ArrayList<String> list = new ArrayList<String>();
-        list.add("¸Ó·ç");            
-        list.add("»ç°ú");           
-        list.add("¾ŞµÎ");       
-        list.add("ÀÚµÎ");       
-        list.add("»ç°ú");         
-        int index1 = list.indexOf("»ç°ú"); 
-        int index2 = list.lastIndexOf("»ç°ú"); 
-        System.out.println("Ã¹¹øÂ° »ç°ú: " + index1);
-        System.out.println("¸¶Áö¸· »ç°ú: " + index2);
+        list.add("ë¨¸ë£¨");            
+        list.add("ì‚¬ê³¼");           
+        list.add("ì•µë‘");       
+        list.add("ìë‘");       
+        list.add("ì‚¬ê³¼");         
+        int index1 = list.indexOf("ì‚¬ê³¼"); 
+        int index2 = list.lastIndexOf("ì‚¬ê³¼"); 
+        System.out.println("ì²«ë²ˆì§¸ ì‚¬ê³¼: " + index1);
+        System.out.println("ë§ˆì§€ë§‰ ì‚¬ê³¼: " + index2);
     }
 }

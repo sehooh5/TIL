@@ -3,9 +3,9 @@ import java.util.*;
 class LinkedListExample3 {
     public static void main(String args[]) {
         LinkedList<String> list = new LinkedList<String>();
-        list.add("¸Á°í");            
-        list.add("ÆÄÀÎ¾ÖÇÃ");           
-        list.add("¹Ù³ª³ª");   
+        list.add("ë§ê³ ");            
+        list.add("íŒŒì¸ì• í”Œ");           
+        list.add("ë°”ë‚˜ë‚˜");   
         Iterator<String> iterator = list.iterator();   
         while (iterator.hasNext()) {
             String str = iterator.next();

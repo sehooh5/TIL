@@ -1,11 +1,11 @@
 package day13;
 
 import java.util.Iterator;
-import java.util.LinkedList;	//ctrl+shift+O ÇÏ¸é »ç¿ëÇÑ ¸Ş¼­µå Ã£¾ÆÁÜ
+import java.util.LinkedList;	//ctrl+shift+O í•˜ë©´ ì‚¬ìš©í•œ ë©”ì„œë“œ ì°¾ì•„ì¤Œ
 
 
 class Person{
-		private String name;		//ÀÚ¼Õ, Å¬·¡½º ¸ğµÎ Á¢±Ù ºÒ°¡- Person Å¬·¡½º ³»¿¡¼­¸¸ »ç¿ë
+		private String name;		//ìì†, í´ë˜ìŠ¤ ëª¨ë‘ ì ‘ê·¼ ë¶ˆê°€- Person í´ë˜ìŠ¤ ë‚´ì—ì„œë§Œ ì‚¬ìš©
 		Person(String name){
 			this.name = name;
 		}
@@ -31,11 +31,11 @@ public class FriendTestLinkedList {
 		LinkedList<Friend> info = new LinkedList<>();
 
 		
-		info.add(new Friend ("¿À¼¼È£","12345678","seho@seho.com"));
-		info.add(new Friend ("¿À¼¼È£","12345678","seho@seho.com"));
-		info.add(new Friend ("¿À¼¼È£","12345678","seho@seho.com"));
-		info.add(new Friend ("¿À¼¼È£","12345678","seho@seho.com"));
-		info.add(new Friend ("¿À¼¼È£","12345678","seho@seho.com"));
+		info.add(new Friend ("ì˜¤ì„¸í˜¸","12345678","seho@seho.com"));
+		info.add(new Friend ("ì˜¤ì„¸í˜¸","12345678","seho@seho.com"));
+		info.add(new Friend ("ì˜¤ì„¸í˜¸","12345678","seho@seho.com"));
+		info.add(new Friend ("ì˜¤ì„¸í˜¸","12345678","seho@seho.com"));
+		info.add(new Friend ("ì˜¤ì„¸í˜¸","12345678","seho@seho.com"));
 		
 		for(int i = 0; i<info.size();i++) {	
 			Friend list = info.get(i);
@@ -43,10 +43,10 @@ public class FriendTestLinkedList {
 		}
 		System.out.println("-------------------------");
 		for(Friend value : info) {
-			System.out.println(value.getInfo()); 	//for eace ÀÍÈ÷±â
+			System.out.println(value.getInfo()); 	//for eace ìµíˆê¸°
 		}
 		System.out.println("-------------------------");
-		Iterator<Friend> iter = info.iterator();	//iteratop ´Ù½Ã°øºÎ!!
+		Iterator<Friend> iter = info.iterator();	//iteratop ë‹¤ì‹œê³µë¶€!!
 		while (iter.hasNext()) {
 			Friend fri = iter.next();
             System.out.println(fri.getInfo());
@@ -61,7 +61,7 @@ public class FriendTestLinkedList {
 //	private String phoneNum;
 //	private String email;
 //	Friend(String phoneNum, String email, String name){
-//		super(name); // privateÀÎµ¥ ¿Ö Á¢±Ù µÈ ÀÌÀ¯´Â?
+//		super(name); // privateì¸ë° ì™œ ì ‘ê·¼ ëœ ì´ìœ ëŠ”?
 //		this.phoneNum = phoneNum;
 //		this.email = email;
 //	}
@@ -69,7 +69,7 @@ public class FriendTestLinkedList {
 //	private String phoneNum;
 //	private String email;
 //	Friend(String x, String y, String z){
-//		super(x); // privateÀÎµ¥ ¿Ö Á¢±Ù µÈ ÀÌÀ¯´Â?
+//		super(x); // privateì¸ë° ì™œ ì ‘ê·¼ ëœ ì´ìœ ëŠ”?
 //		this.phoneNum = y;
 //		this.email = z;
 //	}
@@ -79,13 +79,13 @@ public class FriendTestLinkedList {
 //}
 //public class FriendTest {
 //	public static void main(String[] args) {
-//		Friend[] f = new Friend[5]; // º¯¼ö 5°³ ¼³Á¤
-//		f[0] = new Friend("ÀÌ¿µ±â","0000","ee249@naver.com");
-//		f[1] = new Friend("¿µ±â","0000","ee24@naver.com");
-//		f[2] = new Friend("¿µ±â","0000","ee249@navr.com");
-//		f[3] = new Friend("ÀÌ±â","0000","ee249@navercom");
-//		f[4] = new Friend("ÀÌ","0000","ee249@nav.com");
-//		System.out.println("ÀÌ¸§      ÀüÈ­¹øÈ£         ¸ŞÀÏÁÖ¼Ò");
+//		Friend[] f = new Friend[5]; // ë³€ìˆ˜ 5ê°œ ì„¤ì •
+//		f[0] = new Friend("ì´ì˜ê¸°","0000","ee249@naver.com");
+//		f[1] = new Friend("ì˜ê¸°","0000","ee24@naver.com");
+//		f[2] = new Friend("ì˜ê¸°","0000","ee249@navr.com");
+//		f[3] = new Friend("ì´ê¸°","0000","ee249@navercom");
+//		f[4] = new Friend("ì´","0000","ee249@nav.com");
+//		System.out.println("ì´ë¦„      ì „í™”ë²ˆí˜¸         ë©”ì¼ì£¼ì†Œ");
 //		System.out.println("-----------------------");
 //		for(int i=0;i<5;i++) {
 //			System.out.println(f[i].getInfo());

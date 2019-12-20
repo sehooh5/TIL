@@ -2,9 +2,9 @@ package day13;
 import java.util.*;
 public class GenericTestNew {
 	public static void main(String[] args) {
-		// Á¦³×¸¯½º ¶ó´Â ±¸¹®ÀÌ Àû¿ëµÇ¾î ¸¸µé¾îÁø Å¬·¡½ºÀÇ °´Ã¼ »ı¼º½Ã
-		// Å¸ÀÔ ÆÄ¶ó¹ÌÅÍ¶ó´Â °ÍÀ» »ç¿ëÇÑ´Ù. 
-		LinkedList<String> list = new LinkedList<String>();  // Å¸ÀÔÆÄ¶ó¹ÌÅÍ
+		// ì œë„¤ë¦­ìŠ¤ ë¼ëŠ” êµ¬ë¬¸ì´ ì ìš©ë˜ì–´ ë§Œë“¤ì–´ì§„ í´ë˜ìŠ¤ì˜ ê°ì²´ ìƒì„±ì‹œ
+		// íƒ€ì… íŒŒë¼ë¯¸í„°ë¼ëŠ” ê²ƒì„ ì‚¬ìš©í•œë‹¤. 
+		LinkedList<String> list = new LinkedList<String>();  // íƒ€ì…íŒŒë¼ë¯¸í„°
 		list.add("java");
 		list.add("100");
 		list.add("servlet");
@@ -21,7 +21,7 @@ public class GenericTestNew {
 		
 		Iterator<String> iter = list.iterator();
 		while(iter.hasNext()){
-			String s = iter.next();			//ÀåÁ¡2. Çüº¯È¯À» ¾ÈÇØÁàµµ ±¦Âú´Ù
+			String s = iter.next();			//ì¥ì 2. í˜•ë³€í™˜ì„ ì•ˆí•´ì¤˜ë„ ê´œì°®ë‹¤
 			System.out.println(s);
 		}
 	}

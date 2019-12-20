@@ -110,7 +110,7 @@
    - list.size(); 길이
    - list.add(); 더해주기
 
-4. HashTable, HashMap
+4. HashTable, HashMap,HashSet
 
    - 버켓을 만들어서 key값을 이용하여 데이터 넣을 통 번호를 계산하는 구조
    - 버켓 개수가 많으면 세세하게 정리할 수 있다.
@@ -119,8 +119,67 @@
    - 데이터 넣기 : hashtable.put("해리",new Integer(95));
    - 데이터 뽑기 : key 값으로 찾음// Integer num = hashtable.get("해리");
    - 지우기 : hashtable.remove("해리");
-
-   - 중복된 키가 들어갈 경우 기존 데이터를 무조건 대체함
+- 중복된 키가 들어갈 경우 기존 데이터를 무조건 대체함
    - 기본적으로 16개의 버켓을 만든다..물론 늘려줄 수 있다
    - hash.containsKey(key값 ) ==> key 값이 중복되면 true를 리턴
    - hash.keySet() ==> key의 값만 불러오기
+   
+   - **HashCode 로 오버라이딩**
+   
+     - 버켓을 판단할 때 쓰는 것이 바로 해쉬 값, HashCode
+   
+     - 사용하려는 클래스에 오버라이딩 하지 않으면 Object로 상속받은 hashCode메소드를 그대로 사용하여 출력을 할 수 없다.
+   
+     - **equals** 또한 오버라이딩 해줘야 한다.
+   
+     - ```java
+       package day14;
+       
+       import java.util.HashSet;
+       
+       class Member3 {
+       	private int id;
+       	private String name;
+       	private String password;
+       	Member3(int id, String name, String password) {
+       		this.id = id;
+       		this.name = name;
+       		this.password = password;
+       	}
+       	public boolean equals(Object o) {	//equals 오버라이딩
+       		if (o != null && o instanceof Member3) {
+       			Member3 m = (Member3) o;			
+       			if (id ==  m.id && 
+       					name.equals(m.name) && 
+       							password.equals(m.password))
+       				return true;
+       		}
+       		return false;
+       	}	
+       	public int hashCode() {//hashCode 오버라이딩 하여 key로 사용
+       		return id+name.hashCode()+password.hashCode();	
+       	}
+       	
+       	public String toString() {
+       		return "("+id+":"+name+":"+password+")";
+       	}
+       }
+       public class ObjectTest3 {
+       	public static void main(String args[]) {
+       		Member3 obj1 = new Member3(10, "자바", "duke");
+       		Member3 obj2 = new Member3(10, "자바", "duke");
+       		Member3 obj3 = new Member3(20, "자바", "duke");
+       		System.out.println(obj1.hashCode());
+       		System.out.println(obj2.hashCode());		
+       		System.out.println(obj3.hashCode());	
+       		HashSet<Member3> set = new HashSet<>();
+       		set.add(obj1);
+       		set.add(obj2);
+       		set.add(obj3);
+       		System.out.println("저장된 데이터의 갯수 : " + set.size());
+       		System.out.println(set);
+       	}
+       
+       ```
+   
+       

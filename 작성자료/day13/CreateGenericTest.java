@@ -1,7 +1,7 @@
 package day13;
 import java.util.Date;
-public class CreateGenericTest { //***Generic = °´Ã¼ »ı¼ºµÇ´Â Å¸ÀÔÀÌ °´Ã¤ »ı¼º½Ã Á¤ÇÏ´Â ÀÏ¹İÈ­ ±¸¹®
-	public static void main(String[] args) {//¸¸µé¶§µµ ÀÚÀ¯·Ó°Ô Çüº¯È¯¿¡ ´ëÇØ¼­ ÀÚÀ¯·Ó°Ô ÇÒ ¼ö ÀÖ´Ù.
+public class CreateGenericTest { //***Generic = ê°ì²´ ìƒì„±ë˜ëŠ” íƒ€ì…ì´ ê°ì±„ ìƒì„±ì‹œ ì •í•˜ëŠ” ì¼ë°˜í™” êµ¬ë¬¸
+	public static void main(String[] args) {//ë§Œë“¤ë•Œë„ ììœ ë¡­ê²Œ í˜•ë³€í™˜ì— ëŒ€í•´ì„œ ììœ ë¡­ê²Œ í•  ìˆ˜ ìˆë‹¤.
 		Value1 o1 = new Value1();
 		o1.put("abc");
 		String s1 = o1.get(); 
@@ -14,7 +14,7 @@ public class CreateGenericTest { //***Generic = °´Ã¼ »ı¼ºµÇ´Â Å¸ÀÔÀÌ °´Ã¤ »ı¼º½Ã
 		
 		Value3<String> o3 = new Value3<>();		
 		o3.put("abc");
-		String s3 = (String)o3.get(); //Çüº¯È¯ ¾ÈÇØÁàµµ µÈ´Ù. Å¸ÀÔ ÆÄ¶ó¹ÌÅÍ°¡ String ÀÌ±â ¶§¹®¿¡
+		String s3 = (String)o3.get(); //í˜•ë³€í™˜ ì•ˆí•´ì¤˜ë„ ëœë‹¤. íƒ€ì… íŒŒë¼ë¯¸í„°ê°€ String ì´ê¸° ë•Œë¬¸ì—
 		System.out.println(s3);	
 		
 		Value3<Date> o4 = new Value3<Date>();		
@@ -35,18 +35,18 @@ class Value1 {
 	}
 }
 class Value2 {
-	Object obj;	//¸ğµç °´Ã¼ ÀúÀå °¡´É-Object ÀÌ±â ¶§¹®
-	void put(Object obj){ //ÀÔ·ÂÇÒ¶§´Â »ó°ü¾øÀ½
+	Object obj;	//ëª¨ë“  ê°ì²´ ì €ì¥ ê°€ëŠ¥-Object ì´ê¸° ë•Œë¬¸
+	void put(Object obj){ //ì…ë ¥í• ë•ŒëŠ” ìƒê´€ì—†ìŒ
 		this.obj = obj;
 	}
-	Object get() {		//²¨³¾¶§´Â Çüº¯È¯ ÇØÁà¾ß ÇÑ´Ù.
+	Object get() {		//êº¼ë‚¼ë•ŒëŠ” í˜•ë³€í™˜ í•´ì¤˜ì•¼ í•œë‹¤.
 		return obj;
 	}
 }
-// Value3<Card> v = new Value3<card>();	//Card ¸¦ ¸ÕÀú ÁÖ¸é ¾Æ·¡ TT°¡ Card·Î ¹Ù²ï´Ù
-// Value3<String> v = new Value3<String>();	//°´Ã¼°¡ »ı¼ºµÇ´Â Å¸ÀÔÀ» ÀÏ¹İÈ­ ½ÃÅ²´Ù. °´Ã¼ »ı¼º ½ÃÁ¡¿¡¼­ Á¤ÇÏ´Â °í±Ş ±¸¹®
+// Value3<Card> v = new Value3<card>();	//Card ë¥¼ ë¨¼ì € ì£¼ë©´ ì•„ë˜ TTê°€ Cardë¡œ ë°”ë€ë‹¤
+// Value3<String> v = new Value3<String>();	//ê°ì²´ê°€ ìƒì„±ë˜ëŠ” íƒ€ì…ì„ ì¼ë°˜í™” ì‹œí‚¨ë‹¤. ê°ì²´ ìƒì„± ì‹œì ì—ì„œ ì •í•˜ëŠ” ê³ ê¸‰ êµ¬ë¬¸
 
-class Value3<TT> {		//< > ¾È¿¡ ³»¿ëÀº »ó°üÀÌ ¾ø´Ù.
+class Value3<TT> {		//< > ì•ˆì— ë‚´ìš©ì€ ìƒê´€ì´ ì—†ë‹¤.
 	TT obj;
 	void put(TT obj){
 		this.obj = obj;

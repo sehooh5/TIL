@@ -3,11 +3,11 @@ import java.util.*;
 public class SetExample1 {
     public static void main(String args[]) {
         HashSet<String> set = new HashSet<String>();
-        System.out.println(set.add("ÀÚ¹Ù"));
-        System.out.println(set.add("Ä«ÇªÄ¡³ë"));
-        System.out.println(set.add("¿¡½ºÇÁ·¹¼Ò"));
-        System.out.println(set.add("ÀÚ¹Ù"));	//ÀÚ¹Ù´Â ¾Õ¿¡ ÀÖ¾î¼­ Áßº¹ ºÒ°¡
-        System.out.println("ÀúÀåµÈ µ¥ÀÌÅÍÀÇ ¼ö = " + set.size());
+        System.out.println(set.add("ìë°”"));
+        System.out.println(set.add("ì¹´í‘¸ì¹˜ë…¸"));
+        System.out.println(set.add("ì—ìŠ¤í”„ë ˆì†Œ"));
+        System.out.println(set.add("ìë°”"));	//ìë°”ëŠ” ì•ì— ìˆì–´ì„œ ì¤‘ë³µ ë¶ˆê°€
+        System.out.println("ì €ì¥ëœ ë°ì´í„°ì˜ ìˆ˜ = " + set.size());
         Iterator<String> iterator = set.iterator();
         while (iterator.hasNext()) {
             String str = iterator.next();

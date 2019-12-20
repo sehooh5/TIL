@@ -3,13 +3,13 @@ import java.util.*;
 class LinkedListExample2 {
     public static void main(String args[]) {
         LinkedList<String> list = new LinkedList<String>();
-        list.add("Æ÷µµ");            
-        list.add("µş±â");           
-        list.add("º¹¼ş¾Æ");          
-        list.add(2, "Å°À§");          
-        list.set(0, "¿À·»Áö");         
+        list.add("í¬ë„");            
+        list.add("ë”¸ê¸°");           
+        list.add("ë³µìˆ­ì•„");          
+        list.add(2, "í‚¤ìœ„");          
+        list.set(0, "ì˜¤ë Œì§€");         
         list.remove(1);             
-        list.remove("Å°À§");        
+        list.remove("í‚¤ìœ„");        
         int num = list.size();
         for (int cnt = 0; cnt < num; cnt++) {
             String str = list.get(cnt);

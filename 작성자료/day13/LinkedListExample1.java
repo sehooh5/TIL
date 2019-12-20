@@ -3,9 +3,9 @@ import java.util.*;
 class LinkedListExample1 {
     public static void main(String args[]) {
         LinkedList<String> list = new LinkedList<String>();
-        list.add("Æ÷µµ");          
-        list.add("µş±â");          
-        list.add("º¹¼ş¾Æ");          
+        list.add("í¬ë„");          
+        list.add("ë”¸ê¸°");          
+        list.add("ë³µìˆ­ì•„");          
         int num = list.size();
         for (int cnt = 0; cnt < num; cnt++) {
             String str = list.get(cnt);
@@ -13,7 +13,7 @@ class LinkedListExample1 {
         }
         LinkedList<Integer> list2 = new LinkedList<Integer>();
         list2.add(new Integer(100));       
-        list2.add(1000);// JDK 1.5 ºÎÅÍ AUTO Boxing ÀÌ¶ó´Â ±¸¹®ÀÌ Áö¿ø
+        list2.add(1000);// JDK 1.5 ë¶€í„° AUTO Boxing ì´ë¼ëŠ” êµ¬ë¬¸ì´ ì§€ì›
         //list2.add("1000");
     }
 }

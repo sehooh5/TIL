@@ -2,26 +2,26 @@ package day13;
 import java.util.*;
 public class GenericTest {
 	public static void main(String[] args) {
-		LinkedList list = new LinkedList();	//Linked Hash µî Á¦³Ê¸¯ Àû¿ëÇÑ ¸®½ºÆ®µé,()¼³Á¤ ¾ÈÇØÁÖ¸é Object °´Ã¼·Î ¼³Á¤µÇ¾î ±× ÀÚ¼Õ °´Ã¼°¡ ¸ğµÎ µé¾î°¥ ¼ö ÀÖµû.
-		list.add("java");		//ÀÚ·á ³ÖÀ» ¶§ »ç¿ë
+		LinkedList list = new LinkedList();	//Linked Hash ë“± ì œë„ˆë¦­ ì ìš©í•œ ë¦¬ìŠ¤íŠ¸ë“¤,()ì„¤ì • ì•ˆí•´ì£¼ë©´ Object ê°ì²´ë¡œ ì„¤ì •ë˜ì–´ ê·¸ ìì† ê°ì²´ê°€ ëª¨ë‘ ë“¤ì–´ê°ˆ ìˆ˜ ìˆë”°.
+		list.add("java");		//ìë£Œ ë„£ì„ ë•Œ ì‚¬ìš©
 		list.add("100");
 		list.add("servlet");
 		list.add("jdbc");
 		
-		for(int i=0; i < list.size(); i++)	//ÀÚ·á ÃßÃâ ¹æ¹ı1. ¼Óµµ°¡ ´À¸®´Ù
+		for(int i=0; i < list.size(); i++)	//ìë£Œ ì¶”ì¶œ ë°©ë²•1. ì†ë„ê°€ ëŠë¦¬ë‹¤
 			System.out.println(list.get(i));
 		System.out.println();		
 		
-		for(Object value : list) {		//ÀÚ·á ÃßÃâ ¹æ¹ı2. Á¦ÀÏ ºü¸§
+		for(Object value : list) {		//ìë£Œ ì¶”ì¶œ ë°©ë²•2. ì œì¼ ë¹ ë¦„
 			String s = (String)value;	
 			System.out.println(s);
 		}
 		System.out.println();		
 		
-		Iterator iter = list.iterator();	//ÀÚ·á ÃßÃâ ¹æ¹ı3. ±Ô°İÈ­µÈ ¹æ¹ı
-		while(iter.hasNext()){				//hasNext() Â÷·Ê´ë·Î ²¨³»´Â°Í
-			Object value = iter.next();		//´Ù¸¥ Å¬·¡½ºµé¿¡¼­µµ »ç¿ë °¡´É
-			String s = (String)value;		//Çüº¯È¯ ²À ÇØÁà¾ßÇÑ´Ù Object-> String
+		Iterator iter = list.iterator();	//ìë£Œ ì¶”ì¶œ ë°©ë²•3. ê·œê²©í™”ëœ ë°©ë²•
+		while(iter.hasNext()){				//hasNext() ì°¨ë¡€ëŒ€ë¡œ êº¼ë‚´ëŠ”ê²ƒ
+			Object value = iter.next();		//ë‹¤ë¥¸ í´ë˜ìŠ¤ë“¤ì—ì„œë„ ì‚¬ìš© ê°€ëŠ¥
+			String s = (String)value;		//í˜•ë³€í™˜ ê¼­ í•´ì¤˜ì•¼í•œë‹¤ Object-> String
 			System.out.println(s);
 		}
 	}

@@ -13,21 +13,21 @@ public class HashMapLab1 {
 		int in = 0;
 		while(hash.size() !=5){
 
-			System.out.println("³ª¶ó ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä");
+			System.out.println("ë‚˜ë¼ ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”");
 			str = sc.next();
 			if (hash.containsKey(str) == false) {
-				System.out.println("ÀÎ±¸ ¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä");
+				System.out.println("ì¸êµ¬ ìˆ˜ë¥¼ ì…ë ¥í•˜ì„¸ìš”");
 				in = sc.nextInt();
-				System.out.println("ÀúÀåµÇ¾ú½À´Ï´Ù.");
+				System.out.println("ì €ì¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
 				hash.put(str, in);
 
 			} else
-				System.out.printf("³ª¶ó¸í %s´Â ÀÌ¹Ì ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù.", str);
+				System.out.printf("ë‚˜ë¼ëª… %sëŠ” ì´ë¯¸ ì €ì¥ë˜ì–´ ìˆìŠµë‹ˆë‹¤.", str);
 
 		}
 
-		System.out.println("5°³°¡ ¸ğµÎ ÀÔ·ÂµÇ¾ú½À´Ï´Ù.");
-		System.out.print("ÀÔ·ÂµÈ µ¥ÀÌÅÍ : ");
+		System.out.println("5ê°œê°€ ëª¨ë‘ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
+		System.out.print("ì…ë ¥ëœ ë°ì´í„° : ");
 
 		Iterator<String> iter = hash.keySet().iterator();
 		while (iter.hasNext()) {
