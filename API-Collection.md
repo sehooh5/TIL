@@ -183,3 +183,152 @@
        ```
    
        
+
+---
+
+### 가장 기본이 되는 자료
+
+```java
+package day13;
+import java.util.Date;
+public class CreateGenericTest { 
+  //***Generic = 객체 생성되는 타입이 객채 생성시 정하는 일반화 구문
+	public static void main(String[] args) {
+  //만들때도 입력때도 자유롭게 형변환에 대해서 자유롭게 할 수 있다.
+		Value1 o1 = new Value1();
+		o1.put("abc");
+		String s1 = o1.get(); 
+		System.out.println(s1);		//전부 String 무난히 통과
+		
+		Value2 o2 = new Value2();
+		o2.put("abc");
+		String s2 = (String)o2.get(); //Object 사용으로 사용할때는
+		System.out.println(s2);				//다시 형변환 해줘야 한다
+		
+		Value3<String> o3 = new Value3<>();		
+		o3.put("abc");
+		String s3 = (String)o3.get(); 
+    //형변환 안해줘도 된다. 타입 파라미터가 String 이기 때문에,,저거생략가능
+		System.out.println(s3);	
+		
+		Value3<Date> o4 = new Value3<Date>();		
+		o4.put(new Date());
+		Date s4 = o4.get(); 
+		System.out.println(s4);	
+	}
+}
+
+
+class Value1 {
+	String obj;
+	void put(String obj){
+		this.obj = obj;
+	}
+	String get() {
+		return obj;
+	}
+}
+class Value2 {
+	Object obj;	//모든 객체 저장 가능-Object 이기 때문
+	void put(Object obj){ //입력할때는 상관없음
+		this.obj = obj;
+	}
+	Object get() {		//꺼낼때는 형변환 해줘야 한다.
+		return obj;
+	}
+}
+// Value3<Card> v = new Value3<card>();	//Card 를 먼저 주면 아래 TT가 Card로 바뀐다
+// Value3<String> v = new Value3<String>();	//객체가 생성되는 타입을 일반화 시킨다. 객체 생성 시점에서 정하는 고급 구문
+
+class Value3<TT> {		//< > 안에 내용은 상관이 없다. 사용할때 오버라이딩
+	TT obj;
+	void put(TT obj){
+		this.obj = obj;
+	}
+	TT get() {
+		return obj;
+	}
+}
+
+```
+
+
+
+---
+
+### Generic 출력하는 방법!!
+
+```java
+package day13;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.*;
+public class GenericTest {
+	public static void main(String[] args) {
+		LinkedList list = new LinkedList();	//Linked Hash 등 제너릭 적용한 리스트들,()안에 설정 안해주면 Object 객체로 설정되어 그 자손 객체가 모두 들어갈 수 있따.대신 한가지 종류의 객체들을 입력 가능.
+		list.add("java");		//자료 넣을 때 name.add 사용
+		list.add("100");
+		list.add("servlet");
+		list.add("jdbc");
+		
+    //자료 추출 방법1.기본 for 구문, 속도가 느리다
+		for(int i=0; i < list.size(); i++)	
+			System.out.println(list.get(i));
+		System.out.println();		
+		
+    //자료 추출 방법2.for each 구문, 제일 빠름
+		for(Object value : list) {		
+			String s = (String)value;	
+			System.out.println(s);
+		}
+		System.out.println();		
+		
+    //자료 추출 방법3.Iterator 인터페이스, 규격화된 방법
+		Iterator iter = list.iterator();	
+		while(iter.hasNext()){				//hasNext() 차례대로 꺼내는것
+			Object value = iter.next();		//다른 클래스들에서도 사용 가능
+			String s = (String)value;		//형변환 꼭 해줘야한다 Object-> String
+			System.out.println(s);
+		}
+	}
+}
+```
+
+
+
+### 프린트를 파라미터 사용하여 더 간편하게 하기
+
+```java
+package day13;
+import java.util.*;
+public class GenericTestNew {
+	public static void main(String[] args) {
+		// 제네릭스 라는 구문이 적용되어 만들어진 클래스의 객체 생성시
+		// 타입 파라미터라는 것을 사용한다. 
+		LinkedList<String> list = new LinkedList<String>();  
+    // 타입 파라미터 String 사용
+		list.add("java");
+		list.add("100");
+		list.add("servlet");
+		list.add("jdbc");
+		
+		for(int i=0; i < list.size(); i++)
+			System.out.println(list.get(i));
+		System.out.println();		
+		
+		for(String value : list) {			
+			System.out.println(value);//선언해줄 필요가 없음
+		}
+		System.out.println();
+		
+		Iterator<String> iter = list.iterator();
+		while(iter.hasNext()){
+			String s = iter.next();			//장점2. 형변환을 안해줘도 괜찮다
+			System.out.println(s);
+		}
+	}
+}
+```
+
+
+
