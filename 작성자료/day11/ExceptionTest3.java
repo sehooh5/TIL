@@ -2,37 +2,37 @@ package day11;
 import java.util.Random;
 class TestException extends Exception {
 	TestException(String message){
-		super(message);		//¿¡·¯¸Ş½ÃÁö·Î µî·Ï
+		super(message);		//ì—ëŸ¬ë©”ì‹œì§€ë¡œ ë“±ë¡
 	}
 }
 public class ExceptionTest3 {
 	public static void main(String[] args)  {
-		System.out.println("main()¼öÇà½ÃÀÛ");
+		System.out.println("main()ìˆ˜í–‰ì‹œì‘");
 		a();
-		System.out.println("main()¼öÇàÁ¾·á");
+		System.out.println("main()ìˆ˜í–‰ì¢…ë£Œ");
 	}
-	static void a()  {	//try, catch·Î ÇÒ °æ¿ì´Â throws Àı ÁÙ ÇÊ¿ä¾ø´Ù.
-		System.out.println("a()¼öÇà½ÃÀÛ");
+	static void a()  {	//try, catchë¡œ í•  ê²½ìš°ëŠ” throws ì ˆ ì¤„ í•„ìš”ì—†ë‹¤.
+		System.out.println("a()ìˆ˜í–‰ì‹œì‘");
 		try {
 			b();
 		} catch (TestException e){	
-			System.out.println("¿À·ù ¹ß»ı : "+e.getMessage());
+			System.out.println("ì˜¤ë¥˜ ë°œìƒ : "+e.getMessage());
 		}
-		System.out.println("a()¼öÇàÁ¾·á");
+		System.out.println("a()ìˆ˜í–‰ì¢…ë£Œ");
 	}
-	static void b() throws TestException {	//b°¡ È£ÃâÇÑ c¿¡ ¿À·ù°¡ ¹ß»ıÇÒ ¼ö ÀÖÁö¸¸ È£ÃâÇÑ ¾ÖÇÑÅ× ³Ñ±â°Ú´Ù.
-		System.out.println("b()¼öÇà½ÃÀÛ");
+	static void b() throws TestException {	//bê°€ í˜¸ì¶œí•œ cì— ì˜¤ë¥˜ê°€ ë°œìƒí•  ìˆ˜ ìˆì§€ë§Œ í˜¸ì¶œí•œ ì• í•œí…Œ ë„˜ê¸°ê² ë‹¤.
+		System.out.println("b()ìˆ˜í–‰ì‹œì‘");
 		c();
-		System.out.println("b()¼öÇàÁ¾·á");
+		System.out.println("b()ìˆ˜í–‰ì¢…ë£Œ");
 	}
-	static void c() throws TestException { //throws TestException À» ¾ÈÁÖ¸é ¿À·ù ÁÖ°í½ÍÀº Àı¿¡¼­ ¿¡·¯³²
-		System.out.println("c()¼öÇà½ÃÀÛ");
-		boolean flag = new Random().nextBoolean();	//º¯¼ö¿¡ ¾È´ã°í ¹Ù·Î ¾´ Random ±¸¹®,,ÇÑ¹ø¸¸ »ç¿ë °¡´É,,°ªÀº true or false
+	static void c() throws TestException { //throws TestException ì„ ì•ˆì£¼ë©´ ì˜¤ë¥˜ ì£¼ê³ ì‹¶ì€ ì ˆì—ì„œ ì—ëŸ¬ë‚¨
+		System.out.println("c()ìˆ˜í–‰ì‹œì‘");
+		boolean flag = new Random().nextBoolean();	//ë³€ìˆ˜ì— ì•ˆë‹´ê³  ë°”ë¡œ ì“´ Random êµ¬ë¬¸,,í•œë²ˆë§Œ ì‚¬ìš© ê°€ëŠ¥,,ê°’ì€ true or false
 		if(flag){
-			throw new TestException("<<:::::Å×½ºÆ®·Î ¿¹¿Ü¹ß»ı½ÃÅ´:::::>>");
+			throw new TestException("<<:::::í…ŒìŠ¤íŠ¸ë¡œ ì˜ˆì™¸ë°œìƒì‹œí‚´:::::>>");
 		}else {
-			System.out.println("¤»¤»¤»¤»");
+			System.out.println("ã…‹ã…‹ã…‹ã…‹");
 		}	
-		System.out.println("c()¼öÇàÁ¾·á");
+		System.out.println("c()ìˆ˜í–‰ì¢…ë£Œ");
 	}	
 }

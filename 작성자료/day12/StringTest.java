@@ -2,25 +2,25 @@ package day12;
 public class StringTest {
 	public static void main(String[] args) {
 		System.out.println("1".length());    //1			
-		System.out.println("°¡³ª´Ù".length()); //3
-		System.out.println("abc".charAt(1)); //b, ¹®ÀÚ¿­¿¡¼­ ¿øÇÏ´Â À§Ä¡ ²¨³»´Â °Í 0=Ã¹¹øÂ°, 1=µÎ¹øÂ°		
+		System.out.println("ê°€ë‚˜ë‹¤".length()); //3
+		System.out.println("abc".charAt(1)); //b, ë¬¸ìì—´ì—ì„œ ì›í•˜ëŠ” ìœ„ì¹˜ êº¼ë‚´ëŠ” ê²ƒ 0=ì²«ë²ˆì§¸, 1=ë‘ë²ˆì§¸		
 		System.out.println("abc".toUpperCase());  //ABC 	
 		String str1 = "ABCDEFGHIJ";
 		String str2 = "abcdefgfhij";
 		
-		System.out.println(str1.substring(4));		// 4ºÎÅÍ »Ì¾Æ³¿, °ª ¾ÈÁÖ¸é 0 ºÎÅÍ     
-		System.out.println(str1.substring(0, 3)); 	// 0ºÎÅÍ 3 Àü±îÁö(n,m) = n~m-1		
-		System.out.println(str2.indexOf("f"));    	// 5, f°¡ ÀÖ´Â À§Ä¡¸¦ Àü´ŞÇØ¶ó
-		System.out.println(str2.lastIndexOf("f")); 	// 7, µÚ¿¡¼­ºÎÅÍ Ã£À½
-		System.out.println(str2.replace('h', 'H')); // h¸¦ H·Î ´ëÃ¼,,,¸¹ÀÌ ¹Ù²Ü°Å¸é StringBuffer	    
+		System.out.println(str1.substring(4));		// 4ë¶€í„° ë½‘ì•„ëƒ„, ê°’ ì•ˆì£¼ë©´ 0 ë¶€í„°     
+		System.out.println(str1.substring(0, 3)); 	// 0ë¶€í„° 3 ì „ê¹Œì§€(n,m) = n~m-1		
+		System.out.println(str2.indexOf("f"));    	// 5, fê°€ ìˆëŠ” ìœ„ì¹˜ë¥¼ ì „ë‹¬í•´ë¼
+		System.out.println(str2.lastIndexOf("f")); 	// 7, ë’¤ì—ì„œë¶€í„° ì°¾ìŒ
+		System.out.println(str2.replace('h', 'H')); // hë¥¼ Hë¡œ ëŒ€ì²´,,,ë§ì´ ë°”ê¿€ê±°ë©´ StringBuffer	    
 		
 		String str3 = "java:html5:css3:javascript";
-		String[] ary = str3.split(":");   //¿öµå·Î ½ºÆ®¸µ¿¡ ´ã¾Æ¼­ ¸®ÅÏ
+		String[] ary = str3.split(":");   //ì›Œë“œë¡œ ìŠ¤íŠ¸ë§ì— ë‹´ì•„ì„œ ë¦¬í„´
 		
 		for(int i=0; i < ary.length; i++){
 			System.out.println(ary[i]);
 		}		
-		char ch[] = str3.toCharArray();	// ÇÑ¹®ÀÚ ÇÑ¹®ÀÚ Ä³¸¯ÅÍÇüÀ¸·Î ´ã¾Æ¼­ ¸®ÅÏ
+		char ch[] = str3.toCharArray();	// í•œë¬¸ì í•œë¬¸ì ìºë¦­í„°í˜•ìœ¼ë¡œ ë‹´ì•„ì„œ ë¦¬í„´
 		System.out.println(str3.length() + " ---- " + ch.length);
 		System.out.println(str3);
 		System.out.println(ch);

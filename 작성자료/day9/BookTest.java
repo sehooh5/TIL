@@ -2,24 +2,24 @@ package day9;
 class Book{
 	String title;
 	String author;
-	private int price;				////*** ¿ÜºÎ¿¡¼­ Á¢±Ù ¸øÇÏ°Ô private ¼³Á¤
+	private int price;				////*** ì™¸ë¶€ì—ì„œ ì ‘ê·¼ ëª»í•˜ê²Œ private ì„¤ì •
 	Book(){
 
-		this("ÀÚ¹ÙÀÇ Á¤¼®","³²±Ã ¼º",30000);
+		this("ìžë°”ì˜ ì •ì„","ë‚¨ê¶ ì„±",30000);
 	}
 	Book(String title,String author,int price){
 		this.title = title;						
 		this.author = author;
-		setPrice(price);					//set Price ¸Þ¼­µå¸¦ »ç¿ëÇÏ¿© Á¦´ë·ÎµÈ price »ý¼º
+		setPrice(price);					//set Price ë©”ì„œë“œë¥¼ ì‚¬ìš©í•˜ì—¬ ì œëŒ€ë¡œëœ price ìƒì„±
 	}
-	void setPrice(int price) {				//setter ¼³Á¤ --> ¹«Á¶°Ç void
-		if (price < 0)						//setter ¼³Á¤ÇÏ¿© Àß¸øµÈ °ª °É·¯³»±â
+	void setPrice(int price) {				//setter ì„¤ì • --> ë¬´ì¡°ê±´ void
+		if (price < 0)						//setter ì„¤ì •í•˜ì—¬ ìž˜ëª»ëœ ê°’ ê±¸ëŸ¬ë‚´ê¸°
 			this.price = -price;
 		else
 			this.price = price;
 	}
 	String getBookInfo() {
-		return "Ã¥ÀÌ¸§ : "+title+" "+author+" "+price;
+		return "ì±…ì´ë¦„ : "+title+" "+author+" "+price;
 	}
 	void BookTest(){
 		System.out.println(getBookInfo());

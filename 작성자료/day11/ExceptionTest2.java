@@ -1,30 +1,30 @@
 package day11;		
-//¿¡·¯µéÀÇ ºÎ¸ğÅ¬·¡½º´Â Exception ÀÌ¶ó´Â Å¬·¡½º
+//ì—ëŸ¬ë“¤ì˜ ë¶€ëª¨í´ë˜ìŠ¤ëŠ” Exception ì´ë¼ëŠ” í´ë˜ìŠ¤
 public class ExceptionTest2 {
 
 	public static void main(String[] args) {
-		System.out.println("¼öÇà½ÃÀÛ");
-		try {						//¿¹¿Ü°¡ ¹ß»ıÇÒ ¼öµµ ÀÖ´Â ÄÚµå, ²À ¿¹¿Ü ¹ß»ı ÄÚµå¸¸ ÀÖ´Â°Ç ¾Æ´Ï´Ù.
+		System.out.println("ìˆ˜í–‰ì‹œì‘");
+		try {						//ì˜ˆì™¸ê°€ ë°œìƒí•  ìˆ˜ë„ ìˆëŠ” ì½”ë“œ, ê¼­ ì˜ˆì™¸ ë°œìƒ ì½”ë“œë§Œ ìˆëŠ”ê±´ ì•„ë‹ˆë‹¤.
 			int num1 = Integer.parseInt(args[0]);
 			int num2 = Integer.parseInt(args[1]);
-			int result = num1/num2;		//¿¹¿Ü ¹ß»ıÇÏ´Â À§Ä¡
-			System.out.println("¿¬»ê °á°ú : "+result);
-		}catch(ArrayIndexOutOfBoundsException e) {	//¸¸¾à ¿©±â Ä³Ä¡ºí·°¿¡¼­ ¿¹¿Ü Ã³¸®ÇÏ¸é ´Ù½Ã ¿Ã¶ó°¨
-			System.out.println("ÇÁ·Î±×·¥ ¾Æ±Ô¸ÕÆ®¸¦ 2°³ Àü´ŞÇÏ¼¼¿ä!!");
-		}catch(ArithmeticException e) {			//0À¸·Î ³ª´­°æ¿ì ¹ß»ı
-			e.printStackTrace();				//e °ªÀ» »ç¿ëÇÏ¿© call stack ¿¡·¯ Á¤º¸ Ãâ·Â(ºñµ¿±â¼öÇà)
-			System.out.println("µÎ¹ø¤Š ÇÁ·Î±×·¥ ¾Æ±Ô¸ÕÆ®´Â 0ÀÌ ¾Æ´Ñ °ªÀ» Àü´ŞÇÏ¼¼¿ä!!");
+			int result = num1/num2;		//ì˜ˆì™¸ ë°œìƒí•˜ëŠ” ìœ„ì¹˜
+			System.out.println("ì—°ì‚° ê²°ê³¼ : "+result);
+		}catch(ArrayIndexOutOfBoundsException e) {	//ë§Œì•½ ì—¬ê¸° ìºì¹˜ë¸”ëŸ­ì—ì„œ ì˜ˆì™¸ ì²˜ë¦¬í•˜ë©´ ë‹¤ì‹œ ì˜¬ë¼ê°
+			System.out.println("í”„ë¡œê·¸ë¨ ì•„ê·œë¨¼íŠ¸ë¥¼ 2ê°œ ì „ë‹¬í•˜ì„¸ìš”!!");
+		}catch(ArithmeticException e) {			//0ìœ¼ë¡œ ë‚˜ëˆŒê²½ìš° ë°œìƒ
+			e.printStackTrace();				//e ê°’ì„ ì‚¬ìš©í•˜ì—¬ call stack ì—ëŸ¬ ì •ë³´ ì¶œë ¥(ë¹„ë™ê¸°ìˆ˜í–‰)
+			System.out.println("ë‘ë²ˆì¨° í”„ë¡œê·¸ë¨ ì•„ê·œë¨¼íŠ¸ëŠ” 0ì´ ì•„ë‹Œ ê°’ì„ ì „ë‹¬í•˜ì„¸ìš”!!");
 			return;
-		}catch (Exception e) {		//ºÎ¸ğ Å¬·¡½ºÀÌ±â¿¡ ÀÚ¼Õ Å¬·¡½ºÀÇ °´Ã¼¸¦ ¹ŞÀ» ¼ö ÀÖ´Ù.
-									//ºÎ¸ğ Å¬·¡½ºÀÏ ¼ö·Ï ¾Æ·¡ À§Ä¡½ÃÄÑ¾ß ÇÑ´Ù
-									//À§¿¡ »ç¿ëÇÏ¸é ¸ğµç ¿¹¿Ü¸¦ ´Ù Àâ¾Æ³»¹ö¸°´Ù
+		}catch (Exception e) {		//ë¶€ëª¨ í´ë˜ìŠ¤ì´ê¸°ì— ìì† í´ë˜ìŠ¤ì˜ ê°ì²´ë¥¼ ë°›ì„ ìˆ˜ ìˆë‹¤.
+									//ë¶€ëª¨ í´ë˜ìŠ¤ì¼ ìˆ˜ë¡ ì•„ë˜ ìœ„ì¹˜ì‹œì¼œì•¼ í•œë‹¤
+									//ìœ„ì— ì‚¬ìš©í•˜ë©´ ëª¨ë“  ì˜ˆì™¸ë¥¼ ë‹¤ ì¡ì•„ë‚´ë²„ë¦°ë‹¤
 //		}catch (NumberFormatException e) {
 			e.printStackTrace();
-			System.out.println("ÇÁ·Î±×·¥ ¾Æ±Ô¸ÕÆ®·Î ¼ıÀÚ¸¦ Àü´ŞÇÏ¼¼¿ä!!");
+			System.out.println("í”„ë¡œê·¸ë¨ ì•„ê·œë¨¼íŠ¸ë¡œ ìˆ«ìë¥¼ ì „ë‹¬í•˜ì„¸ìš”!!");
 		}finally {
-			System.out.println("Ç×»ó¼öÇà!!");	
+			System.out.println("í•­ìƒìˆ˜í–‰!!");	
 		}
-		System.out.println("¼öÇàÁ¾·á!!");
+		System.out.println("ìˆ˜í–‰ì¢…ë£Œ!!");
 	}
 
 }

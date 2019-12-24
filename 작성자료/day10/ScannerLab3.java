@@ -11,13 +11,13 @@ public class ScannerLab3 {
 		int i2;
 		int i3 = 0;
 		boolean flag = false;
-		// ¼ıÀÚ¿Í ¿¬»êÀÚ¸¦ ÀÔ·Â¹Ş¾Æ Ã³¸®ÇÏ´Â ±â´ÉÀ» 3¹ø ¹İº¹ÇÏµµ·Ï ÄÚµå ÀÛ¼º
+		// ìˆ«ìì™€ ì—°ì‚°ìë¥¼ ì…ë ¥ë°›ì•„ ì²˜ë¦¬í•˜ëŠ” ê¸°ëŠ¥ì„ 3ë²ˆ ë°˜ë³µí•˜ë„ë¡ ì½”ë“œ ì‘ì„±
 		while (i < 3) {
-			System.out.println("Ã¹ ¹øÂ° ¼ıÀÚ¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
+			System.out.println("ì²« ë²ˆì§¸ ìˆ«ìë¥¼ ì…ë ¥í•˜ì„¸ìš” : ");
 			i1 = sc.nextInt();
-			System.out.println("µÎ ¹øÂ° ¼ıÀÚ¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
+			System.out.println("ë‘ ë²ˆì§¸ ìˆ«ìë¥¼ ì…ë ¥í•˜ì„¸ìš” : ");
 			i2 = sc.nextInt();
-			System.out.println("¿¬»êÀÚ(+,-,*,/)¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
+			System.out.println("ì—°ì‚°ì(+,-,*,/)ë¥¼ ì…ë ¥í•˜ì„¸ìš” : ");
 			String st = sc.next();
 			switch (st) {
 			case "+":
@@ -33,18 +33,18 @@ public class ScannerLab3 {
 				i3 = i1 * i2;
 				break;
 			default:
-				flag =true;						//dÀÌ°Å ´Ù½Ã »ı°¢ÇØº¸±â »ç¿ë¹ı
+				flag =true;						//dì´ê±° ë‹¤ì‹œ ìƒê°í•´ë³´ê¸° ì‚¬ìš©ë²•
 			}
 			if (flag == true) {
-				System.out.println("+,-,*,/ ¸¦ ÀÔ·ÂÇÏ¼õ");
+				System.out.println("+,-,*,/ ë¥¼ ì…ë ¥í•˜ìˆ‘");
 			} else
-				System.out.printf("%d ¿Í %dÀÇ %s ¿¬»ê °á°ú´Â %d ÀÔ´Ï´Ù.", i1, i2, st, i3);
+				System.out.printf("%d ì™€ %dì˜ %s ì—°ì‚° ê²°ê³¼ëŠ” %d ì…ë‹ˆë‹¤.", i1, i2, st, i3);
 			System.out.println();
-			//System.out.println("°è¼Ó ¼öÇàÇÏ·Á¸é 1, Á¾·áÇÏ·Á¸é ´Ù¸¦ ¼ıÀÚ¸¦ ´­·¯ÁÖ¼¼¿ä : ");
-			System.out.println("°è¼Ó ¼öÇàÇÏ·Á¸é y, Á¾·áÇÏ·Á¸é ´Ù¸¦ ¼ıÀÚ¸¦ ´­·¯ÁÖ¼¼¿ä : ");
+			//System.out.println("ê³„ì† ìˆ˜í–‰í•˜ë ¤ë©´ 1, ì¢…ë£Œí•˜ë ¤ë©´ ë‹¤ë¥¼ ìˆ«ìë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš” : ");
+			System.out.println("ê³„ì† ìˆ˜í–‰í•˜ë ¤ë©´ y, ì¢…ë£Œí•˜ë ¤ë©´ ë‹¤ë¥¼ ìˆ«ìë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš” : ");
 
 			//go = sc.nextInt();
-			if(!sc.next().equals("y"))		// !Àº ("y")¿Í °°Áö ¾ÊÀ» °æ¿ì·Î ¹İÀü½ÃÅ°´Â ¹æ¹ı
+			if(!sc.next().equals("y"))		// !ì€ ("y")ì™€ ê°™ì§€ ì•Šì„ ê²½ìš°ë¡œ ë°˜ì „ì‹œí‚¤ëŠ” ë°©ë²•
 			//if(sc.nextInt() != 1)
 				break;
 		}

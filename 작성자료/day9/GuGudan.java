@@ -1,7 +1,7 @@
 package day9;
 import day6.MethodLab3;
 class Multiplication {
-	private int dan;			//ÀÌ Å¬·¡½º¿¡¼­¸¸ »ç¿ë °¡´É
+	private int dan;			//ì´ í´ë˜ìŠ¤ì—ì„œë§Œ ì‚¬ìš© ê°€ëŠ¥
 	private int number;
 	Multiplication() {}
 	Multiplication(int dan) {
@@ -29,8 +29,8 @@ class GuGuDanExpr extends Multiplication{
 	GuGuDanExpr(int dan, int number){
 		super(dan,number);
 	}
-	static void printAll() {	//GuGuDanExprÀ» È£ÃâÇÏÁö ¾Ê¾Æµµ »ç¿ë °¡´ÉÇÑ static ¸Ş¼­µå
-		int dan;				//»ç¿ë¹ı  =  ClassÀÌ¸§.¸Ş¼­µåÀÌ¸§();
+	static void printAll() {	//GuGuDanExprì„ í˜¸ì¶œí•˜ì§€ ì•Šì•„ë„ ì‚¬ìš© ê°€ëŠ¥í•œ static ë©”ì„œë“œ
+		int dan;				//ì‚¬ìš©ë²•  =  Classì´ë¦„.ë©”ì„œë“œì´ë¦„();
 		int num;
 		for(dan=1;dan<=9;dan++) {
 			for(num=1;num <=9; num++)
@@ -54,7 +54,7 @@ public class GuGudan {
 				p.printPart();
 			}else if(10<=num) {
 				GuGuDanExpr p = new GuGuDanExpr(dan);
-				System.out.print(dan+"´Ü :");
+				System.out.print(dan+"ë‹¨ :");
 				p.printPart();
 			}
 		}else 

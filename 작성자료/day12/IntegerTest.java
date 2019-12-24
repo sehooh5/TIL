@@ -2,7 +2,7 @@ package day12;
 public class IntegerTest {
 	public static void main(String[] args) {
 		if(args.length != 2) {
-			System.out.println("ÇÁ·Î±×·¥ ¾Æ±Ô¸ÕÆ® 2°³¸¦ ¼ıÀÚ·Î ÀÔ·ÂÇÏ¼¼¿ä");
+			System.out.println("í”„ë¡œê·¸ë¨ ì•„ê·œë¨¼íŠ¸ 2ê°œë¥¼ ìˆ«ìë¡œ ì…ë ¥í•˜ì„¸ìš”");
 		} else {
 			System.out.println(Integer.parseInt(args[0])
 					 +Integer.parseInt(args[1]));

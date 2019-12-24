@@ -9,8 +9,8 @@ class Value {
 	}
 	public boolean equals(Object obj) {
 		boolean result = false;
-        if(obj != null && obj instanceof Value)	//instance of »ç¿ë ÇÏ¿© obj °¡ Value °´Ã¼ÀÎÁö È®ÀÎ
-        	if(value == ((Value)obj).value)		//obj¸¦ Value °ªÀ¸·Î °­Á¦ Çüº¯È¯
+        if(obj != null && obj instanceof Value)	//instance of ì‚¬ìš© í•˜ì—¬ obj ê°€ Value ê°ì²´ì¸ì§€ í™•ì¸
+        	if(value == ((Value)obj).value)		//objë¥¼ Value ê°’ìœ¼ë¡œ ê°•ì œ í˜•ë³€í™˜
         		result = true;
 		return result;
     }
@@ -20,25 +20,25 @@ public class EqualsTest {
 		Value v1 = new Value(10);
 		Value v2 = new Value(10);
 		Value v3 = new Value(20);
-		System.out.println(v1.equals(null)); // f - null ÀÌ¹Ç·Î 
-		System.out.println(v1.equals(v3));   // f - °°Àº Value°ª, ÇÏÁö¸¸ °ªÀÌ ´Ù¸§
+		System.out.println(v1.equals(null)); // f - null ì´ë¯€ë¡œ 
+		System.out.println(v1.equals(v3));   // f - ê°™ì€ Valueê°’, í•˜ì§€ë§Œ ê°’ì´ ë‹¤ë¦„
 		System.out.println(v1.equals(v2));   // t
-		System.out.println(v1.equals(new Date()));   // f - Value °´Ã¼ ¾Æ´Ô
-		if(v1 == v2) 		//	µî°¡ == ¾²¸é ÂüÁ¶°ª¸¸ ºñ±³ÇÑ´Ù . ±×·¯¹Ç·Î ´Ù¸£´Ù!
-			System.out.println("v1°ú v2´Â °°½À´Ï´Ù.");
+		System.out.println(v1.equals(new Date()));   // f - Value ê°ì²´ ì•„ë‹˜
+		if(v1 == v2) 		//	ë“±ê°€ == ì“°ë©´ ì°¸ì¡°ê°’ë§Œ ë¹„êµí•œë‹¤ . ê·¸ëŸ¬ë¯€ë¡œ ë‹¤ë¥´ë‹¤!
+			System.out.println("v1ê³¼ v2ëŠ” ê°™ìŠµë‹ˆë‹¤.");
 		else 
-			System.out.println("v1°ú v2´Â ´Ù¸¨´Ï´Ù.");
+			System.out.println("v1ê³¼ v2ëŠ” ë‹¤ë¦…ë‹ˆë‹¤.");
 		v2 = v1;
 		if(v1 == v2) 
-			System.out.println("v1°ú v2´Â °°½À´Ï´Ù.");
+			System.out.println("v1ê³¼ v2ëŠ” ê°™ìŠµë‹ˆë‹¤.");
 		else 
-			System.out.println("v1°ú v2´Â ´Ù¸¨´Ï´Ù.");
-		String s1 = "°¡³ª´Ù";
-		String s2 = "°¡³ª´Ù";
-		String s3 = new String("°¡³ª´Ù");
-		String s4 = new String("°¡³ª´Ù");
+			System.out.println("v1ê³¼ v2ëŠ” ë‹¤ë¦…ë‹ˆë‹¤.");
+		String s1 = "ê°€ë‚˜ë‹¤";
+		String s2 = "ê°€ë‚˜ë‹¤";
+		String s3 = new String("ê°€ë‚˜ë‹¤");
+		String s4 = new String("ê°€ë‚˜ë‹¤");
 		
-		System.out.println(s1 == s2);	//t ¶È°°Àº ³»¿ëÀÇ ¸®ÅÍ·²À» ÀÛ¼ºÇÏ¸é ÇÑ°³¸¸ ¸¸µé¾î¼­ ¾´´Ù.
+		System.out.println(s1 == s2);	//t ë˜‘ê°™ì€ ë‚´ìš©ì˜ ë¦¬í„°ëŸ´ì„ ì‘ì„±í•˜ë©´ í•œê°œë§Œ ë§Œë“¤ì–´ì„œ ì“´ë‹¤.
 		System.out.println(s3 == s4);	//f
 		System.out.println(s1.equals(s2));//t
 		System.out.println(s3.equals(s4));//t

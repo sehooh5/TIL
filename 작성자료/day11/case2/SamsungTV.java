@@ -1,4 +1,4 @@
-﻿package day11.case2;
+package day11.case2;
 
 public class SamsungTV implements TV{//implements를 사용하여 인터페이스에 가서 오버라이딩 할 수 있다. 
 	public void powerOn(){

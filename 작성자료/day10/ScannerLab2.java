@@ -9,13 +9,13 @@ public class ScannerLab2 {
 		int i2 ;
 		int i3=0;
 		boolean flag = false;
-		//╪Щюз©м ©╛╩Йюз╦╕ ют╥б╧ч╬ф цЁ╦╝го╢б ╠Б╢ию╩ 3╧Ь ╧щ╨╧го╣╣╥о дз╣Е юш╪╨
+		//Л┬╚Л·░Л≥─ Л≈╟Л┌╟Л·░К╔╪ Л·┘К═╔К╟⌡Л∙└ Л╡≤К╕╛М∙≤К┼■ Й╦╟К┼╔Л²└ 3К╡┬ К╟≤КЁ╣М∙≤К▐└К║² Л╫■К⌠° Л·▒Л└╠
 		for(i=0;i<3;i++) {
-		System.out.println("ц╧ ╧Ьб╟ ╪Щюз╦╕ ют╥бго╪╪©Д : ");
+		System.out.println("Л╡╚ К╡┬Л╖╦ Л┬╚Л·░К╔╪ Л·┘К═╔М∙≤Л└╦Л ■ : ");
 		i1 = sc.nextInt();
-		System.out.println("╣н ╧Ьб╟ ╪Щюз╦╕ ют╥бго╪╪©Д : ");
+		System.out.println("К▒░ К╡┬Л╖╦ Л┬╚Л·░К╔╪ Л·┘К═╔М∙≤Л└╦Л ■ : ");
 		i2 = sc.nextInt();
-		System.out.println("©╛╩Йюз(+,-,*,/)╦╕ ют╥бго╪╪©Д : ");
+		System.out.println("Л≈╟Л┌╟Л·░(+,-,*,/)К╔╪ Л·┘К═╔М∙≤Л└╦Л ■ : ");
 		String st = sc.next();
 		switch(st) {
 		case "+" : i3 = i1+i2;
@@ -30,9 +30,9 @@ public class ScannerLab2 {
 			flag =true;
 		}
 		if(flag == true) {
-		System.out.println("+,-,*,/ ╦╕ ют╥бго╪У");
+		System.out.println("+,-,*,/ К╔╪ Л·┘К═╔М∙≤Л┬▒");
 		}else
-		System.out.printf("%d ©м %dюг %s ©╛╩Й ╟А╟З╢б %d ют╢о╢ы.",i1,i2,st,i3);
+		System.out.printf("%d Л≥─ %dЛ²≤ %s Л≈╟Л┌╟ Й╡╟ЙЁ╪К┼■ %d Л·┘К▀┬К▀╓.",i1,i2,st,i3);
 		
 	}sc.close();
 	

@@ -1,22 +1,22 @@
 package day11;
 import java.util.Random;
 interface Drawable {
-	 void draw();		//¿À¹ö¶óÀÌµù ½Ã ½Ç¼ö ¸¹ÀÌ ÇÏ´Â °Í "Á¢±ÙÁ¦¾îÀÚ"
-}						//Á¢±ÙÁ¦¾îÀÚ¸¦ (default)¸¦ ÀÚ¼Õ¿¡¼­µµ ¶È°°ÀÌ ÁÖ¸é ¾ÈµÊ..
-						//(default) °°ÀÌ º¸ÀÌÁö¸¸ ÄÄÆÄÀÏ½Ã ÀÚµ¿ public ºÙÀ½..µû¶ó¼­ public Áà¾ßÇÔ
+	 void draw();		//ì˜¤ë²„ë¼ì´ë”© ì‹œ ì‹¤ìˆ˜ ë§ì´ í•˜ëŠ” ê²ƒ "ì ‘ê·¼ì œì–´ì"
+}						//ì ‘ê·¼ì œì–´ìë¥¼ (default)ë¥¼ ìì†ì—ì„œë„ ë˜‘ê°™ì´ ì£¼ë©´ ì•ˆë¨..
+						//(default) ê°™ì´ ë³´ì´ì§€ë§Œ ì»´íŒŒì¼ì‹œ ìë™ public ë¶™ìŒ..ë”°ë¼ì„œ public ì¤˜ì•¼í•¨
 class Rect implements Drawable {
-	public void draw() {	//¿©±â¼­ ÀÎÅÍÆäÀÌ½ºÀÇ ¸Ş¼­µå¸¦ ¿À¹ö¶óÀÌµù ÇÏÁö ¾ÊÀ¸¸é Å¬·¡½º ¼º¸³ ¾ÈµÊ 
-		System.out.println("»ç°¢ÇüÀ» ±×¸³´Ï´Ù.");
+	public void draw() {	//ì—¬ê¸°ì„œ ì¸í„°í˜ì´ìŠ¤ì˜ ë©”ì„œë“œë¥¼ ì˜¤ë²„ë¼ì´ë”© í•˜ì§€ ì•Šìœ¼ë©´ í´ë˜ìŠ¤ ì„±ë¦½ ì•ˆë¨ 
+		System.out.println("ì‚¬ê°í˜•ì„ ê·¸ë¦½ë‹ˆë‹¤.");
 	}
 }
 class Circle implements Drawable {
 	public void draw() {
-		System.out.println("¿øÀ» ±×¸³´Ï´Ù.");
+		System.out.println("ì›ì„ ê·¸ë¦½ë‹ˆë‹¤.");
 	}
 }
 class Diamond implements Drawable  {
 	public void draw() {
-		System.out.println("¸¶¸§¸ğ¸¦ ±×¸³´Ï´Ù.");
+		System.out.println("ë§ˆë¦„ëª¨ë¥¼ ê·¸ë¦½ë‹ˆë‹¤.");
 	}
 }
 public class DrawableTest {
@@ -33,7 +33,7 @@ public class DrawableTest {
 		output(d);
 	}
 	public static void output(Drawable d){
-		System.out.println("Àü´ŞµÈ °´Ã¼ÀÇ Å¬·¡½º¸í : "+
+		System.out.println("ì „ë‹¬ëœ ê°ì²´ì˜ í´ë˜ìŠ¤ëª… : "+
 	                        d.getClass().getName());
 		d.draw();
 	}

@@ -3,9 +3,9 @@ package day11;
 public class ExceptionTest1 {
 
 	public static void main(String[] args) throws InterruptedException {
-		System.out.println("¼öÇà½ÃÀÛ");
+		System.out.println("ìˆ˜í–‰ì‹œì‘");
 		Thread.sleep(3000);
-		System.out.println("¼öÇàÁ¾·á");
+		System.out.println("ìˆ˜í–‰ì¢…ë£Œ");
 	}
 
 }

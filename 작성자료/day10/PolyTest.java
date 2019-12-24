@@ -1,26 +1,26 @@
 package day10;
 
 public class PolyTest {
-	public static void main (String[] args) {			//String ¶ÇÇÑ java.lang »ı·« °¡´É
-		printObjectInfo(new Object());			////¸ğµç °´Ã¼µéÀº Object ÀÇ °´Ã¼ÀÌ±â¿¡ »ç¿ë °¡´ÉÇÏ´Ù!
-		printObjectInfo(new String("°¡³ª´Ù"));
+	public static void main (String[] args) {			//String ë˜í•œ java.lang ìƒëµ ê°€ëŠ¥
+		printObjectInfo(new Object());			////ëª¨ë“  ê°ì²´ë“¤ì€ Object ì˜ ê°ì²´ì´ê¸°ì— ì‚¬ìš© ê°€ëŠ¥í•˜ë‹¤!
+		printObjectInfo(new String("ê°€ë‚˜ë‹¤"));
 		printObjectInfo("ABC");
 		printObjectInfo(new java.util.Date());
-		printObjectInfo(new java.io.File("c:/Temp"));	//À©µµ¿ìÀÇ µğ·ºÅä¸® ±¸ºĞÀÚ´Â \\ µÎ¹ø ½áÁà¾ß ´Ù¸¥±â´ÉÀÌ ÀÛ¿ë ¾ÈÇÑ´Ù (È¤Àº / ÇÑ¹ø)
+		printObjectInfo(new java.io.File("c:/Temp"));	//ìœˆë„ìš°ì˜ ë””ë ‰í† ë¦¬ êµ¬ë¶„ìëŠ” \\ ë‘ë²ˆ ì¨ì¤˜ì•¼ ë‹¤ë¥¸ê¸°ëŠ¥ì´ ì‘ìš© ì•ˆí•œë‹¤ (í˜¹ì€ / í•œë²ˆ)
 		printObjectInfo(new int[10]);
 		printObjectInfo(new double[5]);
-		printObjectInfo(new day7.Member());		//»ç¿ë ºÒ°¡ = public class °¡ ¾Æ´Ï±â ¶§¹®
+		printObjectInfo(new day7.Member());		//ì‚¬ìš© ë¶ˆê°€ = public class ê°€ ì•„ë‹ˆê¸° ë•Œë¬¸
 		printObjectInfo(new Integer(100));
-		printObjectInfo(100);	//¾Ë¾Æ¼­ °´Ã¼·Î ¹Ù²ãÁØ´Ù ÀÌÁ¦
-		printObjectInfo('°¡');	//¾Ë¾Æ¼­ °´Ã¼·Î ¹Ù²ãÁØ´Ù ÀÌÁ¦
-		printObjectInfo(new Character('°¡'));
+		printObjectInfo(100);	//ì•Œì•„ì„œ ê°ì²´ë¡œ ë°”ê¿”ì¤€ë‹¤ ì´ì œ
+		printObjectInfo('ê°€');	//ì•Œì•„ì„œ ê°ì²´ë¡œ ë°”ê¿”ì¤€ë‹¤ ì´ì œ
+		printObjectInfo(new Character('ê°€'));
 	}
-	static void printObjectInfo(Object o) {		//Object ´Â java.lang ¿¡ ÀÖ´Âµ¥ »ı·« °¡´ÉÇÏ´Ù
-		if(o instanceof String) {				//Àü´ŞµÈ °´Ã¼ o°¡ String ÀÌ¸é Âü ¾Æ´Ï¸é °ÅÁş
-			System.out.println("¹®ÀÚ¿­ °´Ã¼ Àü´ŞµÊ : "+o.getClass().getName()
+	static void printObjectInfo(Object o) {		//Object ëŠ” java.lang ì— ìˆëŠ”ë° ìƒëµ ê°€ëŠ¥í•˜ë‹¤
+		if(o instanceof String) {				//ì „ë‹¬ëœ ê°ì²´ oê°€ String ì´ë©´ ì°¸ ì•„ë‹ˆë©´ ê±°ì§“
+			System.out.println("ë¬¸ìì—´ ê°ì²´ ì „ë‹¬ë¨ : "+o.getClass().getName()
 					+" - " + ((String)o).length());
 		}else {
-		System.out.println("Àü´ŞµÈ °´Ã¼ÀÇ Å¬·¡½º ¸í : "+o.getClass().getName());
+		System.out.println("ì „ë‹¬ëœ ê°ì²´ì˜ í´ë˜ìŠ¤ ëª… : "+o.getClass().getName());
 		}
 	}
 }

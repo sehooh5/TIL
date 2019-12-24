@@ -2,8 +2,8 @@ package day12;
 public class AutoBoxingUnboxingTest {
 	public static void main(String[] args) {
 		Integer obj = new Integer(10);
-		obj = 100;  // ±âº» --> °´Ã¼ - ¿ÀÅä¹Ú½Ì
-		int result = obj + 10; // °´Ã¼ --> ±âº» - ¿ÀÅä¾ð¹Ú½Ì
+		obj = 100;  // ê¸°ë³¸ --> ê°ì²´ - ì˜¤í† ë°•ì‹±
+		int result = obj + 10; // ê°ì²´ --> ê¸°ë³¸ - ì˜¤í† ì–¸ë°•ì‹±
 		System.out.println(result);
 	}
 }

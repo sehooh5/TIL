@@ -4,28 +4,28 @@ import java.util.Random;
 
 class DuplicateException extends Exception {
 	DuplicateException() {
-		super("Áßº¹µÈ ·Î¶Ç ¹øÈ£°¡ ¹ß»ıÇß½À´Ï´Ù."); // string ÇüÀ» »ó¼Ó¹ŞÀ¸¸é ¿¹¿Ü ¸Ş½ÃÁö·Î Ã³¸®ÇÑ´Ù.
+		super("ì¤‘ë³µëœ ë¡œë˜ ë²ˆí˜¸ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤."); // string í˜•ì„ ìƒì†ë°›ìœ¼ë©´ ì˜ˆì™¸ ë©”ì‹œì§€ë¡œ ì²˜ë¦¬í•œë‹¤.
 	}
 }
 
 class LottoMachine extends Exception {
 	private int nums[];
 
-	LottoMachine() { // 6°³ÀÇ int Çü ¿ø¼Ò °®´Â ¹è¿­ »ı¼º
+	LottoMachine() { // 6ê°œì˜ int í˜• ì›ì†Œ ê°–ëŠ” ë°°ì—´ ìƒì„±
 		this.nums = new int[6];
 	}
 
-	public void createLottoNums() { // ¹è¿­¿¡ ¿ø¼Ò ³Ö±â
+	public void createLottoNums() { // ë°°ì—´ì— ì›ì†Œ ë„£ê¸°
 		Random ran = new Random();
 		for (int i = 0; i < 6; i++)
 			nums[i] = ran.nextInt(20) + 1;
 	}
 
-	public void checkLottoNums() throws DuplicateException { // ¸Ş¼­µå Çì´õ¿¡ throws ¸¦ º¸¸é ¿¹¿Ü Å¬·¡½º°¡ ¾î¶²°ÇÁö ¾Ë ¼öÀÖ´Ù
+	public void checkLottoNums() throws DuplicateException { // ë©”ì„œë“œ í—¤ë”ì— throws ë¥¼ ë³´ë©´ ì˜ˆì™¸ í´ë˜ìŠ¤ê°€ ì–´ë–¤ê±´ì§€ ì•Œ ìˆ˜ìˆë‹¤
 		for (int i = 0; i < 5; i++) { //
 			for (int j = i + 1; j < 5; j++) {
 				if (nums[i] == nums[j])
-					throw new DuplicateException(); // ¿¹¿Ü¸¦ ¹ß»ı½ÃÅ°±âÀ§ÇØ throw¸¦ ¹ß»ı½ÃÅ´..throw µÚ¿¡´Â ²À ¿¹¿Ü°´Ã¼°¡ ÀÖ¾î¾ßÇÑ´Ù.
+					throw new DuplicateException(); // ì˜ˆì™¸ë¥¼ ë°œìƒì‹œí‚¤ê¸°ìœ„í•´ throwë¥¼ ë°œìƒì‹œí‚´..throw ë’¤ì—ëŠ” ê¼­ ì˜ˆì™¸ê°ì²´ê°€ ìˆì–´ì•¼í•œë‹¤.
 				// DuplicateException e = new DuplicateException();
 				// throw e;
 			}
@@ -41,14 +41,14 @@ class LottoMachine extends Exception {
 public class LottoGame {
 
 	public static void main(String[] args) {
-		LottoMachine lotto = new LottoMachine(); // ¹è¿­»ı¼º
-		lotto.createLottoNums(); // ³­¼ö ³Ö±â
+		LottoMachine lotto = new LottoMachine(); // ë°°ì—´ìƒì„±
+		lotto.createLottoNums(); // ë‚œìˆ˜ ë„£ê¸°
 
-		try { // ¿¹¿Ü È®ÀÎÇÏ´Â try-catch ±¸¹®
-			lotto.checkLottoNums(); // ¿¹È¸ È®ÀÎÇÏ´Â checkLottoNums ¸Ş¼­µå¿¡¼­ ¿À·ù¹ß»ıÇÏ¸é catch
+		try { // ì˜ˆì™¸ í™•ì¸í•˜ëŠ” try-catch êµ¬ë¬¸
+			lotto.checkLottoNums(); // ì˜ˆíšŒ í™•ì¸í•˜ëŠ” checkLottoNums ë©”ì„œë“œì—ì„œ ì˜¤ë¥˜ë°œìƒí•˜ë©´ catch
 		} catch (DuplicateException e) {
-			System.out.println(e.getMessage()); // e.getMessage´Â ¿À·ùÀÇ ¸Ş½ÃÁö
-			return; // return ÁÖ´Â ÀÌÀ¯´Â? ¿À·ù³ª¸é ¿©±â¼­ ½ÇÇà Á¾·á
+			System.out.println(e.getMessage()); // e.getMessageëŠ” ì˜¤ë¥˜ì˜ ë©”ì‹œì§€
+			return; // return ì£¼ëŠ” ì´ìœ ëŠ”? ì˜¤ë¥˜ë‚˜ë©´ ì—¬ê¸°ì„œ ì‹¤í–‰ ì¢…ë£Œ
 		}
 		int nums[] = lotto.getNums();
 		for (int i = 0; i < nums.length; i++) {

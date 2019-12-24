@@ -1,4 +1,4 @@
-package day10; //getter setter »ç¿ëÇÏ´Â ÀÌÀ¯¿Í ¹æ¹ı ´Ù½Ã °øºÎÇØº¸±â
+package day10; //getter setter ì‚¬ìš©í•˜ëŠ” ì´ìœ ì™€ ë°©ë²• ë‹¤ì‹œ ê³µë¶€í•´ë³´ê¸°
 
 abstract class Mobile {
 	private String mobileName;
@@ -89,13 +89,13 @@ public class MobileTest {
 		MobileTest.printTitle();
 		printMobile(kind[0]);
 		printMobile(kind[1]);
-		System.out.println("[10ºĞ ÃæÀü]");
+		System.out.println("[10ë¶„ ì¶©ì „]");
 		MobileTest.printTitle();
 		kind[0].charge(10);
 		kind[1].charge(10);
 		printMobile(kind[0]);
 		printMobile(kind[1]);
-		System.out.println("[5ºĞ ÅëÈ­]");
+		System.out.println("[5ë¶„ í†µí™”]");
 		MobileTest.printTitle();
 		kind[0].operate(5);
 		kind[1].operate(5);

@@ -3,25 +3,25 @@ package day9;
 
 class A{
 	A(){
-		System.out.println("A Å¬·¡½º¸¦ °´Ã¼ »ı¼ºÇÕ´Ï´Ù.");
+		System.out.println("A í´ë˜ìŠ¤ë¥¼ ê°ì²´ ìƒì„±í•©ë‹ˆë‹¤.");
 	}
 }
 class B extends A{
 	B(int num){
 		
-		System.out.println("B Å¬·¡½º¸¦ °´Ã¼ »ı¼ºÇÕ´Ï´Ù.");
+		System.out.println("B í´ë˜ìŠ¤ë¥¼ ê°ì²´ ìƒì„±í•©ë‹ˆë‹¤.");
 	}
 }
 class C extends B{
 	C(){
-		super(100);								// Á÷Á¢ ºÎ¸ğÅ¬·¡½º¸¦ È£Ãâ½ÃÄÑÁà¾ßÇÑ´Ù.
-		System.out.println("C Å¬·¡½º¸¦ °´Ã¼ »ı¼ºÇÕ´Ï´Ù.");
+		super(100);								// ì§ì ‘ ë¶€ëª¨í´ë˜ìŠ¤ë¥¼ í˜¸ì¶œì‹œì¼œì¤˜ì•¼í•œë‹¤.
+		System.out.println("C í´ë˜ìŠ¤ë¥¼ ê°ì²´ ìƒì„±í•©ë‹ˆë‹¤.");
 	}
 }
 public class ABCTest {
 
 	public static void main(String[] args) {
-		new C();								// ÀÚµ¿À¸·Î ºÎ¸ğµéÀÇ °´Ã¼ »ı¼º
+		new C();								// ìë™ìœ¼ë¡œ ë¶€ëª¨ë“¤ì˜ ê°ì²´ ìƒì„±
 
 	}
 

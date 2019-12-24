@@ -2,7 +2,7 @@ package day11.case2;
 
 public class TVUser {
 	public static void main(String[] args) {
-		TV tv = new SamsungTV();	//Lg È¤Àº Samsung À» ¼­·Î ¹Ù²ãµµ ¿¡·¯°¡ ³ªÁö ¾Ê´Â´Ù
+		TV tv = new SamsungTV();	//Lg í˜¹ì€ Samsung ì„ ì„œë¡œ ë°”ê¿”ë„ ì—ëŸ¬ê°€ ë‚˜ì§€ ì•ŠëŠ”ë‹¤
 		tv.powerOn();
 		tv.volumnUp();
 		tv.volumnDown();

@@ -1,9 +1,9 @@
 package day11.case3;
 
 public class TVFactory {
-	public static TV getTV(String beanName){	//¸Ş¼­µå ³»¿¡ non static ¾ø±â¿¡ static »ç¿ë °¡´É
-		TV obj = null;							//static »ç¿ëÀ¸·Î ÆĞÅ°Áö¸í ¾øÀÌ Å¬·¡½º¸í.¸Ş¼­µå¸í »ç¿ë°¡´É
-		if(beanName.equals("samsung")){			//*******¾ğÁ¦ static ¾²´ÂÁö ´Ù½Ã Àß Á¤¸®
+	public static TV getTV(String beanName){	//ë©”ì„œë“œ ë‚´ì— non static ì—†ê¸°ì— static ì‚¬ìš© ê°€ëŠ¥
+		TV obj = null;							//static ì‚¬ìš©ìœ¼ë¡œ íŒ¨í‚¤ì§€ëª… ì—†ì´ í´ë˜ìŠ¤ëª….ë©”ì„œë“œëª… ì‚¬ìš©ê°€ëŠ¥
+		if(beanName.equals("samsung")){			//*******ì–¸ì œ static ì“°ëŠ”ì§€ ë‹¤ì‹œ ì˜ ì •ë¦¬
 			obj = new SamsungTV();
 		} else if(beanName.equals("lg")){
 			obj = new LgTV();

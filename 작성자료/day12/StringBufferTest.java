@@ -4,27 +4,27 @@ public class StringBufferTest {
 
 	public static void main(String[] args) {		
 		StringBuffer buffer = new StringBuffer();	
-		String str = "ÀÚ¹ÙÇÁ·Î±×·¡¹Ö";					
+		String str = "ìë°”í”„ë¡œê·¸ë˜ë°";					
      	buffer.append(str);
 
         System.out.printf("%s\n", buffer);
 //        buffer.reverse();
         System.out.printf("%s\n", buffer);
-        System.out.printf("±æÀÌ : %d\n", buffer.length());    
+        System.out.printf("ê¸¸ì´ : %d\n", buffer.length());    
         
         StringBuffer buffer2 = new StringBuffer();
-        buffer2.append('ÀÚ');
-        buffer2.append('¹Ù');
-        buffer2.append('ÇÁ');
-        buffer2.append('·Î');
-        buffer2.append('±×');
-        buffer2.append('·¡');
-        buffer2.append('¹Ö');
+        buffer2.append('ì');
+        buffer2.append('ë°”');
+        buffer2.append('í”„');
+        buffer2.append('ë¡œ');
+        buffer2.append('ê·¸');
+        buffer2.append('ë˜');
+        buffer2.append('ë°');
         
         System.out.println(buffer == buffer2);
         System.out.println(buffer.equals(buffer2));
         System.out.println(buffer.toString().equals(buffer2.toString()));
-	}			//StringBuffer ºñ±³ÇÏ·Á¸é µÑ´Ù String ÇüÀ¸·Î º¯È¯ÇÏ¿© ºñ±³ÇØ¾ßÇÑ´Ù
+	}			//StringBuffer ë¹„êµí•˜ë ¤ë©´ ë‘˜ë‹¤ String í˜•ìœ¼ë¡œ ë³€í™˜í•˜ì—¬ ë¹„êµí•´ì•¼í•œë‹¤
 }
 
 

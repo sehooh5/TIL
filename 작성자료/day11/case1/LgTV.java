@@ -1,4 +1,4 @@
-﻿package day11.case1;
+package day11.case1;
 
 public class LgTV {
 	public void turnOn(){

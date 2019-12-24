@@ -8,5 +8,5 @@
 //		tv.powerOff();
 //	}
 //}
-// Lg¿Í Samsung ÀÇ ÀÛµ¿ ¹æ¹ýÀÌ °°Àºµ¥ ¸í·É¾î°¡ ´Ù¸¦ ¶§
-// interface ¸¦ »ç¿ëÇÏ¿© ¹­¾îÁÙ ¼ö ÀÖµû.
+// Lgì™€ Samsung ì˜ ìž‘ë™ ë°©ë²•ì´ ê°™ì€ë° ëª…ë ¹ì–´ê°€ ë‹¤ë¥¼ ë•Œ
+// interface ë¥¼ ì‚¬ìš©í•˜ì—¬ ë¬¶ì–´ì¤„ ìˆ˜ ìžˆë”°.

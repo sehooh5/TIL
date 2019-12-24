@@ -1,4 +1,4 @@
-﻿package day11.case2;
+package day11.case2;
 
 public class LgTV implements TV {
 	public void powerOn(){

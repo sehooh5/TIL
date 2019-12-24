@@ -75,15 +75,15 @@ class SaleTV extends TV {
 	}
 
 	public void play() {
-		System.out.println("ÆÇ¸Å TV Ã¤³Î " + getChannel() + " ¹øÀÇ ÇÁ·Î¸¦ ÇÃ·¹ÀÌÇÕ´Ï´Ù.");
+		System.out.println("íŒë§¤ TV ì±„ë„ " + getChannel() + " ë²ˆì˜ í”„ë¡œë¥¼ í”Œë ˆì´í•©ë‹ˆë‹¤.");
 	}
 
 	public void sale() {
-		System.out.println(getModel() + " ¸ğµ¨ÀÇ »óÇ°À» ÆÇ¸ÅÇÕ´Ï´Ù." + price + "À» ÁöºÒÇØ ÁÖ¼¼¿ä");
+		System.out.println(getModel() + " ëª¨ë¸ì˜ ìƒí’ˆì„ íŒë§¤í•©ë‹ˆë‹¤." + price + "ì„ ì§€ë¶ˆí•´ ì£¼ì„¸ìš”");
 	}
 
 	public String toString() {
-		return "ÆÇ¸Å»óÇ°Á¤º¸ : ¸ğµ¨¸í(" + getModel() + "), °¡°İ(" + String.format("%,d", price) + "¿ø), Å©±â("
+		return "íŒë§¤ìƒí’ˆì •ë³´ : ëª¨ë¸ëª…(" + getModel() + "), ê°€ê²©(" + String.format("%,d", price) + "ì›), í¬ê¸°("
 				+ "("+String.format("%d", getSize()+")");
 	}
 }
@@ -110,15 +110,15 @@ class RentalTV extends TV implements Rentable {
 	}
 
 	public void play() {
-		System.out.println("´ë¿© TV Ã¤³Î " + getChannel() + " ¹øÀÇ ÇÁ·Î¸¦ ÇÃ·¹ÀÌÇÕ´Ï´Ù.");
+		System.out.println("ëŒ€ì—¬ TV ì±„ë„ " + getChannel() + " ë²ˆì˜ í”„ë¡œë¥¼ í”Œë ˆì´í•©ë‹ˆë‹¤.");
 	}
 
 	public void rent() {
-		System.out.println(getModel() + " ¸ğµ¨ÀÇ »óÇ°À» ´ë¿©ÇÕ´Ï´Ù." + price + "À» ÁöºÒÇØ ÁÖ¼¼¿ä");
+		System.out.println(getModel() + " ëª¨ë¸ì˜ ìƒí’ˆì„ ëŒ€ì—¬í•©ë‹ˆë‹¤." + price + "ì„ ì§€ë¶ˆí•´ ì£¼ì„¸ìš”");
 	}
 
 	public String toString() {
-		return "´ë¿©»óÇ°Á¤º¸ : ¸ğµ¨¸í(" + getModel() + "), °¡°İ(" + String.format("%,d", price) + "¿ø), Å©±â("
+		return "ëŒ€ì—¬ìƒí’ˆì •ë³´ : ëª¨ë¸ëª…(" + getModel() + "), ê°€ê²©(" + String.format("%,d", price) + "ì›), í¬ê¸°("
 				+ String.format("%d", getSize() + ")");
 	}
 }

@@ -1,8 +1,8 @@
 package day11.case2;
 
-public interface TV {				//interface »ç¿ë
-	public void powerOn();			//abstract ¸¦ ¾È½áÁàµµ ÀÚµ¿À¸·Î abstract ¸Ş¼­µå°¡ µÈ´Ù.
-	public void powerOff();			//ÀÛ¿ëÇÏ´Â ¸Ş¼­µå¸¦ ±Ô°İÈ­ ÇÏ´Â °ÍÀÌ´Ù
+public interface TV {				//interface ì‚¬ìš©
+	public void powerOn();			//abstract ë¥¼ ì•ˆì¨ì¤˜ë„ ìë™ìœ¼ë¡œ abstract ë©”ì„œë“œê°€ ëœë‹¤.
+	public void powerOff();			//ì‘ìš©í•˜ëŠ” ë©”ì„œë“œë¥¼ ê·œê²©í™” í•˜ëŠ” ê²ƒì´ë‹¤
 	public void volumnUp();
 	public void volumnDown();
 }
