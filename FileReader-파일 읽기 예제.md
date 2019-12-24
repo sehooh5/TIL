@@ -1,6 +1,6 @@
 ### FileReader-파일 읽기 예제
 
-```
+```java
 package day14.copy;
 
 import java.io.*;
@@ -33,7 +33,7 @@ public class FileReaderTest {
 
 ```
 
-```
+```java
 package day14.copy;
 import java.io.*;
 public class FileReaderTest2 {
@@ -66,7 +66,7 @@ public class FileReaderTest2 {
 
 ```
 
-```
+```java
 package day14.copy;
 
 import java.io.*;
@@ -90,7 +90,7 @@ public class FileReaderTest3 {
 }
 ```
 
-```
+```java
 package day14.copy;
 import java.io.*;
 public class FileReaderTest4 {

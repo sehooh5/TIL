@@ -1,6 +1,6 @@
 ### File 생성
 
-```
+```java
 package day14.copy;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class FileTest1 {
 }
 ```
 
-```
+```java
 package day14.copy;
 
 import java.io.*;

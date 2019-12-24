@@ -1,6 +1,6 @@
 ### FileWriter - 예제
 
-```
+```java
 package day14.copy;
 import java.io.*;
 public class FileWriterTest2 {
@@ -25,7 +25,7 @@ public class FileWriterTest2 {
 }
 ```
 
-```
+```java
 package day14.copy;
 import java.io.*;
 public class FileWriterTest {
@@ -38,11 +38,11 @@ public class FileWriterTest {
         }
         try  {
         	writer = new FileWriter("c:/iotest/output.txt",true);//파일에 추가
-//        	writer = new FileWriter("c:/iotest/output.txt");// 오버라이딩 모드
+//        	writer = new FileWriter("c:/iotest/output.txt");// 오버라이딩 모드,덮어쓰기
             char arr[] = { '객', '체', '지', '향', '언', '어', 'J', 'a', 'v', 'a' };          
             for (int cnt = 0; cnt < arr.length; cnt++)
                 writer.write(arr[cnt]);
-            writer.write(File.pathSeparatorChar);            
+            writer.write(File.pathSeparatorChar);  //;를 넣어주는 메서드    
             writer.write(arr);		//배열
             writer.write("\r\n");	//개행처리 안해줘서 따로 해줘야한다.
             writer.write("OCJP 시험 대비");//문자열..다양한객체 오버라이딩 되어잇음
