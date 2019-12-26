@@ -29,7 +29,7 @@ Delete : 삭제
 DQL ----> DML -----> DDL
 
 1. cmd 창에 들어가서 sqlplus라는 명령을 수행시킨다.
-2. sqldeveloper 라는 추가 프로그램을 설치하여 사용한다.
+2. sqldeveloper 라는 추가 프로그램을 설치하여 사용한다 - UI 사용할 수 있음
 
 **학습용 일반계정 : scott, hr(락해제)**
 
@@ -74,36 +74,8 @@ DQL ----> DML -----> DDL
 
 
 
-### SELECT
+#### 년도계산
 
-- select + 추출하려는 컬럼명리스트 또는 * from +테이블 이름
+- rr/mm/dd : 0~49 현재 세기, 50~99 이전 세기
 
-  ```
-  select * from emp;   select ename, sal from emp;   select sysdate from dual;
-  
-  select 100+200 from emp; --> 300에 emp의 행만큼 실행됨
-  
-  select user from dual; 여기서 dual은 더미 테이블로 한번만 처리해도 되는 데이터를 처리할때사용
-  ```
-
-  
-
-- where 행의 조건식
-
-  - from 선 수행 후 where절 수행 다음으로 select 실행
-
-  - order by 컬럼명 (별칭, 식) desc|asc
-
-  ```sql
-  select ename, sal 
-  
-  from emp
-  
-  where sal > 2000
-  
-  order by sal desc; | [asc];(desc 안주면 디폴트 asc 적용)
-  ```
-
-  
-
-  
+- yy/mm/dd : 현재 세기를 붙임 (ex 20xx)
