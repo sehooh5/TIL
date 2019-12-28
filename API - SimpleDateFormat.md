@@ -23,8 +23,10 @@ public class SimpleDateFormatTest {
 	}
 
 	public static void main(String[] args) throws ParseException {
-		System.out.println(timeToStrDate(new Date().getTime()));//시간불러옴
-		System.out.println(parseStrDate("2019년 12월 25일"));//날짜 입력	
+		System.out.println(timeToStrDate(new Date().getTime()));
+    //시간불러옴
+		System.out.println(parseStrDate("2019년 12월 25일"));
+    //날짜 입력	
 	}
 }
 ```
