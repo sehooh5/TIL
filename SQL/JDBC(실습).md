@@ -16,7 +16,7 @@ public class ReadVisitor22 {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		//2. DBMS에 접속 
 		Connection conn =  DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE",
-													"jdbctest","jdbctest");
+							"jdbctest","jdbctest");
 		System.out.println(conn);
 		//3.Statement / PreparedStatement 객체 생성
 		Statement st = conn.createStatement();
@@ -43,4 +43,6 @@ public class ReadVisitor22 {
 
 }
 ```
+
+
 
