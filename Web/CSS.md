@@ -6,18 +6,16 @@
 
 ### CSS 의 작성 방법
 
-- 인라인방법 : HTML 엘리먼트에 style 이라는 속성으로 정의하는 방법
-  <tag style="property: value">
-- 전역적 방법 : <style> 이라는 태그에 웹 페이지의 태그들에 대핚 스타일을 정의하는 방법
-
 ```html
+1. 인라인 방법 - HTML 엘리먼트에 style 이라는 속성으로 정의하는 방법
+<tag style="property: value">
+2. 전역적 방법 - <style> 이라는 태그에 웹 페이지의 태그들에 대핚 스타일을 정의하는 방법
 <style type="text/css">
 selector {property: value;}
 </style>
+3. 외부 파일 연결 방법 - 독립된 파알(확장자 .css)을 만들어서 HTML 문서에 연결하는 방법
+<link rel="stylesheet" type="text/css" href="style.css" />
 ```
-
-- 외부 파일 연결 방법 : 독립된 파일(확장자 .css)을 만들어서 HTML 문서에 연결하는 방법
-  <link rel="stylesheet" type="text/css" href="style.css" />
 
 
 
@@ -49,15 +47,33 @@ selector {property: value;}
 
 4. id 선택자 : #id이름   ex) #t1{}
 
-5. 자식 선택자
+5. 부모 선택자 : 
 
-6. 자손 선택자
+6. 자식 선택자 : selection > p
 
-7. 첫번째 동생 선택자
+7. 자손 선택자 : selection p
 
-8. 동생들 선택자
+8. 첫번째 동생 선택자 : h1 + p
 
-9. 속성 선택자
+9. 동생들 선택자 : h1~p
+
+10. 속성 선택자 : 
+
+    |    표기    |                             설명                             |
+    | :--------: | :----------------------------------------------------------: |
+    |   [속성]   |           지정한 `속성`갖고있는 요소에 스타일 적용           |
+    | [속성~=값] |      `속성`과 `값`을 비교해 하나만 일치해도 스타일 적용      |
+    | [속성^=값] | `속성`의  `값`이 지정한 문자로 시작되는 속성 값만 스타일 적용 |
+    | [속성$=값] |  `속성`의 `값`이 지정한 문자로 끝나는 속성 값만 스타일 적용  |
+    | [속성*=값] | `속성`의 `값`중에 `값`의 일부가 포함되는 속성에 스타일 지정  |
+
+
+
+11. 가상 선택자 : 
+
+    :first-letter, :first-line, :first-child, :last-child, :before, :after, :hover, :focus
+
+    
 
 ```html
 (exam2_2)
