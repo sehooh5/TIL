@@ -184,11 +184,13 @@
 
   ​			객체의 멤버로 정의되는 함수
 
+- 아규먼트로 함수 전달 가능!
+
 - 전역코드 :  <script>수행문장들........</script>
 
 - 생성 방법
 
-  ```
+  ```javascript
   [명시적(선언적) 함수 정의]
   
   	function 함수명(매개변수 선언){
@@ -216,6 +218,4 @@
   	함수명2([아규먼트]);
   ```
 
-  
-
-  
+  ![image-20200108092616754](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200108092616754.png)
