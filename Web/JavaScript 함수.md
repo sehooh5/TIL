@@ -50,7 +50,7 @@ f2(100);/*	매개변수 다른 함수인데도 아규먼트 전달한다  */
 <title>Insert title here</title>
 </head>
 <body>
-<h1>함수 정의와 활용(2)-선언적 함수 정의</h1>
+<h1>함수 정의와 활용(2)-표현적 함수 정의</h1>
 <hr>
 <script>
 var f1 = function(){
@@ -80,7 +80,37 @@ document.write(typeof f2 + '<br>');
 
 
 
-### exam14-함수에서 데이터 체크,이벤트 발생
+### exam14 - 가변아규먼트 처리함수
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>가변아규먼트 처리 함수 만들기</h1> <!-- 자바에서는 ... 사용했었다 -->
+<hr>
+<script>
+function out(){
+	/* arguments라는 자동으로 만들어진 배열 변수를 사용한다..가변형 */
+	document.write("아규먼트 갯수 : "+arguments.length+"<br>");	
+	for(var i=0; i<arguments.length;i++)
+		console.log(arguments[i]);
+	console.log('------------------');
+}
+
+out();
+out(10); out(10,20); out('a','b','c'); out(1,2,3,4,5,6,7,8);
+</script>
+</body>
+</html>
+```
+
+
+
+### exam15-함수에서 데이터 체크,이벤트 발생
 
 ```javascript
 <!DOCTYPE html>
@@ -122,38 +152,6 @@ function clickProcess(p) {	/* 이벤트 핸들러 : 이벤트가 발생했을 �
 </body>
 </html>
 ```
-
-
-
-### exam15 - 가변아규먼트 처리함수
-
-```javascript
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<h1>가변아규먼트 처리 함수 만들기</h1> <!-- 자바에서는 ... 사용했었다 -->
-<hr>
-<script>
-function out(){
-	/* arguments라는 자동으로 만들어진 배열 변수를 사용한다..가변형 */
-	document.write("아규먼트 갯수 : "+arguments.length+"<br>");	
-	for(var i=0; i<arguments.length;i++)
-		console.log(arguments[i]);
-	console.log('------------------');
-}
-
-out();
-out(10); out(10,20); out('a','b','c'); out(1,2,3,4,5,6,7,8);
-</script>
-</body>
-</html>
-```
-
-
 
 
 
@@ -215,6 +213,67 @@ document.write(r1 + "<br>");
 document.write(r2 + "<br>");
 document.write(r3 + "<br>");
 document.write(r4 + "<br>");
+</script>
+</body>
+</html>
+```
+
+
+
+### exam17-함수에 함수
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>함수의 아규먼트 처리</h1>
+<hr>
+<script>
+function output(p){
+	if(typeof p == 'function'){
+		p("ㅋㅋㅋ");
+	}else{
+		document.write("<h2> ㅋㅋㅋ :" +p+"</h2>");
+	}
+}
+output("둘리");
+output(function(param){console.log(param);})
+//function myAlert(param){
+	var myAlert = function(param){
+		window.alert(param);
+}
+output(myAlert);
+</script>
+</body>
+</html>
+```
+
+
+
+### exam18-고차함수 활용..5초마다
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>고차함수 활용 예</h2>
+<hr>
+<p>5초 후에 이 화면은 바뀝니다..</p>
+<script>
+	var displayDate = function(){
+		var d = new Date();
+		document.write(d.toLocaleString()+"<br>");
+	};
+	var time = 5000;
+	window.setInterval(displayDate, time);	//setInterval 몇초마다 함수를 실행해라!
 </script>
 </body>
 </html>

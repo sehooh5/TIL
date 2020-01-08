@@ -261,6 +261,119 @@ for(var i=0; i <10; i++){
 
 
 
+#### exam9 -  배열
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>배열 생성과 활용(1)</h1>
+<hr>
+<script>
+var a1 = [];
+document.write("<h3>"+ typeof a1 +"</h3>");	//자바스크립트의 배열은 object 배열, 다들어갈수있다
+document.write("<h3>"+ Array.isArray(a1) +"</h3>");
+document.write("<h3>"+ a1.length +"</h3>");
+document.write("<h3>"+ a1[0] +"</h3>");
+document.write("<hr>");
+a1[4] = 100;
+document.write("<h3>"+ a1.length +"</h3>");
+for(var i=0; i < a1.length; i++)	//undefined까지 전부 뽑아낸다
+	document.write("<h4>"+ a1[i] +"</h4>");
+document.write("<hr>");
+for(var i in a1)  // for(int data : ary)	// for each -> undefined 제외함
+	document.write("<h4>"+ a1[i] +"</h4>");	// Java 와 다른점은 undeined 아닌 객체들의 index 를 꺼내와서 불러온다
+document.write("<hr>");
+var a2 = [10, '가나다', true, 3.5];
+for(var i in a2)  // for(int data : ary)
+	document.write("<h4>"+ typeof a2[i] + ":" + a2[i] +"</h4>");
+</script>
+</body>
+</html>
+```
+
+
+
+#### exam10-배열,toString,Date
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>배열 생성과 활용(2)</h1>
+<hr>
+<script>
+var a1 = new Array();  // [ ]
+var a2 = new Array(10); // 크기
+var a3 = new Array('가'); // 원소값
+var a4 = new Array(10, 20); // 원소값
+var a5 = new Array(1,2,3,4,5); // 원소값
+/* window.alert(a1.length); 0
+window.alert(a2.length); 10
+window.alert(a3.length); 1
+window.alert(a4.length); 2
+window.alert(a5.length); 5 */
+document.write(a1.toString() + "<br>");	
+document.write(a2.toString() + "<br>");
+document.write(a3.toString() + "<br>");
+document.write(a4.toString() + "<br>");
+document.write(a5 + "<br>");//구지 toSting() 안써줘도 자동으로 된다.
+var d = new Date();
+document.write(d.toString() + "<br>");
+document.write(d + "<br>");
+</script>
+</body>
+</html>
+```
+
+
+
+#### exam11-배열,메서드
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>배열 객체의 주요 메서드 활용</h1>
+<hr>
+<script>
+var ary = ['둘리', '또치', '도우너', '희동이', '고길동']
+document.write(ary + "<br>");
+var ary2 = ary.sort();	//sort 호출 후 배열이 바뀐다
+document.write(ary + "<br>");
+document.write(ary2 + "<br>");
+document.write("<hr>");
+var ary3 = [30, 11, 5, 27, 9]
+document.write(ary3 + "<br>");
+var ary4 = ary3.sort(function(a, b){ return b-a;});	
+									//desc 즉 내림차순 sort 숫자형식
+document.write(ary3 + "<br>");
+document.write(ary4 + "<br>");
+document.write("<hr>");
+var ary5 = [ ];	//배열 방만 만들어주고 push로 자유롭게 넣고싶은 만큼 데이터를 입력할 수 있다
+ary5.push(100);
+ary5.push(200);
+ary5.push(500);	
+document.write(ary5 + "<br>");
+</script>
+</body>
+</html>
+```
+
+
+
 #### exercise1-구구단실습(while and for)
 
 ```javascript

@@ -26,7 +26,7 @@
 
 
 
-#### exam21-기본 객체 만들기
+### exam21-기본 객체 만들기
 
 ```javascript
 <!DOCTYPE html>
