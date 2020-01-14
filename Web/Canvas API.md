@@ -4,6 +4,8 @@
 
 - 웹페이지에 그림을 그릴 수 있도로 지원하는 API
 
+- **body 에 캔버스만 주고 head 에 script 로 그릴수 있다.**
+
 - 그림을 그리기 위한 영역이 필요한데 이때 사용하는 태그가  `<canvas>` 
 
   ```
@@ -128,17 +130,16 @@
     `<canvas>`객체의 (dx, dy) 위치에 비트맵 이미지 객체(ImageData)의 데이터를 출력한다.
 
 - **HTMLObjectCanvas 객체 저장**
-  toDataURL() : `<canvas>` 태그 영역의 모듞 내용을 png 형식의 URI 문자열로 벾홖하여
-  리턴핚다.
-
-  ```
+  toDataURL() : `<canvas>` 태그 영역의 모듞 내용을 png 형식의 URI 문자열로 변환하여 리턴한다.
+  
+```
   var canvas = document.getElementById("draw");
   var dataURL = canvas.toDataURL();
   console.log(dataURL);
   // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNby
   // blAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC"
   ```
-
+  
 - `<video>` 와 `<audio>` 태그 관련 API
 
   - controls, autoplay, loop
@@ -200,9 +201,63 @@
     window.addEventListener("load", initiate, false);
     ```
 
-    
-
   
 
+  
+#### smile
+  
+  ```javascript
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+  <script>
+  function draw() {
+  var can = document.getElementById("smile");
+  smile = can.getContext('2d');
+  
+  smile.beginPath();
+  smile.arc(200,200,200,45,Math.PI*2,true);
+  smile.fillStyle = "skyblue";
+  smile.fill();
+  
+  smile.beginPath();
+  smile.arc(120,170,60,0,Math.PI,true);
+  smile.strokeStyle = "blue";
+  smile.lineWidth = 3;
+  smile.lineCap = "round";
+  smile.stroke();
+  
+  smile.beginPath();
+  smile.arc(280,170,60,0,Math.PI*-1,true);
+  smile.strokeStyle = "blue";
+  smile.lineWidth = 3;
+  smile.lineCap = "round";
+  smile.stroke();
+  
+  smile.beginPath();
+  smile.arc(200,250,80,0,Math.PI,false);
+  smile.strokeStyle = "magenta";
+  smile.lineWidth = 3;
+  smile.lineCap = "round";
+  smile.fillStyle = "pink";
+  smile.fill();
+  smile.stroke();
+  
+  smile.beginPath();
+  }
+  window.addEventListener("load", draw, false);
+  </script>
+  </head>
+  <body>
+  
+  <canvas id="smile" width= "500" height = "500"></canvas>
+  </body>
+  </html>
+  ```
+  
+  
+  
   
 
