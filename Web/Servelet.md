@@ -1,5 +1,9 @@
 # Servelet
 
+[TOC]
+
+
+
 - CGI(Common Gateway Interface) : 웹의 표준, 구현언어 투명성
 
   - Fast CGI
@@ -42,6 +46,10 @@
    - HttpServletRequest 의 getParameter() 또는 getParameterValues()를 사용
    - getParameter() :  단수, String 형
    - getParameterValues() : 복수, String[] 형 배열 ....ex) checkbox 
+   
+6. **POST** 때는 한글이 깨지니까 
+
+   **response.setContentType("text/html; charset=utf-8");**  꼭 지정해줘야 한다!
 
 
 
@@ -52,9 +60,10 @@
 
 2. 서블릿의 요청은
 
-   - 서블릿을 요청하는 URL 문자열을 브라우저의 주소필드에 입력해서 직접 : GET
-   - `<a>` 태그로 요청 : GET
-   - `<form>` 태그를 통해서 요청 : GET or POST
+   - 서블릿을 요청하는 URL 문자열을 브라우저의 주소필드에 입력해서 직접 : **GET**
+   - 서블릿이 바이너리 일 경우에만 `<img>` 태그로 요청 : **GET**
+   - `<a>` 태그로 요청 : **GET**
+   - `<form>` 태그를 통해서 요청 : **GET or POST**
 
 3. 서블릿 객체는 한 번 생성되는 서버 종료되거나 컨텍스트가 리로드 될 때까지 객체상태를 유지한다 = 서블릿이 속도가 빠른 이유
 
@@ -65,8 +74,29 @@
    init()  -  service() : doGet()  -  destroy()
 
    ​							 : doPost()
+   
+6. 두번째 요청시에는 service() 부터 호출된다!
 
 
+
+#### 요청재지정
+
+- **redirect** : HttpServletResponse 의 sendRedirect() 메서드를 사용한다
+
+  - 동일한 요청상에서 다른 자원에 요청을 넘겨서 대신 응답
+  - 동일한 서버의 동일 웹 어플리케이션에 존재하는 대상ㅇ만 가능
+  - 브라우저의 주소필드의 URL 이 바뀌지 않음
+  - 두 자원이 HttpServletRequest 객체 공유
+
+- **forward** : RequestDispatcher 의 forward()메서드를 사용한다
+
+  - 다른 자원을 다시 요청하여 응답
+  - Web 상의 모든 페이지로 요청재지정 가능
+  - 브라우저의 주소필드의 URL이 바뀜
+  - 재지정 대상에 대한 요청 자체를 브라우저가 하게됨
+  - 두 자원이 HttpServletRequest 객체를 공유하지 않음
+
+  
 
 ### 실행한 기초 내용들
 
@@ -95,6 +125,23 @@
 </body>
 </html>
 ```
+
+
+
+#### first servlet 에서 테스트
+
+```java
+<servlet>
+<servlet-name> abc </servlet-name>
+<servlet-class>FirstServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>abc</servlet-name>
+<url-pattern>/firstthree</url-pattern>
+</servlet mapping>
+```
+
+
 
 
 
@@ -434,10 +481,174 @@ public class GetPostServlet extends HttpServlet {
 
 
 
+#### GetPostServlet2.java - 
+
+```java
+package core;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/getpost2")
+//url 주면 무조건 GET 방식으로 출력된다
+public class GetPostServlet2 extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print("<h2>요청 방식 : "+request.getMethod()+"</h2>");
+		out.print("<h2>Query 문자열 : "+
+		                  request.getParameter("name")+"</h2>");
+		out.close();
+		System.out.println(request.getMethod()+" 방식 수행");
+	}
+
+	/* doPost가 호출되면 Encoding 수행하고 doGet을 호출한다 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		doGet(request,response);
+	}
+}
+```
+
+
+
+#### GetPostServlet3.java - service
+
+```java
+package core;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/getpost3")
+//url 주면 무조건 GET 방식으로 출력된다
+public class GetPostServlet3 extends HttpServlet {
+	//service 는 GET POST 구분없이 수행하게 함
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		String method = request.getMethod();
+		if(method.equals("POST"))
+			request.setCharacterEncoding("utf-8");
+		out.print("<h2>요청 방식 : "+method+"</h2>");
+		out.print("<h2>Query 문자열 : "+
+		                  request.getParameter("name")+"</h2>");
+		out.close();
+		System.out.println(method+" 방식 수행");
+	}
+}
+```
+
+
+
+
+
 #### QueryTestServlet.java
 
 ```java
+package core;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/querytest")
+public class QueryTestServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String name = request.getParameter("stname");
+		String pwd = request.getParameter("pwd");
+		int age = Integer.parseInt(request.getParameter("age"));
+		
+		String gender = request.getParameter("gender");
+		
+		String[] hobby = request.getParameterValues("hobby");
+		String[] food = request.getParameterValues("food");
+		
+		String color = request.getParameter("color");
+		String op = request.getParameter("op");
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		out.print("<h2> 전달된 내용 </h2>"); out.print("<hr>");
+		
+		
+		out.print("<ul>");
+		out.print("<li> 이름 : " +name+ "</li>");
+		out.print("<li> 암호 : " +pwd+ "</li>");
+		out.print("<li> 나이 : " +age+ "</li>");
+		
+		out.print("<li> 성별 : ");
+			if (gender == null) {
+				out.print("선택 제대로 하세요 -ㅅ-");	
+			}
+			else {
+				out.print(gender);
+			}
+		out.print("</li>");
+		
+		out.print("<li> 취미 : ");
+			if (hobby == null) {
+				out.print("선택 제대로 하세요 -ㅅ-");	
+			}
+			else {
+				for (int i=0 ; i<hobby.length ; ++i) {
+					if (i == hobby.length -1) {
+						out.print(hobby[i]);
+						break;
+					}
+					out.print(hobby[i] +",");
+				}
+			}
+		out.print("</li>");
+		
+		out.print("<li> 좋아하는 색 :" +(color == ""?"없음":color) +"</li>");
+		out.print("<li> 좋아하는 음식 : ");
+		if (food == null) {
+			out.print("선택 제대로 하세요 -ㅅ-");	
+		}
+		else {
+			for (int i = 0; i < food.length; ++i) {
+				if (i == food.length - 1) {
+					out.print(food[i]);
+					break;
+				}
+				out.print(food[i] +",");
+			}
+		}
+		out.print("</li>");
+		out.print("<li> 의견 : " + op + "</li>");
+		out.print("<li> 비밀1 : " + request.getParameter("h_1") + "</li>");
+		out.print("<li> 비밀2 : " + request.getParameter("h_2") + "</li>");
+		
+		
+		out.print("</ul>"); out.print("<hr>");
+		out.print("<a href='http://70.12.113.164:8000/sedu/queryForm.html'>"
+				+ "입력화면으로</a>");
+		
+		out.close();
+	}
+
+}
 ```
 
 
@@ -521,18 +732,217 @@ http://localhost:8000/sedu/querytest?
 
 
 
-#### 실습
+#### 실습-ReservationSevlet, html - date 변환
 
 ```java
+package core;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/reservation")
+public class ReservationServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setContentType("text/html; charset=utf-8");
+		request.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		
+		String name = request.getParameter("name");
+		String pwd = request.getParameter("pwd");
+		String rType = request.getParameter("rType");
+		String[] reQ = request.getParameterValues("request");
+		
+		
+		String date = request.getParameter("date");
+		LocalDate newD = LocalDate.parse(date);
+		DateTimeFormatter date1 = DateTimeFormatter.ofPattern(
+				"yyyy년 MM월 dd일");
+		String date2 = newD.format(date1);
+
+
+		 
+		 
+/*		if(pwd == "7777") {*/
+		out.print("<h1>"+name+" 님의 예약내용</h1><hr>");
+		
+			
+		out.print("<ul>");
+		out.print("<li> 룸 : " +rType+ "</li>");
+		out.print("<li> 추가 요청 사항 : ");
+		if (reQ == null) {
+			out.print("추가 요청사항이 없습니다.");	
+		}
+		else {
+			for (int i=0 ; i<reQ.length ; ++i) {
+				if (i == reQ.length -1) {
+					out.print(reQ[i]);
+					break;
+				}
+				out.print(reQ[i] +",");
+			}
+		}
+		out.print("</li>");
+			
+		
+		  out.print("<li> 예약날짜 : " +date2+ " </li>");
+		 
+		
+		out.print("</ul>"); out.print("<hr>");
+		out.print("<a href='http://70.12.115.175:8000/sedu/html/reservation.html'>"
+				+ "입력화면으로</a>");
+		/*
+		 * }else { out.print("비밀번호를 다시 입력하세요"); }
+		 */
+		out.close();
+	}
+
+}
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>울랄라 팬션 예약</title>
+<style>
+div#form { 
+	width : 420px;
+	height : 250px;
+	background : linear-gradient(to top, #d5f4e6 , #b3c6ff);
+	/* border : 1px solid; */
+	box-shadow : 5px 5px #d5f4e6;
+	padding : 10px;
+	border-radius: 40px 40px 60px 80px;
+}
+div#end{
+	text-align : center;
+}
+</style>
+</head>
+
+<body>
+
+
+<div id="form">
+<form action="/sedu/reservation" method = "POST">
+<h2 style="color: #2952a3; text-shadow : 1px 1px #1f3d7a;">펜션 예약 서비스</h2>
+<hr>
+예약자명 : <input type = "text" required name="name"><br>
+예약암호 : <input type = "password" required name="pwd"><br>
+룸 선택 : 
+<input type="radio" name="rType" value="춘" >춘
+<input type="radio" name="rType" value="하">하
+<input type="radio" name="rType" value="추">추
+<input type="radio" name="rType" value="덩">덩
+<br>
+추가요청 : 
+<input type="checkbox" name="request" value="패러글라이딩">패러글라이딩
+<input type="checkbox" name="request" value="스카이다이빙">스카이다이빙
+<input type="checkbox" name="request" value="산악행군">산악행군
+<br>
+예약 날짜 : 
+<input type="date" name="date" ><hr>
+<div id="end">
+<input type = "submit" value = "보내기">
+<input type = "reset" value = "다시작성하기">
+</div>
+</form>
+</div>
+</body>
+</html>
 ```
 
 
 
-#### 실습
+#### 실습-BasketService,productlog
 
 ```java
+package core;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/basket")
+public class BasketServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		String id = request.getParameter("pid");
+		
+		out.print("<h2 style='color:blue'>선택한 상품 : " +id+"<br>"
+				+"<img src = 'http://70.12.115.175:8000/edu/images/"+id+".png'");
+		out.print("<hr>");
+		out.print("<a href='http://70.12.115.175:8000/sedu/html/productlog.html'>"
+				+ "다른 칵테일 고르기</a>");
+
+		out.close();
+	}
+
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>하나가 먹다 둘이 죽는 칵테일 리스트</title>
+<style>
+img{
+	 border : 3px dotted #5d85d5; 
+	box-shadow : 10px 10px #5d85d5;
+	width : 150px;
+	height : 150px;
+	margin : 10px;
+	border-radius: 10px 10px 10px 10px;
+}
+</style>
+</head>
+
+<body>
+<h2>하나가 먹다 둘이 죽는 칵테일 리스트</h2>
+<a href="/sedu/basket?pid=p001"><img src = "http://70.12.115.175:8000/edu/images/p001.png" name="pid" id="p001"></a>
+<a href="/sedu/basket?pid=p002"><img src = "http://70.12.115.175:8000/edu/images/p002.png" name="pid" id="p002"></a>
+<a href="/sedu/basket?pid=p003"><img src = "http://70.12.115.175:8000/edu/images/p003.png" name="pid" id="p003"></a>
+<a href="/sedu/basket?pid=p004"><img src = "http://70.12.115.175:8000/edu/images/p004.png" name="pid" id="p004"></a>
+<a href="/sedu/basket?pid=p005"><img src = "http://70.12.115.175:8000/edu/images/p005.png" name="pid" id="p005"></a><br>
+<a href="/sedu/basket?pid=p006"><img src = "http://70.12.115.175:8000/edu/images/p006.png" name="pid" id="p006"></a>
+<a href="/sedu/basket?pid=p007"><img src = "http://70.12.115.175:8000/edu/images/p007.png" name="pid" id="p007"></a>
+<a href="/sedu/basket?pid=p008"><img src = "http://70.12.115.175:8000/edu/images/p008.png" name="pid" id="p008"></a>
+<a href="/sedu/basket?pid=p009"><img src = "http://70.12.115.175:8000/edu/images/p009.png" name="pid" id="p009"></a>
+<a href="/sedu/basket?pid=p010"><img src = "http://70.12.115.175:8000/edu/images/p010.png" name="pid" id="p010"></a>
+
+
+
+
+
+</body>
+
+</html>
 ```
 
 
