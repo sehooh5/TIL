@@ -84,7 +84,7 @@
 - **redirect** : HttpServletResponse 의 sendRedirect() 메서드를 사용한다
 
   - 동일한 요청상에서 다른 자원에 요청을 넘겨서 대신 응답
-  - 동일한 서버의 동일 웹 어플리케이션에 존재하는 대상ㅇ만 가능
+  - 동일한 서버의 동일 웹 어플리케이션에 존재하는 대상에만 가능
   - 브라우저의 주소필드의 URL 이 바뀌지 않음
   - 두 자원이 HttpServletRequest 객체 공유
 
@@ -102,7 +102,7 @@
 
 - sedu 프로젝트 만들고
 
-- tomcat-add and remove 에서 sedu 를 add 해준다
+- tomcat-add and remove에서 sedu 를 add 해준다
 
 - .jsp 로 저장해준다
 
