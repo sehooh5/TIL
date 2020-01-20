@@ -2,6 +2,24 @@
 
 [TOC]
 
+### 기본 개념
+
+- edu
+
+- sedu
+
+- OS - 폴더
+
+- Eclipse - (Dydnamic) Web Project
+
+- Tomcat - Context(Context path : /edu, /sedu)
+
+  
+
+
+
+---
+
 
 
 - CGI(Common Gateway Interface) : 웹의 표준, 구현언어 투명성
@@ -81,14 +99,18 @@
 
 #### 요청재지정
 
-- **redirect** : HttpServletResponse 의 sendRedirect() 메서드를 사용한다
+- **forward** : **RequestDispatcher** 의 **forward()**메서드를 사용한다
 
   - 동일한 요청상에서 다른 자원에 요청을 넘겨서 대신 응답
-  - 동일한 서버의 동일 웹 어플리케이션에 존재하는 대상ㅇ만 가능
+
+  - 동일한 서버의 동일 웹 어플리케이션에 존재하는 대상에만 가능
+
+    즉,같은 프로젝트 안에 있는 servlet만 사용 가능하다..**다른웹사이트 사용 불가**
+
   - 브라우저의 주소필드의 URL 이 바뀌지 않음
   - 두 자원이 HttpServletRequest 객체 공유
 
-- **forward** : RequestDispatcher 의 forward()메서드를 사용한다
+- **redirect** : **HttpServletResponse** 의 **sendRedirect()** 메서드를 사용한다
 
   - 다른 자원을 다시 요청하여 응답
   - Web 상의 모든 페이지로 요청재지정 가능
@@ -96,7 +118,121 @@
   - 재지정 대상에 대한 요청 자체를 브라우저가 하게됨
   - 두 자원이 HttpServletRequest 객체를 공유하지 않음
 
-  
+
+![image-20200120092043066](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200120092043066.png)
+
+#### forward basic
+
+```java
+package core;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/forward")
+public class ForwardServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		System.out.println("ForwardServlet 수행 시작");
+		//***context path 이후 uri 부분을 줘야한다...컨텍스트 패스 이후는 /sedu 이후부분
+		///sedu 주면 404 에러가 뜬다..무조건 context패스를 붙여서 실행한다==동일한 웹 어플리케이션 지정 !
+		//즉, /sedu/first.html = /sedu/sedu/first.html 하는 꼴
+//		RequestDispatcher rd = request.getRequestDispatcher("naver.com");
+		RequestDispatcher rd = request.getRequestDispatcher("/first.html");
+		rd.forward(request,  response);
+		System.out.println("ForwardServlet 수행 종료");
+		//마지막까지 수행한다..하지만 포워드 된 것이 메인이다.
+		//수행은 했지만 실행은 first.html 이 했다!
+	}
+
+}
+```
+
+
+
+#### redirect basic
+
+```java
+package core;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/redirect")
+public class RedirectServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//다른 웹 어플리케이션도 실행이 가능하다!!
+		System.out.println("RedirectServlet 수행 시작");
+		response.sendRedirect("naver.com");
+//		response.sendRedirect("/edu/first.html");	//전부 가능
+		//response.sendRedirect("/sedu/first.html");
+		System.out.println("RedirectServlet 수행 종료");
+		//수행하고 주소필드가 바뀐다..요청 : /redirect --> 실행 후 : /first.html
+		//이런 과정 때문에 다시 연결 된걸 알 수 있다.
+	}
+
+}
+```
+
+
+
+#### redirect 실습
+
+```java
+package core;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/move")
+public class MoveServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getParameter("action");
+		if(id == null) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.print("<h2>전달된 쿼리 문자열이 없어서 MoveServlet이 직접 응답합니당..</h2>");
+			out.close();
+		}else {
+			String site = "";
+		if(id.equals("naver"))
+			site = "http://www.naver.com";
+		else if(id.equals("daum"))
+			site = "http://www.daum.net";
+		else if(id.equals("google"))
+			site = "http://www.google.com";
+		response.sendRedirect(site);
+		}
+
+	}
+
+}
+```
+
+
 
 ### 실행한 기초 내용들
 

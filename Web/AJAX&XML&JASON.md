@@ -522,17 +522,111 @@ function getImage() {
 
 
 
-#### exam3-JASON
+#### ajaxlab1.html
 
 ```javascript
-
+<!DOCTYPE html>
+<html>
+    <head>
+     <meta charset='utf-8'>
+     <title>날씨 정보</title>
+     <style>
+     img{
+     	width : 200px;
+     	height : 200px;
+     }
+     </style>
+     <script>	
+     window.onload = function() {
+ 		var request = new XMLHttpRequest();
+ 		request.onload = function(event) {
+ 			/* alert("들어옴"); */
+ 			if (request.status == 200) {
+ 				/* alert("200 들어옴"); */
+ 				var str = request.responseText;
+ 				/* alert(str); */
+ 				var jsObj = JSON.parse(str);
+ 				/* alert(jsObj); */
+ 				var textArea = document.getElementById('output');
+ 				var imgArea = document.getElementById('image');
+ 				textArea.innerHTML = "<h2>기준 시간 : "+ jsObj.time +"</h2>"+
+ 								"<h2>기온 : "+ jsObj.temp +"도</h2>";
+ 				imgArea.innerHTML = "<img src=\"../"+jsObj.img+"\">";
+ 			}
+ 		};
+ 		/* alert("오픈시작"); */
+ 		request.open('GET', 'content/weather.jsp', true);
+ 		/* alert("센드 시작"); */
+ 		request.send();
+ 	};
+		
+     </script>
+    </head>
+    <body>
+        <h1>오늘의  날씨 정보</h1>
+        <hr>
+        <div id="output"></div>
+        <figure id="image" style="width:200px; height:200px;"></figure>
+    </body>
+</html>
 ```
 
 
 
-#### exam3-JASON
+#### ajaxlab2.html
 
 ```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>주소와 위도경보</title>
+<script>
+function startPrompt() {
+
+		var add = prompt("주소를 입력하세요");
+		/* alert(add); */
+		var add2 = encodeURIComponent(add);
+		/* alert(add2); */
+		var request = new XMLHttpRequest();
+		request.onload = function() {
+			/*  alert("들어옴");  */
+			if (request.status == 200) {
+				/* alert("200 잘 읽어옴");  */
+				var str = request.responseText;
+				/* alert(str+"객체 잘 읽어냄");  */
+				var jsObj = JSON.parse(str);
+				/* alert(jsObj+"객체 자바로 잘 바꿔줬음");  */
+				var textArea = document.getElementById('output');
+
+				textArea.innerHTML = "변환된 위도와 경도"
+						+ jsObj.results[0].geometry.location.lat + " : "
+						+ jsObj.results[0].geometry.location.lng;
+
+			}
+		};
+		/* alert("오픈시작"); */
+		request
+				.open(
+						'GET',
+						'https://maps.googleapis.com/maps/api/geocode/json?address='
+								+ add2
+								+ "&key=AIzaSyD8k2DWC_7yFHCrH6LDR3RfITsmWMEqC8c",
+						true);
+		/* alert("센드 시작");  */
+		request.send();
+	};
+</script>
+</head>
+<body>
+	<h1>주소와 위도경도 변환 서비스</h1>
+	<hr>
+	<button onclick="startPrompt();" id="btn">주소입력버튼</button>
+	<br>
+	<h2 id="output"></h2>
+
+</body>
+</html>
 
 ```
 
