@@ -1,5 +1,7 @@
 # Survlet JDBC
 
+[TOC]
+
 - 서블릿(웹)에서의 DB연동
 
 ### 순서
@@ -33,7 +35,7 @@
 
 #### VisitorDBServlet
 
-```
+```java
 package core;
 
 import java.io.IOException;
@@ -133,7 +135,7 @@ public class VisitorDBServlet2 extends HttpServlet {
 
 #### visitorMain,Form.html
 
-```
+```javascript
 <!DOCTYPE html>
 <html>
 <head>
@@ -172,5 +174,107 @@ public class VisitorDBServlet2 extends HttpServlet {
 
 </body>
 </html>
+```
+
+
+
+
+
+#### VisitorDBServlet2 - preparedStatement사용
+
+```java
+package core;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class VisitorDBServlet
+ */
+@WebServlet("/visitordb2")
+public class VisitorDBServlet2 extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		try {
+		Class.forName("oracle.jdbc.driver.OracleDriver");//꼭 try catch 써줘야함
+		}catch(ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 오류");
+		}
+		//**ojdbc6.jar 를 /WEB-INF/lib 밑에 넣어놔야한다
+		//DB서버 접속, Statement 객체 생성, "select name, writedate, memo from visitor" SQL명령 수행
+		//예외처리 필수!!try catch with resource 사용!!간단하게 close 안쓰고 사용 가능
+		String sql = "select name, to_char(writedate, 'yyyy\"년\" mm\"월\" dd\"일\"') writedate, memo from visitor"; 
+		try (Connection conn = DriverManager.getConnection
+				("jdbc:oracle:thin:@localhost:1521:XE", "jdbctest", "jdbctest");
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql);){
+			out.print("<h1>방명록 리스트</h1><hr>");
+			out.print("<table border='1'>");
+			while(rs.next()) {
+				out.print("<tr>");
+				out.print("<td>"+rs.getString("name")+"</td>");
+				out.print("<td>"+rs.getString("writedate")+"</td>");
+				out.print("<td>"+rs.getString("memo")+"</td>");
+				out.print("</tr>"); // 서블릿은 html 뽑을라면 일일이 out.print 해야됨.. 이걸 보완해주는애가 jsp
+			}
+			out.print("</table>");
+		}catch(SQLException e) {
+			out.print("<h2>오류 발생!!</h2>");
+			e.printStackTrace();
+		}
+		out.print("<hr><a href='/sedu/html/visitorMain.html'>방명록 메인화면으로 가기</a>");
+		out.close();
+	}
+	
+	//insert 부분을 preparedstatement 사용!!!!!!!!!!!!!!!
+	//장점..빠르고 동적 파라미터 사용이 용이하다...그리고 문자열 아닌 바이너리도 사용가능
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		request.setCharacterEncoding("UTF-8");
+		
+		String name = request.getParameter("name");
+		String memo = request.getParameter("memo");
+		
+		try {
+		Class.forName("oracle.jdbc.driver.OracleDriver");//꼭 try catch 써줘야함
+		}catch(ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 오류");
+		}
+		//** ?를 주어서 미리 지정하지 않음
+/**/	String sql = "insert into visitor values(?,sysdate,?)"; 
+		//**객체 생성하는 애들만 오고 close 필요한 애들만 사용해야한다..따라서executeUpdate는 불가
+		try (Connection conn = DriverManager.getConnection
+				("jdbc:oracle:thin:@localhost:1521:XE", "jdbctest", "jdbctest");
+/**/		PreparedStatement pstmt = conn.prepareStatement(sql);//미리 sql 바로 등록!
+				){
+/**/		pstmt.setString(1, name);
+/**/		pstmt.setString(2, memo);
+/**/		pstmt.executeUpdate();//sql 등록 X 위에서 미리 등록 했음
+			out.print("<h2>방명록글 저장 성공</h2>");
+		}catch(SQLException e) {
+			out.print("<h2>방명록글 저장 실패</h2>");
+			e.printStackTrace();
+		}
+		out.print("<hr><a href='/sedu/html/visitorMain.html'>방명록 메인화면으로 가기</a>");
+		out.close();
+	}
+}
 ```
 
