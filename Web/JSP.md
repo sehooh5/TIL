@@ -209,19 +209,217 @@
 
 
 
-#### exam1 - 
+#### exam5 - 요청한 페이지로 돌아가는 법, 띄어쓰기 주의
 
 ```jsp
+<!-- 표현식 태그 연습 -->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!-- 특수문자 사용방법 + amp; -->
+<h1>선언문 태그</h1>
+<hr>
+<%!
+	int multiply(int n1, int n2){
+	return n1*n2;
+}
+%>
+<%
+	int result = 0;
+	if(request.getMethod().equals("GET")){
+%>
+	<h3>숫자 2개를 입력하세요</h3>
+	<form method="post" action="/sedu/jspexam/exam5.jsp">
+	남바 완  <input type="number" name="no1"><br>
+	남바 투  <input type="number" name="no2"><br>
+	<input type="submit">
+	</form>
+<%
+	}else{
+		int no1 = Integer.parseInt(request.getParameter("no1"));
+		int no2 = Integer.parseInt(request.getParameter("no2"));
+		result = multiply(no1,no2);
+	
+%>
+	<h2>결과는 바로오오~~~~~ : <%= result %></h2>
+	<!-- 요청한 페이지 HTML의 URL 을 출력된다, jsp 표현식은 인용부호 안에서도 사용 가능-->
+	<a href="<%= request.getHeader("referer") %>">입력 화면으로</a>
+<%  } %>	
 
+</body>
+</html>
 ```
 
 
 
 
 
-#### exam1 - 
+#### 번호 맞추기 실습 lotto
 
 ```jsp
+///////////////////////////////////////////LottoServlet1.java
+package core;
 
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/lotto1")
+public class LottoServlet1 extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setContentType("text/html; charset=utf-8");
+		String num = request.getParameter("num");
+		int sNum = Integer.parseInt(num);
+		
+		int rNum = (int)(Math.random()*6+1);
+		System.out.println("전달된 값 : "+ sNum + ", 추출된 값 : " + rNum);
+		
+		String url;
+		if (sNum == rNum) {
+			url="/jspexam/success.jsp";
+		}else {
+			url="/jspexam/fail.jsp";
+		}
+		RequestDispatcher rd = request.getRequestDispatcher(url);
+		rd.forward(request,response);
+	}
+
+}
+
+
+///////////////////////////////////////////lottoForm.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+div{
+	width : 550px;
+	height : 180px;
+	background : linear-gradient(to top, #d5f4e6 , #b3c6ff);
+	box-shadow : 5px 5px #d5f4e6;
+	padding : 10px;
+	border-radius: 40px 40px 60px 80px;
+	text-align : center;
+}
+</style>
+</head>
+<body>
+<div>
+<h1>오이오이 로또 번호 맞춰보라구우~</h1>
+<hr>
+<form method="GET" action="/sedu/lotto1">
+1부터 6까지의 숫자를 입력 하시게 : <input type="number" min="1" max="6" name="num">
+<input type="image" 
+src="http://70.12.115.175:8000/sedu/jspexam/clover.png" width="30">
+</form>
+</div>
+</body>
+</html>
+
+
+///////////////////////////////////////////success.jsp
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+div{
+	width : 350px;
+	height : 100px;
+	background : linear-gradient(to top, #d5f4e6 , #b3c6ff);
+	box-shadow : 5px 5px #d5f4e6;
+	padding : 10px;
+	border-radius: 40px 40px 60px 80px;
+	text-align : center;
+}
+span{
+	color : yellow;
+	text-shadow : 2px 2px black;
+}
+</style>
+</head>
+<body>
+
+<% 
+	LocalDateTime cDate = LocalDateTime.now();
+	DateTimeFormatter fomatter = DateTimeFormatter.ofPattern("HH시 mm분");
+%>
+<div><h2>
+<%= cDate.format(fomatter) %>에 로또 당첨!!<br>
+<span>FLEX</span> 해보렸지모야~</h2>
+</div><br>
+<img src="http://70.12.115.175:8000/edu/images/gra.png" width="150">
+
+</body>
+</html>
+
+
+
+///////////////////////////////////////////fail.jsp
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+div{
+	width : 430px;
+	height : 130px;
+	background : linear-gradient(to top, #d5f4e6 , #b3c6ff);
+	box-shadow : 5px 5px #d5f4e6;
+	padding : 10px;
+	border-radius: 40px 40px 60px 80px;
+	text-align : center;
+	text-color : white;
+	text-shadow : 2px 2px white;
+}
+span{
+	color : yellow;
+	text-shadow : 2px 2px black;
+}
+</style>
+</head>
+<body>
+
+<% 
+	LocalDateTime cDate = LocalDateTime.now();
+	DateTimeFormatter fomatter = DateTimeFormatter.ofPattern("HH시 mm분");
+%>
+<div><h2>
+<%= cDate.format(fomatter) %>에 당첨 실패!!<br>
+젊은 친구 인생은 다시 도전하는거야~<br><span>빠끄</span>~눌러</h2>
+</div><br>
+<a href="<%= request.getHeader("referer") %>"><input type="image" src="http://70.12.115.175:8000/sedu/jspexam/back.PNG" width="150"></a>
+<!-- <form>
+<input type="image" src="http://70.12.115.175:8000/sedu/jspexam/back.PNG" width="150">
+</form> -->
+
+</body>
+</html>
 ```
 
