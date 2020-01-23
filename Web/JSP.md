@@ -18,6 +18,8 @@
 
 - 기본적으로 Service 기능으로 GET과 POST 를 구분하지 않고 사용 가능
 
+- JSP - - - > Servlet 으로 변환된다!
+
 
 
 ### 사용방법
@@ -25,10 +27,11 @@
 - JSP 는 **내장객체**를 사용하면 된다. 내장 객체 **9개**! (즉, 변수만 기억하면 된다)
 
   ```
-  request, response, session, out, application, config, exception, page, pageContext
+  request, response, session, out, application, config, exceptionisErrorPage에서만 사용 가능, page, pageContext
   ```
 
-  
+  - application : servlet 갯수마다 context가 생긴다 (우린 edu, sedu 두개)
+  - exception : isErrorPage에서만 사용 가능
 
   ##### HTML 문서 안에 정해진 **JSP 태그**로 사용한다
 
@@ -43,10 +46,30 @@
   -가운데 세개는 자바 코드 작성에 사용하는 태그들
   ```
 
+  - <%@ page 속성명="속성값".........%> 
+
+    - 인용부호("") 꼭 줘야한다
+
+    - language, contentType, pageEncoding, isErrorPage, session, buffer,
+
+      import, isELIgnored
+
+  - <%@ include file="포함하려는 대상 파일의 로컬 URL" %> : include 지시자
+
+    - 반복되는 파일 사용할때
+    - 포함하는 위치 : 이 지시자 태그가 사용된 위치
+    - 포함하는 시기 : JSP를 Servlet으로 변환하기 전
+    - 포함하는 대상 : html, jsp, jspf(다른 jsp에 포함되는 jsp file 일때 사용)
+    - 서블릿은 상대 jsp를 포함해서 변환되기때문에 **한 개만 생성** : 동적포함
+
 - **액션 태그**
 
+  - 기능이 정해져있는 태그
+
   ```
-  <jsp:include />,<jsp:forward  />, <jsp:parapm	/>
+  <jsp:include /> :같이 응답하고싶으면 사용, ***서블릿 각자 생성,정적포함
+  <jsp:forward  /> : 요청, 재지정
+  <jsp:parapm	/> : 포워드하는 대상한테 데이터 전달하는 태그
   ```
 
 - **커스텀 태그**
@@ -54,7 +77,33 @@
   - JSTL
   - 우리는 XML, core 태그 위주로 공부할 것
 
+#### MVC
 
+- 요청은 servlet /  응답은 jsp
+- **모델** : 어플리케이션의 정보(데이터) 담당
+- **뷰** : 텍스트, 체크박스 항목 등과 같은 사용자 인터페이스 요소 담당
+- **컨트롤러** : 데이터와 비즈니스 로직 사이의 상호동작 관리, 어플리케이션 기능담당
+
+![image-20200123174025928](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200123174025928.png)
+
+
+
+#### 객체공유
+
+- forward 는 객체공유 가능
+- redirect 는 가능할 때도 있고 아닐 때도 있다
+- Page Scope : 
+- RequestScope : HttpServletRequest 객체에 보관하여 응답 될 때까지 보관
+- Session Scope : HttpSession 객체에 보관하여 session 있는동안 보관
+-  Application Scope : 
+  - ServletContext 서버 기동될때까지 보관(가장 길다)
+  - 모든 클라이언트(서블릿)에 의해 공유
+- 메서드
+  - public void setAttribute(String key, Object value)
+  - public Object get Attribute(String key)
+  - public void removeAttribute(String key)
+
+![image-20200123173706387](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200123173706387.png)
 
 ---
 
@@ -422,4 +471,927 @@ span{
 </body>
 </html>
 ```
+
+
+
+
+
+
+
+#### exam6
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>요청 방식에 따른 처리</title>
+<style>
+	input {
+		margin : 3px;
+	}
+</style>
+</head>
+<body>
+	<% if (request.getMethod().equals("GET")) { %>
+		<h2>원하는 칼라와 날짜를 선택하세요</h2>
+		<!-- 자기자신을 요청.....action 태그 생략 가능 -->
+		<form method="post" action="/sedu/jspexam/exam7.jsp">
+			칼라 : <input type="color"  name="fcolor" ><br>
+			날짜 : <input type="date"  name="fdate"><br>
+			<input type="submit" value="전송">
+		</form>
+		<!-- post 방식으로 요청하면 작동 --> 
+	<% } else { %>	
+			<script>
+				document.body.style.backgroundColor =
+					         '<%= request.getParameter("fcolor") %>';
+			</script>
+			<h2>선택 날짜는 <%= request.getParameter("fdate") %> 이네요..</h2>
+	<% } %>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+#### exam7
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>요청 방식에 따른 처리</title>
+<style>
+	input {
+		margin : 3px;
+	}
+</style>
+</head>
+<body>
+	<% if (request.getMethod().equals("GET")) { %>
+		<h2>원하는 칼라와 날짜를 선택하세요</h2>
+		<!-- 자기자신을 요청.....action 태그 생략 가능 -->
+		<form method="post" action="/sedu/jspexam/exam7.jsp">
+			칼라 : <input type="color"  name="fcolor" ><br>
+			날짜 : <input type="date"  name="fdate"><br>
+			<input type="submit" value="전송">
+		</form>
+		<!-- post 방식으로 요청하면 작동 --> 
+	<% } else { %>	
+			<script>
+				document.body.style.backgroundColor =
+					         '<%= request.getParameter("fcolor") %>';
+			</script>
+			<h2>선택 날짜는 <%= request.getParameter("fdate") %> 이네요..</h2>
+	<% } %>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+#### reservation.jsp
+
+```jsp
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDate"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>펜션 예약해보자</title>
+<style>
+	input {
+		margin : 3px;
+	}
+</style>
+</head>
+<body>
+<%
+request.setCharacterEncoding("UTF-8");
+%>
+		<h1> <%= request.getParameter("name") %>님의 예약 내용</h1>
+		<hr>
+		<ul>
+		<li> 룸 : <%= request.getParameter("rType") %></li>
+		<li> 추가 요청 사항 : <% 
+		String[] reQ = request.getParameterValues("request");
+		if (reQ == null) {
+			out.print("추가 요청사항이 없습니다.");	
+		}
+		else {
+			for (int i=0 ; i<reQ.length ; ++i) {
+				if (i == reQ.length -1) {
+					out.print(reQ[i]);
+					break;
+				}
+				out.print(reQ[i] +",");
+			}
+		}%>
+		</li>
+		<li> 예약날짜 : 
+		<% 
+		String date = request.getParameter("date");
+		LocalDate newD = LocalDate.parse(date);
+		DateTimeFormatter date1 = DateTimeFormatter.ofPattern(
+				"yyyy년 MM월 dd일");
+		String date2 = newD.format(date1);
+		out.print(date2);
+		%></li>
+		</ul>
+		<br>
+		<br>
+		<a href="<%= request.getHeader("referer") %>"><input type="image" src="http://70.12.115.175:8000/sedu/jspexam/back.PNG" width="150"></a>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+#### exam8-errorPage 설정
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<!-- 실행하다 에러 났을때만 에러페이지 기능이 작동한다 -->
+<%@ page isErrorPage="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body style="text-align:center">
+<h2>오류 발생했어욤ㅠㅠ</h2>
+<h3>빠른시일내에 복구하겠습니다...</h3>
+<img src="error.jpg">
+<%	
+/* 내장객체 변수 ..@page 지시자 태그에 isErroPage=true일때만 사용 가능*/
+    String msg = "오류 원인 : " + exception;
+	System.out.println("----------------------------------------");
+	System.out.println(msg);
+	System.out.println("----------------------------------------");	
+	exception.printStackTrace();
+%>
+</body>
+</html>
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+    <!-- 실행하다 에러 났을때만 에러페이지 기능이 작동한다 -->
+<%@ page isErrorPage="true" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body style="text-align:center">
+<h2>오류 발생했어욤ㅠㅠ</h2>
+<h3>빠른시일내에 복구하겠습니다...</h3>
+<img src="error.jpg">
+<%	
+	/* 내장객체 변수 ..@page 지시자 태그에 isErroPage=true일때만 사용 가능*/
+    String msg = "오류 원인 : " + exception;
+	System.out.println("----------------------------------------");
+	System.out.println(msg);
+	System.out.println("----------------------------------------");	
+	exception.printStackTrace();
+%>
+</body>
+</html>
+```
+
+
+
+
+
+#### exam9 - include jspf사용
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSP 학습</title>
+</head>
+<body>
+<h2>include 지시자 태그 테스트</h2>
+<hr>
+<%@  include  file="part1.jspf"  %>
+<hr>
+<%@  include  file="part2.jspf"  %>
+<hr>
+<h3>이 페이지에서 직접 출력하는 내용입니다.</h3>
+</body>
+</html>
+
+
+<%@  page pageEncoding="UTF-8"  %>
+<div>
+include 지시자에 의해 포함된 내용입니다.
+</div>
+
+
+<%@  page pageEncoding="UTF-8"  %>
+<% int num = 1000; %>
+<div>
+100 * 2 의 연산 결과 : <%= num * 2 %>
+</div>
+```
+
+
+
+
+
+#### exam10 - jsp:forward, param 액션태그
+
+```jsp
+<%@ page contentType="text/html; charset=utf-8"   %>
+<!DOCTYPE html>
+<html>
+<HEAD>
+<meta charset="UTF-8">
+<TITLE>forward 액션 태그를 이용한 분기 예제  </TITLE>
+</HEAD>
+<BODY>
+<% if(request.getParameter("type")==null || 
+           request.getParameter("type").equals("admin") ){ %>
+  <jsp:forward page="admin_new.jsp">
+  	<jsp:param name="message" value="Hi! Administrator" />
+  </jsp:forward>
+<% } else  {%>
+  <jsp:forward page="user_new.jsp">
+  	<jsp:param name="message" value="Hi! User" />
+  </jsp:forward>
+<%} %> 
+</BODY>
+</HTML>
+
+
+<%@ page contentType="text/html; charset=utf-8"   %>
+<HTML>
+<HEAD>
+<TITLE>관리자 화면  </TITLE>
+</HEAD>
+<BODY>
+관리자님 환영합니다. <br>
+이 화면은 관리자를 위한 화면입니다. <br>
+전달된 파라미터 : <span style="color:blue;">
+<%=request.getParameter("message")%></span>
+</BODY>
+</HTML>
+```
+
+
+
+
+
+#### exam11 - jsp:include 액션태그
+
+```jsp
+<%@ page contentType="text/html; charset=utf-8" %>
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<META charset="UTF-8">
+<TITLE>INCLUDE 액션태그 예제</TITLE>
+</HEAD>
+<BODY>
+<H3>INCLUDE 액션태그 예제</H3>
+<H4>각 나라의 감사 인사말입니다.</H4>
+<P>
+한국어 : 
+<jsp:include page="greeting.jsp">
+   <jsp:param name="country" value="korea" />
+</jsp:include>
+</P>
+<P>
+영어 :
+<jsp:include page="greeting.jsp">
+   <jsp:param name="country" value="english" />
+</jsp:include>
+</P>
+<P>
+일본어 :
+<jsp:include page="greeting.jsp">
+   <jsp:param name="country" value="japan" />
+</jsp:include>
+</P>
+</BODY>
+</HTML>
+    
+    
+    
+    
+ <!-- 파일명 : greeting.jsp -->
+<%@ page contentType="text/html; charset=utf-8"%>
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<META charset="UTF-8">
+<TITLE>감사인사</TITLE>
+</HEAD>
+<BODY>
+<%
+if(request.getParameter("country").equals("korea")) {
+%>
+   <%= "감사합니다." %>
+<%	
+}
+else if(request.getParameter("country").equals("english")) {
+%>
+   <%= "Thank You." %>
+<%
+}
+else if(request.getParameter("country").equals("japan")) {
+%>
+    <%= "ありがとうございます" %>
+<%
+}
+%>
+</BODY>
+</HTML>   
+ 
+```
+
+
+
+
+
+
+
+#### exam12 - include 정적포함, 동적포함 비교
+
+- <@ include >는 date.jsp 에 ld 가 두번 정의되서 가져오기 때문에 중복오류
+- jsp:include 는 결과값을 가져와서 오류 없음
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSP 예제</title>
+</head>
+<body>
+<h2>include 지시자와 액션태그 비교</h2>
+<hr>
+<%@ include file="date.jsp" %>
+<hr>
+<%@ include file="date.jsp" %> 
+<%-- 
+<hr>
+<jsp:include page="date.jsp" />
+<hr>
+<jsp:include page="date.jsp" />
+--%>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+#### go.jsp - forward:, redirect
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<%@ page import="java.time.LocalDate" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>고고!!</title>
+</head>
+<body>
+<%	
+	request.setCharacterEncoding("UTF-8");
+	String sub = request.getParameter("study");
+	if(sub == null){%>
+<h2>study 라는 이름으로 전달된 쿼리가 존재하지 않습니다.</h2>
+<%	}	
+	else{
+		String site = "";
+		if(sub.equals("javascrpit"))
+			site = "http://www.w3schools.com/js/default.asp";
+		else if(sub.equals("ajax"))
+			site = "http://www.w3schools.com/js/default.asp";
+		else if(sub.equals("dom"))
+			site = "http://www.w3schools.com/xml/ajax_intro.asp";
+		else if(sub.equals("ajax"))
+			site = "http://www.w3schools.com/js/js_json_intro.asp";
+		else {
+			if(sub.equals("jsp")){%>
+<jsp:forward page="/first.jsp">
+	<jsp:param name="gname" value="unico" />
+</jsp:forward>
+<% 		
+		}else if(sub.equals("html")){ 
+			%>
+<jsp:forward page="/first.html" />
+			<% 
+		}
+		}
+		response.sendRedirect(site);
+	}
+%>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+#### exam13 - JSP 내장객체 점검
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.util.Date"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSP의 내장 객체들</title>
+</head>
+<body>
+<h2>JSP의 내장 객체들 점검</h2>
+[ request ]<br>
+getMethod() : <%=  request.getMethod()  %><br>
+getRequestURI() : <%=  request.getRequestURI()  %><br><!-- /sedu/jspexam.... -->
+getHeader("user-agent") : <%=  request.getHeader("user-agent")  %><br><!-- 요청 헤더정보,크롬;모바일 등등 -->
+[ application ]<br> 
+getContextPath() : <%=  application.getContextPath()  %><br>
+getServerInfo() : <%=  application.getServerInfo()  %><br><!-- 톰캣 이름 -->
+getMajorVersion() : <%=  application.getMajorVersion()  %><br><!-- 서블릿 버전 -->
+[ session ]<br>
+getId() : <%=  session.getId()  %><br>
+getCreationTime() : <%=  new Date(session.getCreationTime())  %><br>
+[ response ]<br>
+getStatus() : <%=  response.getStatus() %><br>
+getBufferSize() : <%=  response.getBufferSize() %><br>
+getContentType() : <%=  response.getContentType() %>
+<H4>Web Application(/sedu) 디렉토리의 파일 리스트 </H4>
+<% 
+java.util.Set<String> list = application.getResourcePaths("/");
+if (list != null) {
+   Object obj[] = list.toArray();
+   for(int i=0; i < obj.length; i++) {
+      out.print(obj[i]+", ");
+   }
+}
+%>
+</body>
+</html>
+```
+
+
+
+
+
+#### exam14
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"  %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2>JSP에서의 HttpSession 객체</h2>
+<hr>
+<%= session.isNew() %><br>
+<%= session.getId() %><br>
+<%= session.getCreationTime() %><br>
+<%= new java.util.Date(session.getCreationTime()) %><br>
+</body>
+</html>
+```
+
+
+
+
+
+#### exam15 - 로그인
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내장객체 예제 </title>
+<style>
+	input {
+		margin : 1px;
+	}
+</style>
+</head>
+<body>
+<%
+if (request.getMethod().equals("POST")) {
+   if (session.isNew() || session.getAttribute("member_id") == null ) {
+      String name = request.getParameter("membername");
+      String passwd = request.getParameter("memberpassword");
+      if(name.equals("duke") && passwd.equals("java")) {
+    	  session.setAttribute("member_id", name);  
+    	  session.setAttribute("member_passwd", passwd);
+    	  session.setMaxInactiveInterval(60);
+%>
+     	 <script>
+  			alert("성공적으로 로그인했습니다!!");
+  		 </script>
+     	 <h3><%=  name %> 회원님.. 좋은하루 되세요...</h3>
+		 <a href="/sedu/jspexam/exam16.jsp">로그아웃</a>	
+<%
+      } else {    	 
+%>
+			<script>
+  				alert("로그인에 실패했습니다 !!");
+  			</script>
+  			<h2>로그인</h2><hr>
+			<form method="post" action="/sedu/jspexam/exam15.jsp">
+				<input placeholder="계정을 입력하세요" 
+				                         name="membername"><br>
+				<input type="password" placeholder="암호를 입력하세요" 
+				                         name="memberpassword"><br>
+				<input type="submit"  value="로그인">
+			</form>
+<%
+      }
+   }		      
+} else if (request.getMethod().equals("GET")) {
+	String name = (String)session.getAttribute("member_id") ;
+	if (name != null ) {
+%>
+		 <h3><%=  name %> 회원님.. 좋은하루 되세요...</h3>
+	 	 <a href="/sedu/jspexam/exam16.jsp">로그아웃</a>	
+<%
+   	} else {
+%>
+ 		<script>
+  			alert("로그인 해주세요!");
+  		</script>
+		<h2>로그인</h2><hr>
+		<form method="post"  action="/sedu/jspexam/exam15.jsp">
+			<input placeholder="계정을 입력하세요" name="membername"><br>
+			<input type="password" placeholder="암호를 입력하세요" name="memberpassword"><br>
+			<input type="submit"  value="로그인">
+		</form>
+<%	
+   	}
+}
+%>			
+</body>
+</html>
+
+```
+
+
+
+
+
+#### exam16 - 로그아웃
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내장객체 예제 </title>
+<style>
+	input {
+		margin : 1px;
+	}
+</style>
+</head>
+<body>
+<%
+	 String membername = 
+	                     (String)session.getAttribute("member_id");
+	 if(membername != null) {
+ 		session.removeAttribute("member_id");
+ 		session.removeAttribute("member_passwd");
+%>
+		<script>
+  			alert("성공적으로 로그아웃했습니다 !!");
+  		</script>
+ <%
+	 } else { 		 
+ %>
+ 		<script>
+  			alert("로그인 상태가 아닙니다 !!");
+  		</script>
+ <%	
+	} 
+%>	
+ 		<h2>로그인</h2><hr>
+		<form method="post"  action="/sedu/jspexam/exam15.jsp">
+			<input placeholder="계정을 입력하세요" name="membername"><br>
+			<input type="password" placeholder="암호를 입력하세요" name="memberpassword"><br>
+			<input type="submit"  value="로그인">
+		</form>		
+</body>
+</html>
+
+```
+
+
+
+
+
+### 객체공유 exam
+
+- xxxVO : Value Object, 값을 설정하고 보관하는 기능
+- xxxDAO : Data Access Object, DB 연동기능 (JDBC)을 지원하는 객체
+- xxxService(xxxBiz) : Service Object, 서비스 로직을 지원하는 객체
+
+#### ShareTestServlet1.java / CountVO / share1.jsp
+
+- **Request Scope**, 요청이 끝나면 없어진다!
+
+```java
+package controller;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import vo.CountVO;
+@WebServlet("/sharetest1")
+public class ShareTestServlet1 extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int param = Integer.parseInt(request.getParameter("num"));
+		CountVO vo = new CountVO();
+		vo.setNumber(param);
+		request.setAttribute("objreq", vo);
+		request.getRequestDispatcher("/jspexam/share1.jsp").
+		              forward(request, response);
+	}
+}
+
+
+package vo;
+
+public class CountVO {
+	private int number;
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number += number;
+	}	
+}
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="vo.CountVO" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"> 
+<title>Insert title here</title>
+</head>
+<body>
+<h2>서블릿이 전달한 객체(request)</h2>
+<hr>
+<%
+	CountVO vo = (CountVO)request.getAttribute("objreq");
+    if(vo != null) {
+%>
+		추출된 값 : <%= vo.getNumber() %><br>		
+<%
+    } else {
+%>
+    	추출된 객체가 없슈!!
+<%	
+    }
+%>
+</body>
+</html>
+```
+
+
+
+
+
+#### ShareTestServlet2.java / CountVO / share2.jsp
+
+- **Session Scope**, 브라우저 살아있는 동안 보관
+
+```java
+package controller;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import vo.CountVO;
+@WebServlet("/sharetest2")
+public class ShareTestServlet2 extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int param = Integer.parseInt(request.getParameter("num"));
+		HttpSession session = request.getSession();
+		if(session.getAttribute("objsession") == null) {
+			session.setAttribute("objsession", new CountVO());
+		}
+		CountVO vo = (CountVO)session.getAttribute("objsession");
+		vo.setNumber(param);
+		
+		request.getRequestDispatcher("/jspexam/share2.jsp").
+		              forward(request, response);
+	}
+}
+
+
+//VO 달고 있으면 값을 설정하고 보관하는 기능이 라고 생각하면 된다
+//Value Object 
+package vo;
+
+public class CountVO {
+	private int number;
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number += number;
+	}	
+}
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="vo.CountVO" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title> 
+</head>
+<body>
+<h2>서블릿이 전달한 객체(session)</h2>
+<hr>
+<%
+	CountVO vo = (CountVO)session.getAttribute("objsession");
+    if(vo != null) {
+%>
+		추출된 값 : <%= vo.getNumber() %><br>		
+<%
+    } else {
+%>
+    	추출된 객체가 없슈!!
+<%	
+    }
+%>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+#### ShareTestServlet3.java / CountVO / share3.jsp
+
+- **Application Scope**, 서버가 기동되어 있는 동안 유효하다
+
+```java
+package controller;
+import java.io.IOException;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import vo.CountVO;
+@WebServlet("/sharetest3")
+public class ShareTestServlet3 extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int param = Integer.parseInt(request.getParameter("num"));
+		System.out.println(param);
+		ServletContext context = getServletContext();
+		if(context.getAttribute("objapp") == null) {
+			context.setAttribute("objapp", new CountVO());
+		}
+		CountVO vo = (CountVO)context.getAttribute("objapp");
+		vo.setNumber(param);
+		
+		request.getRequestDispatcher("/jspexam/share3.jsp").
+		              forward(request, response);
+	}
+}
+
+
+
+package vo;
+
+public class CountVO {
+	private int number;
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number += number;
+	}	
+}
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="vo.CountVO" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title> 
+</head>
+<body>
+<h2>서블릿이 전달한 객체(application)</h2>
+<hr>
+<%
+	CountVO vo = (CountVO)application.getAttribute("objapp");
+    if(vo != null) {
+%>
+		추출된 값 : <%= vo.getNumber() %><br>	
+<%
+    } else {
+%>
+    	추출된 객체가 없슈!!
+<%	
+    }
+%>
+</body>
+</html>
+```
+
+
+
+
+
+#### exam16
+
+```jsp
+
+```
+
+
+
+
+
+
+
+
 

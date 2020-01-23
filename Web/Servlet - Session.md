@@ -43,7 +43,7 @@
 
    - session.removeAttribute("이름"); : 이름으로 보관된 객체의 참조 값 삭제
 - session.invalidate() : 강제로 삭제
-   
+  
    
 
 ### 주요 메서드
@@ -60,7 +60,7 @@
 
   클라이언트 요구 없을 때 서버가 현재의 세션을 언제까지 유지할지를 초시간 단위로 리턴한다..이때 디폴트 세션 마감시간은 30분으로 지정되어 있다.
 
-- public boolea isNew() : 
+- public boolean isNew() : 
 
   서버측에 새로운 세션을 생성한경우 true, 기존 세션 유지되고 있으면 false
 
