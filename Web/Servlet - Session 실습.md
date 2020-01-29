@@ -180,3 +180,57 @@ img {
 </html>
 ```
 
+
+
+#### LottoServlet2.java -lottoForm.html
+
+```java
+package core;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+@WebServlet("/lotto2")
+public class LottoServlet2 extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setContentType("text/html; charset=utf-8");
+		String num = request.getParameter("num");
+		int sNum = Integer.parseInt(num);
+		
+		int rNum = (int)(Math.random()*6+1);
+		System.out.println("전달된 값 : "+ sNum + ", 추출된 값 : " + rNum);
+		
+		String url = null;
+		
+		HttpSession session = request.getSession();
+		if(session.getAttribute("cnt")==null)
+			session.setAttribute("cnt", new int[1]);
+		int[] session_r = (int[])session.getAttribute("cnt");
+		session_r[0]+=1;
+		if(session_r[0]>=4) {
+			url="/jspexam/impossible.jsp";
+		}else if(session_r[0]<=3) {
+			if (sNum == rNum) {
+				url="/jspexam/success.jsp";
+				session_r[0]=4;
+			}else {
+				url="/jspexam/fail.jsp";
+			}
+		}
+		RequestDispatcher rd = request.getRequestDispatcher(url);
+		rd.forward(request,response);
+	}
+
+}
+```
+

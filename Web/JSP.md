@@ -80,9 +80,17 @@
 #### MVC
 
 - 요청은 servlet /  응답은 jsp
-- **모델** : 어플리케이션의 정보(데이터) 담당
-- **뷰** : 텍스트, 체크박스 항목 등과 같은 사용자 인터페이스 요소 담당
-- **컨트롤러** : 데이터와 비즈니스 로직 사이의 상호동작 관리, 어플리케이션 기능담당
+- 기본적으로 요청과 응답을 나누어주는 방법
+- **모델** : 어플리케이션의 정보(데이터) 담당, **Java 객체(VO,DTO,DAO)**
+  - Domain Model : 정보를 보관하여 전달
+  - Service Model 
+    - Business Obj 
+    - DAO 
+  - xxxVO (Value Object) : 값을 보관하는 용도의 객체
+  - xxxDAO (Data Access Object)  : DB연동기능(JDBC)을 지원하는 객체
+  - xxxService(xxxBiz) -Service Object : 이런 저런 서비스 로직을 지원하는 객체
+- **뷰** : 텍스트, 체크박스 항목 등과 같은 사용자 인터페이스 요소 담당, **JSP**
+- **컨트롤러** : 데이터와 비즈니스 로직 사이의 상호동작 관리, 어플리케이션 기능담당, **Servlet**
 
 ![image-20200123174025928](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200123174025928.png)
 
@@ -92,14 +100,16 @@
 
 - forward 는 객체공유 가능
 - redirect 는 가능할 때도 있고 아닐 때도 있다
-- Page Scope : 
-- RequestScope : HttpServletRequest 객체에 보관하여 응답 될 때까지 보관
-- Session Scope : HttpSession 객체에 보관하여 session 있는동안 보관
--  Application Scope : 
-  - ServletContext 서버 기동될때까지 보관(가장 길다)
+- Page Scope : Servlet 또는 JSP 가 수행되는 동안만 유효한 객체
+- **RequestScope** : **HttpServletRequest** 객체에 보관하여 응답 될 때까지 보관
+- **Session Scope** : **HttpSession** 객체에 보관하여 session 있는동안 보관
+-  **Application Scope** : 
+  - **ServletContext** 서버 기동될때까지 보관(가장 길다)
   - 모든 클라이언트(서블릿)에 의해 공유
-- 메서드
+  - 웹정보, 서버정보 추출 가능
+- **메서드**
   - public void setAttribute(String key, Object value)
+    - 세 방법 모두 배열로 사용할 수 있는 컨테이너 객체이다
   - public Object get Attribute(String key)
   - public void removeAttribute(String key)
 
