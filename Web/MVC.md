@@ -144,12 +144,12 @@ public class LottoServlet2 extends HttpServlet {
 
 ---
 
-### EduServlet 첫번째 실습
+#### EduServlet 첫번째 실습
 
 - 객체공유 아무것도 사용하지 않음
 - html -> servlet -> jsp
 
-#### eduForm.html
+##### eduForm.html
 
 ````html
 <!DOCTYPE html>
@@ -185,7 +185,7 @@ div{
 
 
 
-#### EduServlet.java
+##### EduServlet.java
 
 ````java
 package controller;
@@ -228,7 +228,7 @@ public class EduServlet extends HttpServlet {
 
 
 
-#### gradeABCD.java
+##### gradeABCD.java
 
 ````jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -257,7 +257,7 @@ public class EduServlet extends HttpServlet {
 
 - 모델 등장
 
-#### Request Scope 사용
+#### Request Scope (모델VO 사용)
 
 ##### memberForm.html
 
@@ -399,7 +399,7 @@ public class MemberServlet extends HttpServlet {
 
 ````
 
-#### memberView.jsp
+##### memberView.jsp
 
 ````java
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -436,23 +436,377 @@ public class MemberServlet extends HttpServlet {
 </html>
 ````
 
+
+
+
+
+#### RequestScope (VO 사용 X)
+
+##### calcForm.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>연산해봅시다</title>
+<style>
+h1{
+	text-shadow : 2px 2px 2px #d9d9d9;
+}
+input.c1{
+	width : 190px;
+	height : 20px;
+	border-radius : 5px;
+	box-shadow : -2px -2px #d9d9d9;
+	margin : 2px;
+}
+input.c2{
+	border-radius : 5px;
+	box-shadow : 1px 1px grey;
+	background-color : #d9d9d9;
+}
+</style>
+</head>
+<body>
+<h1>연산할 두 개의 숫자를 입력하고 연산자를 선택하시오.</h1>
+<hr>
+<form method="get" action="/mvc/calc">
+<input type="text" name="num1" placeholder="첫번째 숫자" class="c1">
+<select name='sam'>
+	<option value='+'>+</option>
+	<option value='-'>-</option>
+	<option value='*'>*</option>
+	<option value='/'>/</option>
+</select>
+<input type="text" name="num2" placeholder="두번째 숫자" class="c1">
+<input type="submit" value="제출" class="c2">
+</form>
+</body>
+</html>
+```
+
+
+
+##### CalcServlet.java
+
+```java
+package controller;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/calc")
+public class CalcServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int num1 = Integer.parseInt(request.getParameter("num1"));
+		int num2 = Integer.parseInt(request.getParameter("num2"));
+		String sam = request.getParameter("sam");
+		String result = "";
+		String url = "/jspexam/calcResult.jsp";
+		System.out.println(num1);
+		System.out.println(num2);
+		System.out.println(sam);
+		System.out.println(url);
+		
+		switch(sam) {
+		case "+" : result = Integer.toString(num1+num2);
+		break;
+		case "-" : result = Integer.toString(num1-num2);
+		break;
+		case "*" : result = Integer.toString(num1*num2);
+		break;
+		case "/" : 
+			if(num2==0) {
+				url="/jspexam/errorResult.jsp";
+				result = "나눗셈 연산시 두 번째 숫자는 0일 수 없습니다.";
+			}else
+				result = Integer.toString(num1/num2);
+		}
+		System.out.println(result);
+
+		request.setAttribute("result", result);
+		RequestDispatcher rd = request.getRequestDispatcher(url);
+		rd.forward(request,response);
+	}
+
+}
+```
+
+
+
+##### calcResult, errorResult.jsp
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>연산 성공화면</title>
+<style>
+span{
+	color : red;
+}
+</style>
+</head>
+<body>
+<%
+	String result = (String)request.getAttribute("result");
+%>
+<h1>연산 요청 결과</h1><hr>
+<h2>결과 : <span><%= result %></span></h2>
+
+<a href="<%= request.getHeader("referer") %>">입력화면</a>>
+
+</body>
+</html>
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>연산 실패화면</title>
+<style>
+span{
+	color : magenta;
+}
+</style>
+</head>
+<body>
+<%
+	String result = (String)request.getAttribute("result");
+%>
+<h1>요청을 처리하는 동안 오류가 발생했어요</h1><hr>
+<h1>오류의 원인 : <span><%= result %></span></h1>
+
+<a href="<%= request.getHeader("referer") %>">입력화면</a>>
+
+</body>
+</html>
+```
+
+
+
 ---
 
 
 
-### Session Scope 사용
+#### Session Scope 사용
 
-#### LottoServlet2.java
+##### product.html
 
 ````java
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>형제상회</title>
+<style>
+img {
+	width: 150px;
+	height: 150px;
+}
+</style>
+</head>
+
+<body>
+	<h2>구매하고자 하는 상품을 선택하세요</h2>
+	<hr>
+	<a href="/mvc/product?pid=p001"><img
+		src="http://70.12.115.175:8000/mvc/images/apple.png"></a>
+	<a href="/mvc/product?pid=p002"><img
+		src="http://70.12.115.175:8000/mvc/images/banana.png"></a>
+	<a href="/mvc/product?pid=p003"><img
+		src="http://70.12.115.175:8000/mvc/images/halla.png"></a>
+	<br>
+	<br>
+	<button onclick='aaa("del");'>장바구니 비우기</button>
+
+	<script>
+		function aaa(ee) {
+			var request = new XMLHttpRequest();//엔진객체 초기화
+			request.onload = function() {
+				if (request.status == 200) {
+					var str = request.responseText;
+					console.log(str);
+					var jsObj = JSON.parse(str);
+					if (jsObj.msg) {//삭제할때 메시지 내보내기
+						alert(jsObj.msg);
+					}
+				}
+			};
+			request.open('GET', '/mvc/product?pid=' + ee, true);
+			request.send();
+		};
+	</script>
+
+</body>
+
+</html>
+
+
 
 ````
 
-#### LottoServlet2.java
+##### ProductVO.java
 
 ````java
+package model.vo;
+
+public class ProductVO {
+	private int Anum;
+	private int Bnum;
+	private int Hnum;
+	public int getAnum() {
+		return Anum;
+	}
+	public void setAnum(int Anum) {
+		this.Anum += Anum;
+	}
+	public int getBnum() {
+		return Bnum;
+	}
+	public void setBnum(int Bnum) {
+		this.Bnum += Bnum;
+	}
+	public int getHnum() {
+		return Hnum;
+	}
+	public void setHnum(int Hnum) {
+		this.Hnum += Hnum;
+	}
+
+}
 
 ````
+
+##### ProductServlet.java
+
+````java
+package controller;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.vo.ProductVO;
+
+@WebServlet("/product")
+public class ProductServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		HttpSession session = request.getSession();
+		//ProductVO vo 는 가비지 객체가 계속 생성된다
+		//ProductVO vo = new ProductVO();
+		
+		if(session.getAttribute("cnt")==null)
+			session.setAttribute("cnt", new ProductVO());
+        								//VO 객체 최초 생성 한번만!
+		ProductVO session_c = (ProductVO)session.getAttribute("cnt");
+		String id = request.getParameter("pid");
+		String url = "/jspexam/productView.jsp";
+		
+		if(id.equals("p001")) {
+			session_c.setAnum(1);
+		}
+		else if(id.equals("p002")) {
+			session_c.setBnum(1);
+		}
+		else if(id.equals("p003")) {
+			session_c.setHnum(1);
+		}
+		else if(id.equals("del")) {
+			session = request.getSession(false);
+            //false 는 원래 있는 세션 사용하는것
+			if(session != null)
+				session.invalidate();
+			url = "/jspexam/productDel.jsp";
+		}
+		
+		RequestDispatcher rd = request.getRequestDispatcher(url);
+		rd.forward(request,response);
+	}
+
+}
+````
+
+##### productView,Del.jsp
+
+````java
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="model.vo.ProductVO" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>과일 바구니 확인창</title>
+<style>
+a{
+	background : linear-gradient(to top, #d5f4e6 , #b3c6ff);
+}
+</style>
+</head>
+<body>
+<h2>선택된 상품 정보는 다음과 같습니다</h2>
+<hr>
+<%
+	ProductVO vo = (ProductVO)session.getAttribute("cnt");
+%>
+<ul>
+<li>선택된 사과의 개수 : 
+<%= vo.getAnum() %>
+</li>
+<li>선택된 바나나의 개수 : 
+<%= vo.getBnum()%>
+</li>
+<li>선택된 한라봉의 개수 : 
+<%= vo.getHnum() %>
+</li>
+</ul>
+<hr>
+<a href="<%= request.getHeader("referer") %>">상품선택화면</a>>
+</body>
+</html>
+    
+
+    
+//////////////그냥 json 형식으로 전달//////////////////    
+<%@ page contentType="application/json; charset=utf-8"%>
+{ 
+   "msg" : "장바구니가 비어졌어요!"
+}
+````
+
+
+
+---
+
+
 
 #### LottoServlet2.java
 

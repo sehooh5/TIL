@@ -76,13 +76,23 @@
 
   - JSTL
   - 우리는 XML, core 태그 위주로 공부할 것
+  
+- **EL (Expression Language)**
+
+  - <u>표현식 태그</u>를 간단하게 구현 하게 해주는 것 = JSP를 훨씬 간단하게 구현가능
+  - jsp 파일들을 변환하는 실습
+  - ${header.referer} : header 는 요청 header 객체를 불러오는..
+  - ${header.user-agent} : ~~오류남~~ ---> ${header["user-agent"]}
+  - **EL 에서 연산자**: 변수명.xxx
+    - 변수의 참조 대상이 일반 Java 객체이면 getxxx()를 호출한 결과
+    - 변수의 참조 대상이 Map 객체(Hash)이면 get("xxx") 메서드를 호출한 결과 : xxx는 get() 메서드의 변수명으로 사용된다.
 
 #### MVC
 
 - 요청은 servlet /  응답은 jsp
 - 기본적으로 요청과 응답을 나누어주는 방법
 - **모델** : 어플리케이션의 정보(데이터) 담당, **Java 객체(VO,DTO,DAO)**
-  - Domain Model : 정보를 보관하여 전달
+  - Domain Model : 정보를 보관하여 전달(VO 클래스로 만듬)
   - Service Model 
     - Business Obj 
     - DAO 
@@ -93,6 +103,10 @@
 - **컨트롤러** : 데이터와 비즈니스 로직 사이의 상호동작 관리, 어플리케이션 기능담당, **Servlet**
 
 ![image-20200123174025928](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200123174025928.png)
+
+#### DAO
+
+- jdbc 드라이버 연동하려면 WEB-INF -> lib 에 ojdbc6.jar 을 넣어줘야 연동 가능
 
 
 
@@ -1155,6 +1169,10 @@ if (request.getMethod().equals("POST")) {
 - xxxDAO : Data Access Object, DB 연동기능 (JDBC)을 지원하는 객체
 - xxxService(xxxBiz) : Service Object, 서비스 로직을 지원하는 객체
 
+
+
+### Share 예제!! 브라우저간 공유하는지
+
 #### ShareTestServlet1.java / CountVO / share1.jsp
 
 - **Request Scope**, 요청이 끝나면 없어진다!
@@ -1391,17 +1409,364 @@ public class CountVO {
 
 
 
-#### exam16
+### EL 사용법
+
+#### memberView_EL.jsp : 액션태그, EL 사용법
 
 ```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="model.vo.MemberVO"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원 정보 확인창</title>
+</head>
+<body>
+<h1>스크립트 태그</h1>
+<h2>회원 정보</h2>
+<hr>
+<%
+	MemberVO mVO = (MemberVO)request.getAttribute("member");
+%>
+<ul>
+<li>회원 이름 : 
+<%= mVO.getName() %>
+</li>
+<li>회원 계정 : 
+<%= mVO.getId()%>
+</li>
+<li>회원 암호 : 
+<%= mVO.getPwd() %>
+</li>
+<li>회원 전화번호 : 
+<%= mVO.getNum()%>
+</li>
 
+</ul>
+<hr>
+
+<h1>액션 태그</h1>
+<!-- 마지막에 닫아줘야하는 XML 구문 -->
+<!-- id 는 request 객체에 지정한 이름 -->
+<!-- class 는 import 하는거처럼 위치 지정해주기 -->
+<!-- request 객체에서 사용하므로 scope = "request" -->
+<!-- 객체 없으면 새로 만든다..아규먼트 안받는 생성자를 만들어버린다 -->
+<jsp:useBean id="member" class="model.vo.MemberVO" scope="request" />
+<h2>회원 정보</h2>
+<hr>
+<ul>
+<li>회원 이름 : 
+<!-- name 은 객체에 지정한 이름 -->
+<!-- property 에는 getter 의 이름에서 get 빼고 첫글자 소문자로 바꿔서 지정 -->
+<jsp:getProperty name="member" property="name" />
+</li>
+<li>회원 계정 : 
+<jsp:getProperty name="member" property="id" />
+</li>
+<li>회원 암호 : 
+<jsp:getProperty name="member" property="pwd" />
+</li>
+<li>회원 전화번호 : 
+<jsp:getProperty name="member" property="num" />
+</li>
+
+</ul>
+<hr>
+
+<h1>Expression Language 태그</h1>
+<h2>회원 정보</h2>
+<hr>
+<ul>
+<li>회원 이름 : 
+<!-- scope방법.객체이름.property명 -->
+${requestScope.member.name}
+</li>
+<li>회원 계정 : 
+${requestScope.member.id}
+</li>
+<li>회원 암호 : 
+${requestScope.member.pwd}
+</li>
+<li>회원 전화번호 : 
+${requestScope.member.num}
+</li>
+
+</ul>
+<hr>
+<a href="<%= request.getHeader("referer") %>">회원정보 재입력</a>
+</body>
+</html>
 ```
 
 
 
+#### productView.jsp (위와 동일한 방법으로 변환)
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="model.vo.ProductVO" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>과일 바구니 확인창</title>
+<style>
+a{
+	background : linear-gradient(to top, #d5f4e6 , #b3c6ff);
+}
+</style>
+</head>
+<body>
+<h2>선택된 상품 정보는 다음과 같습니다(스크립트 태그)</h2>
+<hr>
+<%
+	ProductVO vo = (ProductVO)session.getAttribute("cnt");
+%>
+<ul>
+<li>선택된 사과의 개수 : <%= vo.getAnum() %></li>
+<li>선택된 바나나의 개수 : <%= vo.getBnum()%></li>
+<li>선택된 한라봉의 개수 : <%= vo.getHnum() %></li>
+</ul>
+<h2>선택된 상품 정보는 다음과 같습니다(액션 태그)</h2>
+<hr>
+<jsp:useBean id="cnt" class="model.vo.ProductVO" scope="session" />
+<ul>
+<li>선택된 사과의 개수 : <jsp:getProperty name="cnt" property="anum"/></li>
+<li>선택된 바나나의 개수 : <jsp:getProperty name="cnt" property="bnum"/></li>
+<li>선택된 한라봉의 개수 : <jsp:getProperty name="cnt" property="hnum"/></li>
+</ul>
+<h2>선택된 상품 정보는 다음과 같습니다(Expression Language)</h2>
+<hr>
+<ul>
+<li>선택된 사과의 개수 : ${sessionScope.cnt.anum}</li>
+<li>선택된 바나나의 개수 : ${sessionScope.cnt.bnum}</li>
+<li>선택된 한라봉의 개수 : ${sessionScope.cnt.hnum}</li>
+</ul>
+<hr>
+<a href="${header.referer}">상품선택화면</a>
+</body>
+</html>
+```
 
 
 
+#### sedu/jspbean,elexam1,2,3,4.jsp
+
+**elexam**1
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EL 테스트</title>
+</head>
+<body>
+<h2>EL의 연산자들</h2>
+<hr>
+\${200+100} :  ${200+100} <br> 
+\${200-100} :  ${200-100} <br>
+\${200/100} :  ${200/100} <br>
+\${200>100} :  ${200>100} <br>
+\${200==100} :  ${200==100} <br>
+\${200!=100} :  ${200!=100} <br>
+\${ '10' - 10 } : ${ '10' - 10 }  숫자 계산함<br> 
+\${ '10' + 10 } : ${ '10' + 10 }<br> 
+\${10 * "10" } : ${10 * "10" }<br>  
+\${40 div 5 } : ${40 div 5 }<br>
+\${40 mod 5 } : ${40 mod 5 }<br> 
+\${ 10 eq 10 } : ${ 10 eq 10 }<br> 
+\${ 10 lt 10 } : ${ 10 lt 10 }<br> 
+\${ 10 gt 10 } : ${ 10 gt 10 }<br>
+\${ 10 le 10 } : ${ 10 le 10 }<br>
+\${ 10 ge 10 } : ${ 10 ge 10 }<br>
+\${10 > 5?'A':'B'} : ${10 > 5?'A':'B'}<br>
+\${100 + 200 + 300 } : ${100 + 200 + 300 }<br>
+\${100 += 200 += 300 } : ${100 += 200 += 300 }<br> 
+\${"EL" += 12 += 34 += "-문자열 결합연산" } : ${"EL" += 12 += 34 += "-문자열 결합연산" }
+</body>
+</html>
+```
 
 
+
+##### elexam2
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EL 테스트</title>
+</head>
+<body>
+<h2>EL의 Query 문자열 추출</h2>
+<hr>
+**중요! param 은  HashMap 객체들을 갖고있는 내장 객체이다 name=value<hr>
+전달된 메시지의 존재 여부 : ${ !empty param.message }<hr>
+전달된 메시지의 내용은 ${param.message} 입니다.<br>
+전달된 메시지의 내용은 ${param["message"]} 입니다.<br>
+전달된 메시지의 내용은 <%= request.getParameter("message") %> 입니다.<br>
+</body>
+</html>
+```
+
+
+
+##### elexam3 - EL 변수의 특징
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EL 테스트</title>
+</head>
+<body>
+<h2>EL 변수</h2>
+<hr>
+name 변수의 값 : ${name}<br>
+<% String name="듀크"; %>
+name 변수의 값(표현식 태그) : <%= name %><br>
+<!-- name 에 접근되지 않는다
+***특정 스코프에 저장되어 있는 값만 접근 가능하다 -->
+name 변수의 값(EL) : ${name}<br>
+<!-- 가장 좁은 의미의 스코프인 pageContext -->
+<!-- 지금 이 jsp에서만 사용 가능한 -->
+<% pageContext.setAttribute("name", "자바");  %>
+name 변수의 값 : ${name}<br>
+pageScope.name 변수의 값 : ${pageScope.name}<br>
+<hr>
+<% pageContext.setAttribute("number", 100); %>
+number 변수의 값 : ${number}<br>
+pageScope.number 변수의 값 : ${pageScope.number}<br>
+number 변수의 값에 23을 더한 값 : ${ number + 23 }
+</body>
+</html>
+```
+
+
+
+##### elexam4 - LanguageInfoBean, Today, TestBean.java
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"  %>
+<%@ page import="jspbean.*, java.util.ArrayList"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"> 
+<title>EL 테스트</title> 
+</head>
+<body>
+<h2>객체의 getter 메서드, 컬렉션 객체의 원소, 클래스의 정적 멤버 사용</h2> 
+<hr>
+<%
+/* today라는 이름으로 일반 Today.java 객체 저장 */
+pageContext.setAttribute("today", new Today());
+ArrayList<TestBean> mylist = new ArrayList<>();
+mylist.add(new TestBean("둘리"));
+mylist.add(new TestBean("또치"));
+mylist.add(new TestBean("도우너"));
+/* list라는 이름으로 ArrayList 형  객체 저장 */
+pageContext.setAttribute("list", mylist); 
+%>
+<h3>객체의 멤버 접근</h3>
+<!-- getYear 과 동일 -->
+${ today.year }년 ${ today.month }월 ${ today.date }일
+<h3>컬렉션의 객체 사용</h3>
+<!-- getName 과 동일 -->
+${ list[0].name }-${ list[1].name }-${ list[2].name }<br>
+<h3>클래스의 정적 멤버 사용</h3>
+<!-- 클래스명을 줘서 바로 가져오는것도 가능하다 -->
+<!-- get 메서드도 사용 가능 -->
+${ LanguageInfoBean.name }<br>
+${ LanguageInfoBean.getBirthYear() }<br>
+${ LanguageInfoBean.getKindInfo() }<br> 
+</body>
+</html>
+```
+
+
+
+```java
+package jspbean;
+
+public class LanguageInfoBean {
+	//static 멤버에 접근이 가능하다는것을 보여주기 위한 예제
+	public static String name = "자바";
+	
+	public static int getBirthYear() {
+		return 1996;
+	}
+	public static String getKindInfo() {
+		return name +"는 OOP 프로그래밍 언어입니다.";
+	}
+}
+
+
+
+package jspbean;
+import java.time.LocalDate;
+
+public class Today {
+	private int year;
+	private int month;
+	private int date;
+	public Today() {
+		year = LocalDate.now().getYear();
+		month = LocalDate.now().getMonthValue();
+		date = LocalDate.now().getDayOfMonth();
+	}
+	//setter 메서드가 필요없다..LocalDate로 세팅해주기때문
+	public int getYear() {
+		return year;
+	}
+	public int getMonth() {
+		return month;
+	}
+	public int getDate() {
+		return date;
+	}	
+}
+
+
+
+package jspbean;
+
+import java.time.LocalTime;
+
+public class TestBean {
+	private String name;
+	private String time;
+	public TestBean() {
+		LocalTime lt = LocalTime.now();
+		time = lt.getHour()+ "시 " +lt.getMinute() +"분 " +lt.getSecond() +"초";
+		name="Guest";
+	}
+	public TestBean(String name) {
+		LocalTime lt = LocalTime.now();
+		time = lt.getHour()+ "시 " +lt.getMinute() +"분 " +lt.getSecond() +"초";
+		this.name=name;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTime() {
+		return time;
+	}
+}
+
+```
 
