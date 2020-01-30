@@ -808,7 +808,300 @@ a{
 
 
 
-#### LottoServlet2.java
+#### visitorForm.html (DAO 예제)
+
+````html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>글을 남겨 주세요</h1>
+<hr>
+<form method="post" action="/mvc/visitor">
+이름 : <input type="text"  name="name" >
+<br>
+남기고자 하는 의견 : <br>
+<textarea rows="10" cols="50" name = "content" ></textarea>
+<br>
+<input type="submit" value="등록">
+<input type="reset" value="재작성">
+</form>
+<hr>
+<form method="get" action="/mvc/visitor">
+검색어 : <input type="search" name="keyword">
+<input type="submit" value="검색">
+<hr>
+<a href="/mvc/visitor">방명록 리스트 보기</a>
+</form>
+</body>
+</html>
+````
+
+
+
+#### VisitorServlet.java (DAO 예제)
+
+````java
+package controller;
+
+import java.io.IOException;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import model.dao.VisitorDAO;
+import model.vo.VisitorVO;
+@WebServlet("/visitor")
+public class VisitorServletDB extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String keyword = request.getParameter("keyword");
+		
+		VisitorDAO dao = new VisitorDAO();
+		if(keyword == null) {
+			List<VisitorVO> list = dao.listAll();
+			for(VisitorVO vo : list) {
+				System.out.println(vo.getMemo());
+			}
+			request.setAttribute("list", list);
+		} else {
+			List<VisitorVO> list = dao.search(keyword);
+			if(list.size() == 0) {
+				request.setAttribute("msg", keyword+"를 담고있는 글이 없어용");
+			} else {
+				request.setAttribute("list", list);
+			}
+		}
+		request.getRequestDispatcher("/jspexam/visitorView.jsp")
+        .forward(request, response);
+	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");		
+		String name = request.getParameter("name");
+		String memo = request.getParameter("content");
+		VisitorDAO dao = new VisitorDAO();
+		VisitorVO vo = new VisitorVO();
+		vo.setName(name);
+		vo.setMemo(memo);
+		boolean result = dao.insert(vo);
+		if(result) {
+			request.setAttribute("msg", name+"님의 글이 성공적으로 입력되었어요!!..");
+		} else {
+			request.setAttribute("msg", name+"님의 글이 입력에 실패했어요!!");
+		}
+		request.getRequestDispatcher("/jspexam/visitorView.jsp")
+		           .forward(request, response);
+	}
+}
+````
+
+
+
+#### VisitorDAO.java (DAO 예제)
+
+````java
+package model.dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.vo.VisitorVO;
+
+public class VisitorDAO {
+	public List<VisitorVO> listAll() {
+		List<VisitorVO> list = new ArrayList<>();
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		try (Connection conn = DriverManager.getConnection
+				("jdbc:oracle:thin:@localhost:1521:xe", "jdbctest", 
+						"jdbctest");
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery
+				("select name, to_char(writedate, "
+				+ "'yyyy\"년\" mm\"월\" dd\"일\"'), memo from visitor");) {
+			VisitorVO vo;
+			while(rs.next()) {
+				vo = new VisitorVO();
+				//숫자들의 의미? 컬럼값
+				vo.setName(rs.getString(1));
+				vo.setWriteDate(rs.getString(2));
+				vo.setMemo(rs.getString(3));
+				list.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	public List<VisitorVO> search(String keyword) {
+		List<VisitorVO> list = new ArrayList<>();
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		try (Connection conn = DriverManager.getConnection
+				("jdbc:oracle:thin:@localhost:1521:xe", "jdbctest", "jdbctest");
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery
+				("select name, to_char(writedate, 'yyyy\"년\" mm\"월\" dd\"일\"'), memo "
+						+"from visitor where memo like '%"+keyword+"%'");) {
+			VisitorVO vo;
+			while(rs.next()) {
+				vo = new VisitorVO();
+				vo.setName(rs.getString(1));
+				vo.setWriteDate(rs.getString(2));
+				vo.setMemo(rs.getString(3));
+				list.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	//DAO에 데이터를 insert 할 목적으로 VO 를 사용한다
+	public boolean insert(VisitorVO vo) {
+		boolean result = true;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		try (Connection conn = DriverManager.getConnection
+				("jdbc:oracle:thin:@localhost:1521:xe", "jdbctest", "jdbctest");
+				//PreparedStatement 뭐였지? 물음표 써서 사용하는거..
+				//동적 파라미터를 사용한다.
+				PreparedStatement pstmt = conn.prepareStatement(
+						"insert into visitor values(?, sysdate, ?)");) {
+			pstmt.setString(1, vo.getName());//1은 첫번째 물음표
+			pstmt.setString(2,  vo.getMemo());//2는 두번째 물음표
+			pstmt.executeUpdate();	
+		} catch (SQLException e) {
+			result = false;
+			e.printStackTrace();
+		}
+		return result;
+	}
+}
+
+````
+
+
+
+#### VisitorVO.html (DAO 예제)
+
+````java
+package model.vo;
+
+public class VisitorVO {
+	private String name;
+	private String writeDate;
+	private String memo;
+	public String getName() {
+		return name;
+	}
+	public String getWriteDate() {
+		return writeDate;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setWriteDate(String writeDate) {
+		this.writeDate = writeDate;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+	@Override
+	public String toString() {
+		return "VisitorVO [name=" + name + ", writeDate=" + writeDate + ", memo=" + memo + "]";
+	}	
+}
+
+````
+
+
+
+#### visitorView.jsp (DAO 예제)
+
+````jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="model.vo.VisitorVO, java.util.List" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	td {
+		border-bottom : 1px dotted green;
+	}
+	tr:hover {
+		background-color : pink;
+		font-weight : bold;
+	}
+	td:nth-child(3) {
+		width : 400px;
+	}
+</style>
+</head>
+<body>
+<%
+	List<VisitorVO> list = (List<VisitorVO>)request.getAttribute("list");
+    if (list != null) {
+%>
+    	<h2>방명록 글 리스트</h2><hr>
+    	<table>    
+<%	
+    	for(VisitorVO vo : list) { 	   
+%>
+			<tr>
+				<td><%= vo.getName() %></td>
+				<td><%= vo.getWriteDate() %></td>
+				<td><%= vo.getMemo() %></td>		
+			</tr>
+<%
+    	}
+%>
+    	</table>
+<%
+    } else {
+%>
+		<h2>${msg}</h2>
+<%
+    }
+%>
+<hr>
+<a href="/mvc/htmlexam/visitorForm.html ">방명록 홈 화면으로 가기</a>
+
+</body>
+</html>
+
+
+
+
+````
+
+
+
+#### visitorForm.html (DAO 예제)
 
 ````java
 
