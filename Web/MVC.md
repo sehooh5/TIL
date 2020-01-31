@@ -808,7 +808,9 @@ a{
 
 
 
-#### visitorForm.html (DAO 예제)
+#### DAO 를 사용한 JDBC
+
+##### visitorForm.html 
 
 ````html
 <!DOCTYPE html>
@@ -842,7 +844,7 @@ a{
 
 
 
-#### VisitorServlet.java (DAO 예제)
+##### VisitorServlet.java
 
 ````java
 package controller;
@@ -901,7 +903,7 @@ public class VisitorServletDB extends HttpServlet {
 
 
 
-#### VisitorDAO.java (DAO 예제)
+##### VisitorDAO.java (DAO 예제)
 
 ````java
 package model.dao;
@@ -1001,7 +1003,7 @@ public class VisitorDAO {
 
 
 
-#### VisitorVO.html (DAO 예제)
+##### VisitorVO.html
 
 ````java
 package model.vo;
@@ -1038,7 +1040,7 @@ public class VisitorVO {
 
 
 
-#### visitorView.jsp (DAO 예제)
+##### visitorView.jsp
 
 ````jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8"
