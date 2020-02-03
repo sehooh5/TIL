@@ -125,6 +125,121 @@
 
 ![image-20200120092043066](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200120092043066.png)
 
+
+
+#### Filter
+
+- 웹 클라이언트에서 요청한 웹 자원들(Servlet, JSP 등)이 수행되기 전 또는 후에 수행되는 객체로 request 또는 response 에 영향을 주거나 특정 처리를 할 수 있다.
+- 예 : 인증필터, 로그 필터, 이미지변환, 압축, 암호화, 스트림토큰화, XML 변환 등
+- 쉬운 예로 POST방식에서 캐릭터 세팅을 자동으로 줄 수 있다.
+- 구현 방법 :  **javax.servlet.Filter** 라는 **인터페이스를 상속**하여 **init(), doFilter(),  ** **destroy()** 를 **오버라이딩** 한다
+
+- ![image-20200203092847895](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200203092847895.png)
+
+- ```java
+  public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)throws IOException, ServletException {
+  // 웹 자원의 수행 전에 처리할 기능
+  chain.doFilter(req, res);
+  // 웹 자원의 수행 후에 처리할 기능
+  }
+  ```
+
+
+
+##### FlowFilter.java
+
+```java
+package filter;
+
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+
+//if mapping name is /firstone,,
+@WebFilter("/firstone")
+public class FlowFilter implements Filter {
+
+	public FlowFilter() {
+		System.out.println("FlowFilter 객체 생성");
+	}
+
+	public void destroy() {
+		System.out.println("FlowFilter 객체 삭제(destroy 실행)");
+	}
+
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		System.out.println("Servlet 수행 전..........");
+		chain.doFilter(request, response);// 중요한 중간점!!
+		System.out.println("Servlet 수행 후..........");
+	}
+
+	public void init(FilterConfig fConfig) throws ServletException {
+		System.out.println("FlowFilter 객체 초기화");
+	}
+
+}
+
+```
+
+
+
+##### HangulFilter.java - POST 때 캐릭터 셋 자동으로 설정해주는 필터
+
+```java
+package filter;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+
+@WebFilter("/*")
+public class HangulFilter implements Filter {
+	//구현할 내용은 없지만 overriding 해줘야 해서 남겨야한다
+	public void destroy() {
+
+	}
+
+
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		System.out.println("HangulFilter 수행 (Before)");
+		
+//Filter 기능은 기본적으로 ServletRequest (super) 를 사용하기 때문에
+//자손형으로 강제 형변형 해줘야 한다(자손형 :HttpServletRequest)
+  	if(((HttpServletRequest)request).getMethod().equals("POST"))
+			request.setCharacterEncoding("UTF-8");
+		chain.doFilter(request, response);
+		System.out.println("HangulFilter 수행 (After)");
+	}
+
+	//구현할 내용은 없지만 overriding 해줘야 해서 남겨야한다
+	public void init(FilterConfig fConfig) throws ServletException {
+
+	}
+
+}
+```
+
+
+
+
+
+---
+
+
+
 #### forward basic
 
 ```java
