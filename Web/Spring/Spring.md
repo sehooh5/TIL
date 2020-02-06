@@ -88,3 +88,35 @@ ApplicationContext context
    - Web 기반 
 3. Mybatis
    - Web 기반
+
+
+
+
+
+### autowire : 조건에 따라 자동으로 객체와 결합해줌
+
+---
+
+- 나중에 **에노테이션**으로 사용할 수 있다
+
+#### byName : setter
+
+1. 프로퍼티명과 동일한 명칭의 빈을 찾아서 해당 객체 주입
+2. 없으면 null 주입 = 객체 주입 포기
+
+
+
+#### byType : setter
+
+1. 타입으로 찾아서 1개면 해당객체 주입
+2. 타입으로 찾아서 2개 이상이면 NoUniqueBeanDefinitionException 발생
+3. 없으면 null 주입 = 객체 주입 포기
+
+
+
+#### constructor : constructor
+
+1. 타입으로 찾아서 1개이면 해당 객체 주입
+2. 타입으로 찾아서 2개 이상이면 매개변수명과 동일한 id 값을 갖는 객체 주입
+3. 없으면 null 주입 = 객체 주입 포기
+

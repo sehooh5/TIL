@@ -91,7 +91,7 @@ public class MessageBeanImpl implements MessageBean{
 
 #### beans.xml - 객체 관리 형식(정해져있음)
 
-```java
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -206,7 +206,7 @@ public class Bar {
 
 #### applicationContect.xml
 
-```java
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -539,95 +539,449 @@ xmlns:p="http://www.springframework.org/schema/p"
 
 
 
-### Sample6 : 
+### Sample6 : ref
 
-#### MessageBean.java
+#### applicationContext.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean id="messageBean" class="sample6.MessageBeanImpl"  
+      c:name="Dooly"   p:outputter-ref="outputRef"  
+      p:phone="123-4567" />
+<bean id="outputRef" class="sample6.FileOutput"  
+      p:filePath="data.txt"/>
+
+
+<!-- <bean id="messageBean" class="sample6.MessageBeanImpl">
+	<constructor-arg  value="Dooly"/>	
+	<property name="phone"  value="123-4567"/>
+	<property name="outputter" ref="outputRef"/>
+</bean>
+
+<bean id="outputRef" class="sample6.FileOutput">
+	<property name="filePath">
+		<value>data.txt</value>
+	</property>
+</bean> -->
+
+</beans>
+```
+
+#### Outputter.java
 
 ```java
+package sample6;
 
+import java.io.IOException;
+
+public interface Outputter {
+	public void output(String message) throws IOException;
+}
 ```
 
 #### MessageBean.java
 
 ```java
+package sample6;
 
+public interface MessageBean {
+	public void helloCall();
+}
 ```
 
-#### MessageBean.java
+#### MessageBeanImpl.java
 
 ```java
+package sample6;
 
+import java.io.IOException;
+
+public class MessageBeanImpl implements MessageBean{
+	private String name;
+	private String phone;
+	private Outputter outputter;
+	
+	//생성자로 name을 받음
+	public MessageBeanImpl(String name) {
+		super();
+		this.name = name;
+		System.out.println("1. Bean Constructor Call");
+	}
+	
+	//setter을 통해서 phone와 outputter입력받음
+	public void setPhone(String phone) {
+		this.phone = phone;
+		System.out.println("4. phone's info set");
+	}
+	
+	public void setOutputter(Outputter outputter) {
+		this.outputter = outputter;
+		System.out.println("3. outputter's info set");
+	}
+
+	@Override
+	public void helloCall() {
+		String message=name+" : " +phone;
+		System.out.println("helloCall() : "+message);
+		
+		try {
+			outputter.output(message);
+			System.out.println("6. Finish");
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
 ```
 
-#### MessageBean.java
+#### HelloSpringApp.java
 
 ```java
+package sample6;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class HelloSpringApp {
+	public static void main(String[] args) {
+		ApplicationContext factory
+        		= new ClassPathXmlApplicationContext("sample6/applicationContext.xml");
+
+		System.out.println("** Container Initialization End **");
+		MessageBean bean=(MessageBean)factory.getBean("messageBean");
+		bean.helloCall();
+
+		((ClassPathXmlApplicationContext) factory).close();
+	}
+}
 
 ```
 
-#### MessageBean.java
+
+
+---
+
+
+
+### Sample7 : 프리픽스 사용 or not
+
+- 7은 Emp를 상속
+
+#### EmpMain.java
 
 ```java
+package sample7;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class EmpMain {
+	public static void main(String[] args) {
+		ApplicationContext factory =
+				   new ClassPathXmlApplicationContext("sample7/bean1.xml");
+		
+		Emp b1 = (Emp)factory.getBean("developer");
+		System.out.println(b1.toString());
+		
+		Emp b2 = (Emp)factory.getBean("engineer");
+		System.out.println(b2.toString());
+		
+		((ClassPathXmlApplicationContext)factory).close();
+	}
+}
 
 ```
 
-#### MessageBean.java
+#### Emp.java
 
 ```java
+package sample7;
+
+public class Emp {
+	private String name;
+	private int salary;
+	
+	public Emp() {
+		super();
+	}
+	public Emp(String name, int salary) {
+		super();
+		this.name = name;
+		this.salary = salary;
+	}
+	@Override
+	public String toString() {
+		return "Name : " + name + ", Salary : " + salary + ", ";
+	}
+}
 
 ```
 
-#### MessageBean.java
+#### Engineer.java
 
 ```java
+package sample7;
+
+public class Engineer extends Emp{
+	private String dept;
+
+	public Engineer() {
+		super();
+	}
+
+	public Engineer(String name, int salary) {
+		super(name, salary);
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " Department : " + dept;
+	}
+}
 
 ```
 
-#### MessageBean.java
+#### Developer.java
 
 ```java
+package sample7;
+
+public class Developer extends Emp{
+	private String dept;
+	
+	public Developer() {
+		super();
+	}
+
+	public Developer(String name, int salary) {
+		super(name, salary);
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " Department : " + dept;
+	}
+}
 
 ```
 
-#### MessageBean.java
+#### Bean1.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean id="developer" class="sample7.Developer">
+	<constructor-arg value="dooly"/>
+	<constructor-arg value="1500000"/>
+	<property name="dept"   value="Development 1 Team"/>
+</bean>
+
+<bean id="engineer" class="sample7.Engineer">
+	<constructor-arg   value="duke"/>
+	<constructor-arg   value="2500000"/>
+	<property name="dept"   value="Technology 1 Team"/>	
+</bean>
+
+</beans>
+		
+```
+
+#### Bean2.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean id="developer" class="sample7.Developer" 
+    c:name="Dooly" c:salary="1500000"    p:dept="Development 1 Team"/>
+<bean id="engineer" class="sample7.Engineer" 
+    c:name="Duke" c:salary="2500000"    p:dept="Technology 1 Team"/>
+</beans>
+```
+
+
+
+### Sample8 : ref 사용 Sample 7과 비슷
+
+- 7은 상속 8 은 EMP 를 포함
+
+#### bean1.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 생성자를 통한 객체 생성 -->
+<bean id="developer" class="sample8.Developer">
+	<constructor-arg name="emp"  ref="emp1" />
+	<constructor-arg name="dept"  value="Development 1 Team"/>
+</bean>
+<bean id="engineer" class="sample8.Engineer">
+	<constructor-arg name="emp"  ref="emp2" />
+	<constructor-arg name="dept"  value="Technology 1 Team"/>
+</bean>
+
+<bean id="emp1" class="sample8.Emp">
+	<constructor-arg name="name"  value="Dooly"/>
+	<constructor-arg name="salary"  value="1500000"/>
+</bean>
+<bean id="emp2" class="sample8.Emp">
+	<constructor-arg name="name"  value="Duke"/>
+	<constructor-arg name="salary"  value="2500000"/>
+</bean>
+</beans>
+```
+
+#### bean2.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- How to set properties using XML namespace -->
+<!-- 매개변수를 _숫자 순서로 줘도 된다 -->
+<bean id="developer" class="sample8.Developer"  
+        					c:_0-ref="emp1"  c:_1="Development 1 Team"/>
+<bean id="engineer" class="sample8.Engineer"   
+        					c:emp-ref="emp2"  c:dept="Technology 1 Team"/>
+
+<bean id="emp1"  class="sample8.Emp" 
+                           	c:_0="Dooly" c:_1="1500000"/>
+<bean id="emp2"  class="sample8.Emp" 
+							c:name="Duke" c:salary="2500000"/>
+</beans>
+
+```
+
+#### Emp.java : 상속이 아닌 포함
 
 ```java
+package sample8;
+
+public class Emp {
+	private String name;
+	private int salary;
+	
+	public Emp() {
+		super();
+	}
+    //이 객체를 생성한 다음 상속 받아야한다
+	public Emp(String name, int salary) {
+		super();
+		this.name = name;
+		this.salary = salary;
+	}
+	@Override
+	public String toString() {
+		return "Name : " + name + ", Salary : " + salary + ", ";
+	}
+}
 
 ```
 
-#### MessageBean.java
+#### Developer.java
 
 ```java
+package sample8;
+
+public class Developer{
+	private Emp emp;
+	private String dept;
+	
+	public Developer() {
+		super();
+	}
+	public Developer(Emp emp, String dept) {
+		super();
+		this.emp = emp;
+		this.dept = dept;
+	}
+	@Override
+	public String toString() {
+		return emp.toString() + " Department : " + dept;
+	}
+}
 
 ```
 
-#### MessageBean.java
+#### Engineer.java
 
 ```java
+package sample8;
+
+public class Engineer{
+	private Emp emp;
+	private String dept;
+
+	public Engineer() {
+		super();
+	}
+	public Engineer(Emp emp, String dept) {
+		super();
+		this.emp = emp;
+		this.dept = dept;
+	}
+	@Override
+	public String toString() {
+		return emp.toString() + " Department : " + dept;
+	}
+}
 
 ```
 
-#### MessageBean.java
+#### EmpMain.java
 
 ```java
+package sample8;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class EmpMain {
+	public static void main(String[] args) {
+		ApplicationContext factory =
+				   new ClassPathXmlApplicationContext("sample8/bean2.xml");
+		
+		Developer b1 = (Developer)factory.getBean("developer");
+		System.out.println(b1.toString());
+		
+		Engineer b2 = (Engineer)factory.getBean("engineer");
+		System.out.println(b2.toString());
+		
+		((ClassPathXmlApplicationContext)factory).close();
+	}
+}
 
 ```
 
-#### MessageBean.java
 
-```java
 
-```
-
-#### MessageBean.java
-
-```java
-
-```
-
-#### MessageBean.java
-
-```java
-
-```
+---
 
