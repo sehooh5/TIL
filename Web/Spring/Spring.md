@@ -120,3 +120,19 @@ ApplicationContext context
 2. 타입으로 찾아서 2개 이상이면 매개변수명과 동일한 id 값을 갖는 객체 주입
 3. 없으면 null 주입 = 객체 주입 포기
 
+
+
+---
+
+
+
+### @component : class 위에 사용
+
+- 해당 패키지를 다 읽어서 빈객체를 만들어주는 기능
+
+- autowired 된 애들은 빈객체 만들어서 사용
+
+- ```xml
+  <context:component-scan base-package="패키지명"/>
+  ```
+
