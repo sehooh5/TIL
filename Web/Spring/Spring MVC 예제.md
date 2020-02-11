@@ -1039,13 +1039,720 @@ public class CountVO {
 
 
 
+---
 
+
+
+### Lotto : Service 사용
+
+- Webapp -WEB-IFG - spring - appServlet - servlet-context 설정 해줘야함
+- `<context:component-scan base-package="service" />` 이거 넣어줘
+
+#### LottoController.java
+
+```java
+//Random 숫자를 컨트롤러 메서드 안에 사용해도(기존방법) 가능하다
+//하지만 DAO 를 사용하기 위해 연습하는 예제
+
+package my.spring.springedu;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import service.LottoService;
+import vo.LottoVO;
+@Controller
+public class LottoController1 {
+	//자동 연결하여 lottoService 가 생성하게 한다
+	//lottoService 에 의존적이다
+	//@Service @DAO 를 서칭하라고 설정해놔서 자동으로 서칭한다
+	//service 패키지에 있는 LottoService 클래스 서칭 (LottoService.java로 감)
+	//여기서 Autowired 해주면 밑에 메서드에서 lottoService 선언해줄 필요 없다(제일 많이하는 실수)
+	@Autowired
+	private LottoService lottoService;	
+	@RequestMapping("/lotto1")
+	public String lottoProcess(LottoVO vo) {	
+		//LottoVO 객체는 RequestScope 에 "lottoVO" 라는 이름으로 저장된다
+		//Session설정을 안해줘서 그런다-->jsp 에서 request객체로 출력할 수 있다
+		//여기서 LottoVO의 변수인 result의 값을 setResult 로 세팅해준다
+		if (lottoService.getLottoProcess(vo.getLottoNum())) {
+			vo.setResult("추카추카!!");
+		} else {
+			vo.setResult("아쉽네요 .. 다음 기회를!!");
+		}
+		return "lottoView1";
+	}
+}
+```
+
+
+
+#### LottoService.java
+
+```java
+package service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import dao.LottoDAO;
+
+//Service 인지 선언해주는 어노테이션
+@Service
+public class LottoService {
+	public LottoService()  {
+		System.out.println("LottoService 객체생성");
+	}
+	//lottoDAO에 의존적이다 ..따라서 lottoDAO 를 찾아서 생성해줘야 한다(LottoDAO.java로 감)
+	//@Autowired 를 사용해서 자동으로 LottoDAO 객체 생성해서 사용하게끔
+	@Autowired
+	LottoDAO lottoDAO = null;
+	//여기서 int lottoNum 은 VO 에서 가져온 숫자로 client 로부터 전달받은 숫자
+	public boolean getLottoProcess(int lottoNum) {
+		boolean result = false;		
+		int randomNumber = lottoDAO.getLottoNumber();
+		System.out.println("--- 난수: " + randomNumber);
+		System.out.println("--- 입력한 수: " + lottoNum);
+		if(randomNumber == lottoNum) 
+			result = true;
+		return result;
+	}
+} 
+
+```
+
+#### LottoDAO.java : Tomcat서버 재기동 될때 생성된다
+
+```java
+package dao;
+import java.util.Random;
+import org.springframework.stereotype.Repository;
+@Repository
+public class LottoDAO {
+	public LottoDAO()  {
+		System.out.println("LottoDAO 객체생성");
+	}
+	public int getLottoNumber() {
+		Random rand = new Random();
+		return rand.nextInt(6)+1;
+	}
+}
+```
+
+#### LottoVO.java
+
+```java
+package vo;
+public class LottoVO {
+	//client에서 전달된 쿼리명이 lottoNum이면 자동으로 가져와서 전달됨
+	private int lottoNum;
+	
+	//반드시 client로 올 필요 없이 result 를 설정해준 객체..
+	//그냥 View 와 Controller 가 공유하는 객체 result
+	private String result;
+	
+	//------객체 선언 끝----------//
+	
+	public LottoVO()  {
+		System.out.println("LottoVO Create object");
+	}
+	public int getLottoNum() {
+		return lottoNum;
+	}
+	public void setLottoNum(int lottoNum) {
+		this.lottoNum = lottoNum;
+	}
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
+	}	
+}
+```
+
+
+
+#### lottoView.jsp
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>로또 결과</h1>
+<hr>
+<h2>${ lottoVO.result }</h2>
+<%
+	vo.LottoVO vo = (vo.LottoVO)request.getAttribute("lottoVO");
+%>
+<h2><%= vo.getResult() %></h2>
+<hr>
+<a href="/springedu/resources/lottoForm1.html">재시도.....</a>
+</body>
+</html>
+```
+
+
+
+
+
+---
+
+
+
+## 잭슨 바인드........(어렵)
+
+### ResponseBody : View 안거치고 Controller 응답
+
+
+
+#### ResponseBodyController.jsp
+
+```java
+package my.spring.springedu;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import vo.MyGroupModel;
+import vo.MyMainModel;
+import vo.MyModel;
+import vo.XmlVO;
+
+@Controller
+public class ResponseBodyController {
+	//동적패스 변수명 : value = "/body/text/{id} 의 id는 동적 변수명
+	@RequestMapping(value = "/body/text/{id}", produces = "text/plain; charset=utf-8")
+	//View 를 안거치고 Controller 가 바로 응답한다
+	@ResponseBody	//@PathVariable 은 동적...없으면 쿼리에서 가져옴
+	public String getByIdInTEXT(@PathVariable String id) {
+		return "<h1>It returns the string directly from the controller : " + id + "</h1>";
+	}
+
+	@RequestMapping(value = "/body/htmltext/{id}", produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public String getByIdInHTMLTEXT(@PathVariable String id) {
+		return "<h1>It returns the HTML directly from the controller : " + id + "</h1>";
+	}
+	
+	@RequestMapping(value = "/body/json/{id}", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String getByIdInJSON(@PathVariable String id) {
+		String s = "{ \"name\" : \"ROSE\", \"num\":5, \"id\" : \""+id+"\"}";
+		return s;
+	}
+	
+	@RequestMapping(value = "/body/json1/{id}", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public MyModel getByIdInJSON1(@PathVariable String id) {
+		MyModel my = new MyModel();
+		my.setFlowerName("ROSE");
+		my.setNum(5);
+		my.setId(id);		
+		return my;
+	}	
+	
+	@RequestMapping(value = "/body/json2/{id}", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public List<MyModel> getByIdInJSON2(@PathVariable String id) {
+		List<MyModel> list = new ArrayList<MyModel>();
+		MyModel my = new MyModel();
+		my.setFlowerName("ROSE");
+		my.setNum(5);
+		my.setId(id);
+		list.add(my);
+		my = new MyModel();
+		my.setFlowerName("LILY");
+		my.setNum(5);
+		my.setId(id);
+		list.add(my);
+		return list;
+	}
+
+	//JSON 은 Value 값을 ArrayList 즉 List 로 줘야한다
+    //자바 내 더블인용 사용할때 \사용해야하는데 그걸 줄여주는게 아래 방법들
+	@RequestMapping(value = "/body/json3/{id}", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public List<MyMainModel> getByIdInJSON3(@PathVariable String id) {
+		ArrayList<MyMainModel> list = new ArrayList<>();
+		ArrayList<MyGroupModel> list2 = new ArrayList<>();
+		ArrayList<MyGroupModel> list2_1 = new ArrayList<>();
+		ArrayList<MyModel> list3 = new ArrayList<>();
+		ArrayList<MyModel> list3_1 = new ArrayList<>();
+		MyModel my1 = new MyModel();
+		my1.setFlowerName("AAA");
+		my1.setNum(5);
+		my1.setId(id);
+		MyModel my2 = new MyModel();
+		my2.setFlowerName("BBB");
+		my2.setNum(5);
+		my2.setId(id);
+		MyModel my3 = new MyModel();
+		my3.setFlowerName("BBB");
+		my3.setNum(5);
+		my3.setId(id);
+		MyModel my4 = new MyModel();
+		my4.setFlowerName("CCC");
+		my4.setNum(5);
+		my4.setId(id);
+		MyModel my5 = new MyModel();
+		my5.setFlowerName("DDD");
+		my5.setNum(5);
+		my5.setId(id);
+		list3.add(my1);
+		list3.add(my2);
+		list3_1.add(my3);
+		list3_1.add(my4);
+		list3_1.add(my5);
+		MyGroupModel mgm1 = new MyGroupModel();
+		mgm1.setCategory("요가");
+		mgm1.setMyModellist(list3);
+		MyGroupModel mgm2 = new MyGroupModel();
+		mgm2.setCategory("수영");
+		mgm2.setMyModellist(list3_1);
+		list2.add(mgm1);
+		list2_1.add(mgm2);
+		MyMainModel mmm1 = new MyMainModel();
+		mmm1.setYear("2019");
+		mmm1.setGrouplist(list2);
+		MyMainModel mmm2 = new MyMainModel();
+		mmm2.setYear("2018");
+		mmm2.setGrouplist(list2_1);
+		list.add(mmm1);
+		list.add(mmm2);
+		System.out.println(list);
+		return list;
+	}
+	//HashMap 도 사용 가능하다
+	@RequestMapping(value = "/body/json4/{id}", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public List<HashMap<String, String>> getByIdInJSON4(@PathVariable String id) {
+		List<HashMap<String, String>> list = new ArrayList<>();
+		HashMap<String, String> map1 = new HashMap<>();
+		map1.put("aa", "10");
+		map1.put("bb", "20");
+		HashMap<String, String> map2 = new HashMap<>();
+		map2.put("cc", "30");
+		map2.put("dd", "40");
+		list.add(map1);
+		list.add(map2);
+		return list;
+	}
+
+	@RequestMapping(value = "/body/xml1/{id}", produces = "application/xml; charset=utf-8")
+	@ResponseBody
+	public MyModel getByIdInXML1(@PathVariable String id) {
+		MyModel my = new MyModel();
+		my.setFlowerName("ROSE");
+		my.setNum(5);
+		my.setId(id);
+		return my;
+	}
+
+	
+	@RequestMapping(value = "/body/xml2/{id}", produces = "application/xml; charset=utf-8")
+	@ResponseBody
+	public XmlVO getByIdInXML4(@PathVariable String id) {
+		XmlVO vo = new XmlVO();
+		ArrayList<MyModel> list = new ArrayList<MyModel>();
+		MyModel my = new MyModel();
+		my.setFlowerName("ROSE");
+		my.setNum(5);
+		my.setId(id);
+		list.add(my);
+		my = new MyModel();
+		my.setFlowerName("LILY");
+		my.setNum(5);
+		my.setId(id);
+		list.add(my);
+		vo.setList(list);
+		return vo;
+	}	
+    
+    //밑에 애들은 ajaxtext1,2.html 가 클라이언트이다
+	@RequestMapping(value = "/getJSON1", 
+			      produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String test1(String id) {		
+		String s = "{ \"result\" : \"ㅋㅋ1"+id+"\"}";
+		return s;
+	}
+	@RequestMapping(value = "/getJSON2", 
+		      produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public HashMap<String, String> test2(String id) {		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("result", "ㅋㅋ2"+id);
+		return map;
+	}
+
+}
+
+```
+
+#### MyModel.java
+
+```java
+package vo;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class MyModel {
+	private String flowerName;
+	private int num;
+	private String id;
+	
+	public String getFlowerName() {
+		return flowerName;
+	}
+	public void setFlowerName(String flowerName) {
+		this.flowerName = flowerName;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	@Override
+	public String toString() {
+		return "MyModel [flowerName=" + flowerName + ", num=" + num + ", id=" + id + "]";
+	}	
+	
+}
+
+```
+
+#### XmlVO.java
+
+- RootElement 이름 설정 방법
+
+```java
+package vo;
+
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlRootElement;
+//RootElement 의 기본값은 클래스명에서 첫글자 소문자
+//name 속성값을 주면 이름으로 바꿀 수 있다
+@XmlRootElement
+public class XmlVO {
+	private List<MyModel> list;
+	public List<MyModel> getList() {
+		return list;
+	}
+	public void setList(List<MyModel> list) {
+		this.list = list;
+	}	
+}
+
+```
+
+#### ajaxtest1.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>New Web Project</title>
+</head>
+<body>
+	<h1>JavaScript 로 구현하는 AJAX 프로그램 - Spring 요청</h1>
+	<button onclick="get()">GET요청</button>
+	<button onclick="post()">POST요청</button>
+	<hr>
+	<output id="result"></output>
+<script>
+	function get() {
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(event) {
+			if (xhr.status == 200) {
+				var result = document.getElementById("result");
+				result.textContent += xhr.responseText;				
+			}
+		};
+		xhr.open('GET', '/springedu/body/json1/GETUNICO', true);
+		xhr.send();
+	}
+	function post() {
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(event) {
+			if (xhr.status == 200) {
+				var result = document.getElementById("result");
+				result.textContent += xhr.responseText;	
+			}
+		};
+		xhr.open('POST', '/springedu/body/xml1/POSTUNICO', true);
+		xhr.setRequestHeader("content-type", 
+				"application/x-www-form-urlencoded");
+		xhr.send("");
+	}
+</script>
+</body>
+</html>
+```
+
+#### ajaxtext2.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>New Web Project</title>
+<script>
+	function go(target) {
+		var request = new XMLHttpRequest();
+		request.onload = function(event) {
+			if (request.status == 200) {
+				var result = document.getElementById("result");
+				result.textContent += request.responseText;				
+			}
+		};
+		request.open('GET', '/springedu/'+target+'?id=DUKE', true);
+		request.send();
+	}
+</script>
+</head>
+<body>
+	<h1>JavaScript 로 구현하는 AJAX 프로그램 - JSON</h1>
+	<button onclick="go('getJSON1')">getJSON1호출</button>
+	<button onclick="go('getJSON2')">getJSON2호출</button>
+	<hr>
+	<output id="result"></output>
+</body>
+</html>
+```
+
+
+
+---
+
+
+
+#### LoginController.java
+
+```java
+package my.spring.springedu;
+	
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import service.LoginService;
+import vo.LoginVO;
+import vo.ResultVO;
+
+@Controller
+public class LoginController {
+	@Autowired
+	LoginService ms;
+	@RequestMapping(value = "/login", produces="application/json; charset=utf-8", method=RequestMethod.POST)
+	@ResponseBody
+	public ResultVO login(LoginVO p) { 
+		ResultVO vo = new ResultVO();
+		boolean result = ms.login(p.getId(), p.getPasswd());
+		if (result == true) {
+			vo.setResult("ok");
+		}
+		else {
+			vo.setResult("fail");
+		}
+		return vo;
+	}
+
+}
+```
+
+#### LoginService.java
+
+```java
+package service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class LoginService {
+	
+	public boolean login(String id, String passwd) {
+		if (passwd.equals("@1234") && id.equals("spring")) {
+			return true;
+		}
+		else {
+		return false;
+		}
+	}
+
+}
+```
+
+
+
+#### exam7_1.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script>
+$(document).ready(function() {
+	$("#loginb").click(	function() {
+		$.post("/springedu/login", $("#loginf").serialize(), function(data) {
+			alert(data.result);
+			$.each(data, function(key, value) {
+				if (value == "ok") {
+					$("#result").text("로그인 성공!!").css("color", "Blue");
+				} else if (value == "fail") {
+					$("#result").text("로그인 실패!!").css("color", "Red");
+					$("#loginf").each(function() {
+						this.reset();
+						$("#id").focus();
+					});
+				}
+			});
+		});
+	});
+});
+</script>
+</head>
+<body>
+	<h3>계정과 패스워드를 입력해 주세요.</h3>
+	<form id="loginf">
+		<table>
+			<tr>
+				<td><label for="id">계정</label></td>
+				<td><input type="text" id="id" name="id" required/></td>
+			</tr>
+			<tr>
+				<td><label for="passwd">패스워드</label></td>
+				<td><input type="password" id="passwd" name="passwd" required/></td>
+			</tr>
+			<tr>
+				<td><input type="button" id="loginb" name="loginb" value="로그인" /></td>
+				<td><output id="result"></output></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
+```
 
 
 
 #### .java
 
 ```java
+
+```
+
+
+
+#### .jsp
+
+```jsp
+
+```
+
+
+
+#### .java
+
+```java
+
+```
+
+
+
+#### .jsp
+
+```jsp
+
+```
+
+
+
+#### .java
+
+```java
+
+```
+
+
+
+#### .jsp
+
+```jsp
+
+```
+
+
+
+#### .java
+
+```java
+
+```
+
+
+
+#### .jsp
+
+```jsp
+
+```
+
+
+
+#### .java
+
+```java
+
+```
+
+
+
+#### .jsp
+
+```jsp
+
+```
+
+
+
+#### .java
+
+```java
+
+```
+
+
+
+#### .jsp
+
+```jsp
 
 ```
 

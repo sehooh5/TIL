@@ -86,6 +86,7 @@
   - **EL 에서 연산자**: 변수명.xxx
     - 변수의 참조 대상이 일반 Java 객체이면 getxxx()를 호출한 결과
     - 변수의 참조 대상이 Map 객체(Hash)이면 get("xxx") 메서드를 호출한 결과 : xxx는 get() 메서드의 변수명으로 사용된다.
+  - ![image-20200211091757915](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200211091757915.png)
 
 #### MVC
 
