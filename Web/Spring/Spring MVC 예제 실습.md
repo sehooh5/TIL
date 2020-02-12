@@ -813,5 +813,132 @@ transition: .5s ease;
 
 
 
+---
 
+## TeamMaker : @RespnseBody, @RequestMapping value, VO 2개, @XmlRootElement
+
+- 기본적으로 json과 xml 의 내용은 같음
+
+#### MyteamController.java
+
+```java
+package my.spring.springedu;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import vo.TeamMemberVO;
+import vo.TeamVO;
+
+@Controller
+public class MyteamController {
+
+	@RequestMapping(value = "/myteam/json", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public TeamVO teamMaker1() {
+		TeamVO vo = new TeamVO();
+		ArrayList<TeamMemberVO> list = new ArrayList<TeamMemberVO>();
+		TeamMemberVO member = new TeamMemberVO();
+		member.setName("최희정");
+		member.setNicName("회장님");
+		list.add(member);
+		member = new TeamMemberVO();
+		member.setName("김동규");
+		member.setNicName("사장님");
+		list.add(member);
+		member = new TeamMemberVO();
+		member.setName("오세호");
+		member.setNicName("(제일 열심히하는)인턴");
+		list.add(member);
+		vo.setTeamName("꽃길 by 김세정");
+		vo.setTeamMember(list);
+		return vo;
+	}
+	
+
+	@RequestMapping(value = "/myteam/xml", produces = "application/xml; charset=utf-8")
+	@ResponseBody
+	public TeamVO teamMaker2() {
+		TeamVO vo = new TeamVO();
+		ArrayList<TeamMemberVO> list = new ArrayList<TeamMemberVO>();
+		TeamMemberVO member = new TeamMemberVO();
+		member.setName("최희정");
+		member.setNicName("회장님");
+		list.add(member);
+		member = new TeamMemberVO();
+		member.setName("김동규");
+		member.setNicName("사장님");
+		list.add(member);
+		member = new TeamMemberVO();
+		member.setName("오세호");
+		member.setNicName("(제일 열심히하는)인턴");
+		list.add(member);
+		vo.setTeamName("꽃길 by 김세정");
+		vo.setTeamMember(list);
+		return vo;
+	}	
+	
+}
+```
+
+#### TeamMemberVO.java
+
+```java
+package vo;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class TeamMemberVO {
+	private String name;
+	private String nicName;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getNicName() {
+		return nicName;
+	}
+	public void setNicName(String nicName) {
+		this.nicName = nicName;
+	}
+	
+}
+
+```
+
+#### TeamVO.java
+
+```java
+package vo;
+
+import java.util.ArrayList;
+
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement
+public class TeamVO {
+	private String teamName;
+	private ArrayList<TeamMemberVO> teamMember;
+	public String getTeamName() {
+		return teamName;
+	}
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	public ArrayList<TeamMemberVO> getTeamMember() {
+		return teamMember;
+	}
+	public void setTeamMember(ArrayList<TeamMemberVO> teamMember) {
+		this.teamMember = teamMember;
+	}
+	
+	
+}
+
+```
 

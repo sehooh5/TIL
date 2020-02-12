@@ -1456,7 +1456,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 //RootElement 의 기본값은 클래스명에서 첫글자 소문자
 //name 속성값을 주면 이름으로 바꿀 수 있다
-@XmlRootElement
+//XML 문서에서 가장 상위 값이 <xmlVO> ==> <unico> 로 변환
+@XmlRootElement(name="unico")
 public class XmlVO {
 	private List<MyModel> list;
 	public List<MyModel> getList() {
