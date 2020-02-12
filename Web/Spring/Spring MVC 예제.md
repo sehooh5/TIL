@@ -1,5 +1,9 @@
 # Spring MVC 예제
 
+[TOC]
+
+
+
 #### HelloController.java
 
 ```java
@@ -1546,7 +1550,7 @@ public class XmlVO {
 
 ---
 
-
+### 로그인 기능 : html 응답, ajax, VO두개, service
 
 #### LoginController.java
 
