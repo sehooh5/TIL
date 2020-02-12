@@ -1667,41 +1667,302 @@ $(document).ready(function() {
 
 
 
-#### .java
+---
+
+### Upload : 
+
+
+
+#### UploadController1.java
 
 ```java
+package my.spring.springedu;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import vo.FileVO;
+@Controller
+public class UploadController1 {
+	@RequestMapping("/uploadForm1")
+	public void formFile() {	   
+	}
+	//saveFile() 실행될때 FileVO 를 먼저 생성한다
+	//왜냐면 FileVO가 없다 지금 request 객체이기 때문에
+	//어떤 이름으로 찾냐면 : fileVO라는 이름으로 찾는다
+	@RequestMapping("/upload")
+	public ModelAndView saveFile(FileVO vo) {	    
+	     String fileName =  vo.getUploadFile().getOriginalFilename();
+	     byte[] content = null;
+	     ModelAndView mav = new ModelAndView();
+	     mav.setViewName("uploadForm1");
+	     try {
+             //뭔가 읽어들이고 변경해주고싶을때는 이 방법을 사용해야한다
+	    	 //getBytes()로 읽고 변경해줄꺼 변경하고 아래 write()로 다시 읽게해주면 된다
+	    	 content =  vo.getUploadFile().getBytes();
+	    	 File f = new File("c:/uploadtest/"+fileName);
+	    	 if ( f.exists() ) {
+	    		 mav.addObject("msg", fileName + " : 파일이 이미 존재해요!!");
+	    	 } else {
+	    		 //text 읽을 수 있나? byte 형 배열 그대로 옴겨놓은거여서 이 방법은 가능하다
+	    		 //FileOutStream 은 바이너리용?
+	    		 FileOutputStream fos = new FileOutputStream(f);
+	    		 fos.write(content);
+	    		 fos.close();
+	    		 mav.addObject("msg", fileName + ": 파일이 저장되었어요!!");
+	    	 }
+	     } catch (IOException e) {
+	    	 e.printStackTrace();
+	    	 mav.addObject("msg", "오류가 발생했어요!!");
+	     }	    
+	    return mav;
+	}
+}
+
 
 ```
 
+#### FileVO.java
 
+```java
+package vo;
 
-#### .jsp
+import org.springframework.web.multipart.MultipartFile;
+//여러개 받고싶으면 배열변수로 받으면 가능하다 MultipartFile[]
+public class FileVO {
+	private MultipartFile uploadFile;
+
+	public MultipartFile getUploadFile() {		
+		return uploadFile;
+	}
+	public void setUploadFile(MultipartFile uploadFile) {
+		this.uploadFile = uploadFile;
+	}
+}
+
+```
+
+#### uploadForm1.jsp
 
 ```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSP Test Example</title>
+</head>
+<body>
+<h2>SpringMVC FileUpload</h2>
+<hr>
+<%
+	if( request.getAttribute("msg") == null ) {
+%>
+	<form action="/springedu/upload" 
+	               enctype="multipart/form-data" method="post">
+    	<input type="file" name="uploadFile"  />
+    	<input type="submit" value="업로드"/>
+	</form>
+<%
+	} else {
+%>
+	 ${ msg }
+<%
+	}
+%>
+</body>
+</html>
+
+
 
 ```
 
 
 
-#### .java
+#### UploadController2.java
 
 ```java
+package my.spring.springedu;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class UploadController2 {
+	@Autowired
+	ServletContext context; 
+	@RequestMapping("/uploadForm2")
+	public void formFile() {
+	}
+
+	@RequestMapping("/upload2")
+	//변수로 MultipartRequest 를 주면 파일이 여러개여도 각각 추출할 수 있다
+	public ModelAndView saveFile(MultipartRequest mreq) {
+		ModelAndView mav = new ModelAndView();
+		//여러개의 MultipartFile 들을 담을 수 있다
+		//MultipartRequest 룰 변수로 사용하고 싶으면 getFiles()메서드를 사용해주면 된다
+		List<MultipartFile> list = mreq.getFiles("mfile");
+		String resultStr = "";
+		String path = "c:/uploadtest/multi";
+		File isDir = new File(path);
+		if (!isDir.isDirectory()) {
+			isDir.mkdirs();
+		}
+		mav.setViewName("uploadForm2");
+		for (MultipartFile mfile : list) {
+			String fileName = mfile.getOriginalFilename();
+			try {
+				File f = new File("c:/uploadtest/multi/" + fileName);
+				//String fileInfo = context.getRealPath("/") + "resources/images/"+fileName;
+				//File f = new File(fileInfo);
+				if (f.exists()) {
+					resultStr += fileName + " : 파일이 이미 존재해요!!<br>";
+				} else {
+					//FileOutputStream 안사용하고 MultipartFile 의 메서드 사용
+					//f 파일을 부분부분 저장하는...기능
+					mfile.transferTo(f);
+					resultStr += fileName + " : 파일이 저장되었어요!!<br>";
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				resultStr += fileName + " : 오류가 발생했어요!!";				
+			}
+		}
+		mav.addObject("msg", resultStr);	
+		return mav;
+	}
+}
 
 ```
 
-
-
-#### .jsp
-
-```jsp
-
-```
-
-
-
-#### .java
+#### UploadController4.java
 
 ```java
+//미니 프로젝트 '주차장'에서 사용했던 방법
+//업로드 파일들을 브라우저에서 요청 못한다..
+//브라우저 보려면 같은 context 안에 있어야한다
+//기존에는 path를 text 하려고 c드라이브 밑에 줬는데
+//resources/images/파일 이름 으로 주면 된다
+package my.spring.springedu;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class UploadController4 {
+	//ServletContext 객체 찾아서 미리 생성해줌
+	
+	@Autowired
+	ServletContext context; 
+	@RequestMapping("/uploadForm3")
+	public String formFile() {
+		return "uploadForm2";
+	}
+
+	@RequestMapping("/upload3")
+	public ModelAndView saveFile(MultipartRequest mreq) {
+		ModelAndView mav = new ModelAndView();
+		List<MultipartFile> list = mreq.getFiles("mfile");
+		String resultStr = "";
+		mav.setViewName("uploadForm2");
+		for (MultipartFile mfile : list) {
+			String fileName = mfile.getOriginalFilename();
+			try {
+				//context.getRealPath("/") 최상위 폴더를 보여준다
+				String fileInfo = context.getRealPath("/") + "resources/images/"+fileName;
+				System.out.println("컨텍스트의 최상위 폴더"+context.getRealPath("/"));
+				File f = new File(fileInfo);
+				if (f.exists()) {
+					resultStr += fileName + " : 파일이 이미 존재해요!!<br>";
+				} else {
+					mfile.transferTo(new File(fileInfo));
+					resultStr += fileName + " : 파일이 저장되었어요!!<br>";
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				resultStr += fileName + " : 오류가 발생했어요!!";				
+			}
+		}
+		mav.addObject("msg", resultStr);	
+		return mav;
+	}
+}
+
+```
+
+#### UploadController3.java
+
+```java
+package my.spring.springedu;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+@RestController
+public class UploadController3 {
+	@RequestMapping(value="/canvasupload",
+			 produces="text/plain; charset=utf-8")	
+	public String saveFile(MultipartFile mfile) {	    
+	     String fileName =  mfile.getOriginalFilename();	  
+	     byte[] content = null;
+	     String result="OK";
+	     try {
+	    	 content =  mfile.getBytes();
+	    	 File f = new File("c:/uploadtest/"+fileName);
+	   		 FileOutputStream fos = new FileOutputStream(f);
+	   		 fos.write(content);
+	   		 fos.close();	   		 
+	     } catch (IOException e) {
+	    	 e.printStackTrace();
+	    	 result="FAIL";
+	     }	    
+	    return result;
+	}
+	@RequestMapping(value="/canvasdownload",
+			 produces="text/plain; charset=utf-8")	
+	public String downloadFile() {	    
+		String path = "C:/uploadtest/";
+		char[] buffer =  null;		
+		try {
+			FileReader reader = new FileReader(path+"test.png");
+			buffer = new 
+					char[(int)(new File(path+"test.png").length())];
+			reader.read(buffer);
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	    return new String(buffer);
+	}
+}
 
 ```
 

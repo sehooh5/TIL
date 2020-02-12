@@ -942,3 +942,97 @@ public class TeamVO {
 
 ```
 
+
+
+#### myteam.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>New Web Project</title>
+<link href="https://fonts.googleapis.com/css?family=Kirang+Haerang:400" rel="stylesheet">
+<style>
+h1{
+	font-size : 60px;
+	font-family : "Kirang Haerang";
+	color : #f8585b;
+	text-shadow : 5px 5px gold;
+}
+h2{
+	font-family : "Kirang Haerang";
+	color : #f8585b;
+	text-shadow : 2px 2px purple;
+}
+span{
+	font-size : 95px;
+}
+button {
+	font-family : "Kirang Haerang";
+	font-color : gold;
+    width:150px;
+    background-color: #f8585b;
+    border: none;
+    color:#fff;
+    padding: 5px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+    margin: 4px;
+    cursor: pointer;
+	border-radius:10px 0 10px 0;
+	box-shadow : 5px 5px gold;
+}
+body{
+	padding-top : 10px;
+	background-image : url('https://cdn.crowdpic.net/detail-thumb/thumb_d_383E3626EA44DD23DE20DBD56B672D0D.jpg');
+	background-repeat : no-repeat;
+	background-size : cover;
+}
+</style>
+<script>
+//팀이름 출력
+	function team(target) {
+		var request = new XMLHttpRequest();
+		request.onload = function(event) {
+			if (request.status == 200) {
+				var str = request.responseText;
+				var jsobj = JSON.parse(str);
+				var result = document.getElementById("result");
+				result.innerHTML = "<br><h2><span>"+jsobj.teamName+"</span></h2>";				
+			}
+		};
+		request.open('GET', '/springedu/'+target, true);
+		request.send();
+	}
+//팀 멤버 출력
+	function member(target) {
+		var request = new XMLHttpRequest();
+		request.onload = function(event) {
+			if (request.status == 200) {
+				var str = request.responseText;
+				var jsobj = JSON.parse(str);
+				var result = document.getElementById("result");
+				result.innerHTML="";
+				for(var i=0;i<3;i++)
+					result.innerHTML += "<h2>"+
+					"<span>"+jsobj.teamMember[i].name+"</span>"+" call Me :"+jsobj.teamMember[i].nicName+"</h2>";			
+			}
+		};
+		request.open('GET', '/springedu/'+target, true);
+		request.send();
+	}
+</script>
+</head>
+<body>
+	<h1>우리팀 소개</h1>
+	<button onclick="team('myteam/json')">우리 팀명</button>
+	<button onclick="member('myteam/json')">우리 팀원</button>
+	<output id="result"></output>
+</body>
+</html>
+
+```
+
