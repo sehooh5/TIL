@@ -60,5 +60,16 @@
 3. id 값 줄때는 반드시 `namespace+id` !! (= resource.VisitorMapper.selectVisitor)
 4. insert 는 result type 을 꼭 줘야한다
    - preparedStatement 처럼 동적 파라미터 사용할 때 지정한 parameterType 객체의 getName 을 전달하는 : **#{name}**
-5. `<![CDATA[<]]>5` : 중간 **[<]** 연산자 쓰기 위하여 CDATA session 사용
+5. < ![**CDATA**[**<**]] >5 : 중간 **[<]** 연산자 쓰기 위하여 CDATA session 사용
 6. **like 연산자** : '%'||#{key}||'%'  ---> 여기서 key 값은 선택된 파라미터형 값 
+
+![image-20200213104200730](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200213104200730.png)
+
+7. insert 에 id 값을 주고 싶으면 **< select Key >** 태그를 사용한다!!
+
+   order="before"는 insert 실행 전에 < select Key > 먼저 실행하라는 수행문
+
+   즉 id 값을 먼저 생성해서 insert 할 데이터에 사용한다
+
+
+
