@@ -92,3 +92,68 @@ public class MeetingController {
 
 ```
 
+#### DAO변환
+
+```java
+package dao;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import vo.MeetingVO;
+@Repository //스프링 컨테이너가 mybatis 자동으로 생성하고 autowired 도 처리해줌
+public class MeetingMybatisDAO implements MeetingDAO {
+
+	@Autowired//session 만드는 과정을 spring이 대신해줌
+	SqlSession session = null;
+	String statement = "";
+	public List<MeetingVO> listAll(){
+		List<MeetingVO> list = null;
+		statement = "resource.MeetingMapper.selectMeeting";
+		list = session.selectList(statement);
+		return list;
+	}
+
+	public boolean insert(MeetingVO vo){
+		boolean result = false;
+		String statement = "resource.MeetingMapper.insertMeeting";
+		session.insert(statement, vo);
+		if(session.insert(statement, vo)==1)
+			result = true;
+			return result;
+		}
+
+	public List<MeetingVO> search(String keyword){
+		System.out.println("MyBatis 로 DB 연동 : search()");
+		List<MeetingVO> list = null;
+		String statement = "resource.MeetingMapper.searchMeeting";
+		list = session.selectList(statement,keyword);
+		return list;
+	}
+
+
+	public boolean delete(int id) {
+		boolean result = false;
+		String statement = "resource.MeetingMapper.deleteMeeting";
+		if(session.delete(statement,id)==1)
+			result = true;
+			return result;
+		}
+	
+	//id 값이 잇으면 update // id 값이 없으면 insert 로 비교하면 좋다
+	public boolean update(MeetingVO vo) {
+		boolean result = false;
+		String statement = "resource.MeetingMapper.updateMeeting";
+		if(session.update(statement,vo)==1)
+			result = true;
+		return result;
+	}
+
+
+}
+
+```
+
