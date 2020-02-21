@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="10268246797-gsmam25f472mnkps76fiv69fu2mfu5qe.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
   </head>
   <body>
@@ -39,9 +39,10 @@ sectret : zkJ7xbKKKhlLGkd61JbjAxpT
 
 
 
-#### 이거 홈페이지에 꼭 넣어줘야함
 
-```html
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-```
 
+10268246797-0j3msn023mdrekk0kb0hpa22k9hv533i.apps.googleusercontent.com
+
+
+
+iNN_W9283SOPguPI_ORnaV9k
