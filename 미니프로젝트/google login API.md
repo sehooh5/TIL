@@ -31,18 +31,36 @@
 
 
 
-ID : 10268246797-gsmam25f472mnkps76fiv69fu2mfu5qe.apps.googleusercontent.com
-
-
-
-sectret : zkJ7xbKKKhlLGkd61JbjAxpT
 
 
 
 
-
-10268246797-0j3msn023mdrekk0kb0hpa22k9hv533i.apps.googleusercontent.com
-
+595308026527-uck4ngk6pur3dhm0bunejuq1llf6buge.apps.googleusercontent.com
 
 
-iNN_W9283SOPguPI_ORnaV9k
+
+rS1wfopgq19DlSn9n_w9htJR
+
+
+
+
+
+
+
+595308026527-pg8v8a3oqgtndi247l9ticfo916ksa88.apps.googleusercontent.com
+
+
+
+wV0evBnOOnYYkKZXjn-f4lCC
+
+
+
+
+
+logintest
+
+195471796631-4kkp0lhn15j6bcnt3r83sg0k4k7u7hn8.apps.googleusercontent.com
+
+
+
+IHJX0ryna7X_KnhA0oh49Xj6
