@@ -283,7 +283,7 @@ public class NewsDAO {
 		boolean result = false;
 		statement = "resource.NewsMapper.updateNews";
 		System.out.println(vo.getId());
-		if(session.delete(statement,vo)==1)
+		if(session.update(statement,vo)==1)
 			result=true;
 		return result;
 	}	
