@@ -1,14 +1,18 @@
-# google login API
+<!-- 
+[구글버전 로그인 기능]
+- localhost:8000 사용
+- id : 195471796631-4kkp0lhn15j6bcnt3r83sg0k4k7u7hn8.apps.googleusercontent.com
+-->
 
-```html
 <html lang="en">
   <head>
     <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="10268246797-gsmam25f472mnkps76fiv69fu2mfu5qe.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="195471796631-4kkp0lhn15j6bcnt3r83sg0k4k7u7hn8.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
   </head>
   <body>
     <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <a href="#" onclick="signOut();">Sign out</a>
     <script>
       function onSignIn(googleUser) {
         // Useful data for your client-side scripts:
@@ -24,21 +28,13 @@
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
       }
+      function signOut(){
+    	  var auth2 = gapi.auth2.getAuthInstance();
+    	    auth2.signOut().then(function () {
+    	      console.log('User signed out.');
+    	});
+    	  auth2.disconnect();
+      }
     </script>
   </body>
 </html>
-```
-
-
-
-
-
-
-
-logintest
-
-195471796631-4kkp0lhn15j6bcnt3r83sg0k4k7u7hn8.apps.googleusercontent.com
-
-
-
-IHJX0ryna7X_KnhA0oh49Xj6
