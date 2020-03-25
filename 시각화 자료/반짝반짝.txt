@@ -1,0 +1,1 @@
+<animate dur="3s" values="f38cfe; #cde68c; #7ca8a0"  attributeName="fill" repeatCount="indefinite"/>

@@ -53,5 +53,31 @@ exam4<-function(x,y,z){
 }
 exam4(3,"-",2)
 
+#5
+exam5<-function(x,y="#"){
+  if(x>=0){
+    for(item in 1:x)
+      cat(y)
+  }
+}   
+exam5(x=3)
+
+#6
+rm(score)
+exam6<-function(score){
+  for(item in score){
+    if(item>=85&item<=100){
+      grade<-"상"
+    }else if(item>=70&item<=84){
+      grade<-"중"
+    }else if(item<70){
+      grade<-"하"
+    }else if(is.na(item))
+      print("NA는 처리불가")
+    print(paste(item,"점은 ",grade,"등급 입니다",sep=""))
+  }
+}
+
+exam6(c(50,70,80,90,NA))
 ```
 
