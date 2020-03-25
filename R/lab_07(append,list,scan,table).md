@@ -174,9 +174,7 @@ cat("오름차순 : ",numb1
 )
 
 
-#[ 문제9 ] 
-
-
+#9
 data <- scan("data/iotest2.txt", what="",encoding="UTF-8")
 data<-table(data)
 which.max(data)
