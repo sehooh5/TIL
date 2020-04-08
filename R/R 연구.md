@@ -50,5 +50,13 @@ Rstudy.Rproj 파일을 더블클릭해 R 스튜디오 기동 or 시작 프로그
 
 14. POST 방식 사용 할 때는 **httr**패키지 사용해야 한다
 
-15. 
+15. **컬럼명** 설정하는 방법
+
+    ```
+    
+    ```
+
+16. write 와 write.table 차이점 : write 는 글들만 저장 table 은 table 형식으로 
+
+17. **apply** 에 대해서(day8, 프린트물 8page 참고)
 

@@ -147,5 +147,84 @@ df <- data.frame(json_obj)
 df <- df[-1]
 names(df) <- c("className", "unitName", "cycle", "keystatName", "dataValue")
 View(df)
+
+
+### apply 계열의 함수를 알아보자
+weight <- c(65.4, 55, 380, 72.2, 51, NA)
+height <- c(170, 155, NA, 173, 161, 166)
+gender <- c("M", "F","M","M","F","F")
+
+df <- data.frame(w=weight, h=height)
+df
+View(df)
+
+apply(df, 1, sum, na.rm=TRUE) ## 함수 뒤에오는 것들은 함수에 영향을 준다
+apply(df, 2, sum, na.rm=TRUE)
+
+# lapply : MARGIN 주지 않는다...열단위로 실행
+lapply(df, sum, na.rm=TRUE) #=MARGIN=2
+
+# sapply : vector 로 할수있으면 vector,,안되면 list, matrix
+#           MARGIN 주지 않는다...열단위로 실행
+sapply(df, sum, na.rm=TRUE)
+
+# tapply : 그룹화하여 실행
+tapply(1:6, gender, sum, na.rm=TRUE)
+tapply(df$w, gender, mean, na.rm=TRUE)
+
+# mapply : 함수가 가장 첫번째 매개변수에 온다...가변형이기 때문
+mapply(paste, 1:5, LETTERS[1:5], month.abb[1:5])
+
+
+v<-c("abc", "DEF", "TwT")
+sapply(v, function(d) paste("-",d,"-", sep="")) # 간단하게 named 로 리턴
+
+l<-list("abc", "DEF", "TwT")
+sapply(l, function(d) paste("-",d,"-", sep=""))
+lapply(l, function(d) paste("-",d,"-", sep=""))
+
+flower <- c("rose", "iris", "sunflower", "anemone", "tulip")
+length(flower)
+nchar(flower)
+sapply(flower, function(d) if(nchar(d) > 5) return(d))## NULL 값이 리턴되는데 NULL 은 데이터셋 영역이므로 list 로 리턴된다
+sapply(flower, function(d) if(nchar(d) > 5) d)
+sapply(flower, function(d) if(nchar(d) > 5) return(d) else return(NA))
+sapply(flower, function(d) paste("-",d,"-", sep=""))
+sapply(flower, function(d, n) if(nchar(d) > n) return(d), 4) #function 의 첫번째 아규먼트만 앞에 주어진 데이터셋
+
+count <- 1
+myf <- function(x, wt=T){
+  print(paste(x,"(",count,")"))
+  Sys.sleep(0.5)
+  if(wt) 
+    r <- paste("*", x, "*")
+  else
+    r <- paste("#", x, "#")
+  count <<- count + 1;
+  return(r)
+}
+result <- sapply(df$w, myf)
+length(result)
+result
+sapply(df$w, myf, F)
+sapply(df$w, myf, wt=F)
+rr1 <- sapply(df$w, myf, wt=F)
+str(rr1)
+
+count <- 1
+sapply(df, myf)
+rr2 <- sapply(df, myf)
+str(rr2)
+rr2[1,1]
+rr2[1,"w"]
+
+#1부터 26사이의 값들 중에서 10개를 추출하여 v라는 변수에 저장한후에
+#추출된 숫자에 해당하는 알파벳 대문자를 원소값으로 벡터를 생성하는 코드를 작성하시오.
+
+
+v<- sample(1:26,10)
+v2<-sapply(v,function(x) return(LETTERS[x]))
+        
+        
 ```
 
