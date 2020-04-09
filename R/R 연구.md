@@ -60,3 +60,10 @@ Rstudy.Rproj 파일을 더블클릭해 R 스튜디오 기동 or 시작 프로그
 
 17. **apply** 에 대해서(day8, 프린트물 8page 참고)
 
+18. 변수들 카운트 하는 방법
+
+    - summary
+    - table
+    
+19. **substr** : 문자 쪼갤 수 있는 기능
+
