@@ -34,6 +34,21 @@
   - `git remote -v` : 확인
 - `git push [저장소 이름] [브랜치 이름]` : 원격 저장소에 푸시
 - `git clone [저장소 주소]` : 
+- `touch [file name]`: make file
+- `rm -rf  [directory name]` : git 해제
+- HEAD -> master : HEAD 는 마지막 커밋을 가르키는 포인터
+- `git branch [branch name]` : 브랜치 생성
+- `git branch` : 현재 갖고있는 branch 이름들을 보여줌
+- `git checkout [branch name]` : 브랜치 변경,이동
+- `git branch -D [branch name]` : 필요없는 브랜치 지우기
+- `git merge [branch name]` : 합치는 주체 브랜치에서 합쳐지는 브랜치 이름 입력 
+  - 내용이 복사되는 느낌이고 합쳐진 브랜치도 존재한다
+- **Push**
+  - `git pull origin master`
+  - `git add READEME.md`
+  - `git commit -m "message"`
+  - `git push origin master`
+- 
 
 
 
