@@ -179,382 +179,278 @@ filter(Price_m> 10 | MPG.highway_m> 25) -> V1 (가능)
 
 
 
-#### distinct() 
+#### group_by() , summarise()
 
-- 
+- 그룹화 및 요약
+
+- mean()	평균
+- sd()	표준편차
+- sum()	합계
+- median()	중앙값
+- min()	최솟값
+- max()	최댓값
+- n()	빈도
 
 ```r
+Cars93 %>% group_by(Manufacturer) %>% summarise(min_price= min(Price))
 
+Cars93 %>% group_by(Manufacturer) %>%
+summarise(min_price= min(Price), max_price= max(Price), mean_price= mean(Price))
+
+# grouping 기준을 여러개 준
+Cars93 %>% group_by(Manufacturer, Model) %>%
+summarise(min_price= min(Price), max_price= max(Price), mean_price= mean(Price))
 ```
 
 
 
-#### arrange() 
+#### mutate() 
 
-- 
+- 새로운 컬럼(변수) 추가하는 함수
 
 ```r
-
+score %>% mutate(총점= 국어+ 영어+ 수학, 평균= 총점/3)
 ```
 
 
+
+#### bind_rows() / bind_cols()
+
+- rbind 행, cbind 열 과 기능은 같고 속도는 더 빠르다
+
+![image-20200414093724321](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200414093724321.png)
+
+
+
+#### join() 
+
+- left_join(), right_join(), inner_join(), full_join()
+
+```r
+	R							SQL
+inner_join()	SELECT * FROM x JOIN y ON x.a= y.a
+left_join()		SELECT * FROM x LEFT JOIN y ON x.a= y.a
+right_join()	SELECT * FROM x RIGHT JOIN y ON x.a= y.a
+full_join()		SELECT * FROM x FULL JOIN y ON x.a= y.a
+semi_join()		SELECT * FROM x WHERE EXISTS (SELECT 1 FROM y WHERE x.a= y.a)
+anti_join()		SELECT * FROM x WHERE NOT EXISTS (SELECT 1 FROM y WHERE x.a= y.a)
+intersect(x,y)	SELECT * FROM x INTERSECT SELECT * FROM y
+union(x, y)		SELECT * FROM x UNION SELECT * FROM y
+setdiff(x, y)	SELECT * FROM x EXCEPT SELECT * FROM y
+```
+
+
+
+#### 결측치,이상치의 판단
+
+- IQR = Q3 - Q1
+
+  Q1(=1분위수)-1.5×IQR 보다 작거나
+
+  Q3(=3분위수)+1.5×IQR 보다 큰 관측 값들을 이상치라고 한다.
+
+  ![image-20200414150506157](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200414150506157.png)
 
 ## day10
 
 ```R
-###데이터 전처리###
-# 날짜와 시간 관련 기능을 지원하는 함수들
+# 전체 요약하기
 
-Sys.Date() 
-Sys.time()
+exam %>% summarise(n = n()) # n() 빈도, 전체 행 빈도 수
+exam %>% tally() # tally() 축약된 summarise =  빈도 수 세주기만함
 
-class(Sys.Date()) # Date 형 객체
-class(Sys.time()) # POSIXct/POSIXt 1970년 1월 1일 00:00기준
-
-as.Date("2020-04-15") # "2020-04-15"
-as.Date("2020/04/15") # "2020-04-15"
-as.Date("2020,04,15") # 안됨
-as.Date("15-04-2020") # "0015-04-20" / 첫번째를 년도로 인식
-
-as.Date("2020,04,15", format="%Y,%m,%d")
-as.Date("15-04-2020", format="%d-%m-%Y")
+exam %>% summarise(mean_math = mean(math))  # math 평균 산출
+mean(exam$math)
 
 
-(today <- Sys.Date())
-format(today, "%Y년 %m월 %d일")
-format(today, "%d일 %B %Y년") # %B 월 이름을 풀네임으로
-format(today, "%y") # %y = 10단위까지의 년도도
-format(today, "%Y") 
-format(today, "%m") # 04
-format(today, "%B") # full name 4월
-format(today, "%b") # short 4
-format(today, "%a") # 요일 축약 
-format(today, "%A") # 요일 풀네임
-weekdays(today) 
-months(today) 
-quarters(today)
-unclass(today)  # 1970-01-01을 기준으로 얼마나 날짜가 지났지는 지의 값을 가지고 있다.
-Sys.Date()
-Sys.time()
-Sys.timezone()
-
-as.Date('1/15/2018',format='%m/%d/%Y') # format 은 생략 가능
-as.Date('4월 26, 2018',format='%B %d, %Y')
-as.Date('110228',format='%d%m%y') # 인식이 안됨 #b=2월
-
-## 영어로 표시하는 방법
-Sys.setlocale("LC_TIME","English") # 환경변수를 영어로 변경경
-Sys.setlocale() # 다시 한글로 복귀귀
+str(exam %>% summarise(mean_math = mean(math),
+                       mean_english = mean(english),
+                       mean_science = mean(science)) ) # 모든 과목의 평균 산출
 
 
-## strptime : 시분초 까지 포함된 문자열 변환시 사용
-x1 <- "2019-01-10 13:30:41"
-# 문자열을 날짜형으로
-as.Date(x1, "%Y-%m-%d %H:%M:%S")# 시분초는 나오지 않음
-# 문자열을 날짜+시간형으로
-strptime(x1, "%Y-%m-%d %H:%M:%S") # format 문자열 지정은 필수
-strptime('2019-08-21 14:10:30', "%Y-%m-%d %H:%M:%S")
-strptime(Sys.time(), "%Y-%m-%d %H:%M:%S")
+# 집단별로 요약하기 그리고 펩시콜라 보다는 코카콜라지
+# 스프라이트 보다는 칠성사이다임 
+exam %>%
+  group_by(class) %>% summarise(n = n()) 
+exam %>%
+  group_by(class) %>% tally()   
+exam %>% count(class)         # count() is a short-hand for group_by() + tally()
+# add_tally() 와 ass_count(..) 도 있음
 
-start <- as.Date("2020-01-01")
-end <- as.Date("2021-01-01")
-seq(start, end, 1) # 1씩 증가되는 반복 객체들 생성
-seq(start, end, "day")
-seq(start, end, "week")
-seq(start, end, "month")
-seq(start, end, "year")
-seq(start, end, "3 month")
-seq(start, end, length.out=7)
+exam %>%
+  group_by(class) %>%                # class별로 분리
+  summarise(mean_math = mean(math))  # math 평균 산출
 
+exam %>%
+  group_by(class) %>%                   # class별로 분리
+  summarise(mean_math = mean(math),     # math 평균
+            sum_math = sum(math),       # math 합계
+            median_math = median(math), # math 중앙값
+            n = n())                    # 학생 수
 
-x2 <- "20200601"
-as.Date(x2, "%Y%m%d")
-datetime<-strptime(x2, "%Y%m%d")
-str(datetime)
+View(mpg)
+str(mpg)
+# 각 집단별로 다시 집단 나누기
+mpg %>%
+  group_by(manufacturer, drv) %>%      # 회사별, 구방방식별 분리
+  summarise(mean_cty = mean(cty)) %>%  # cty 평균 산출
+  head(10)                             # 일부 출력
 
-# Date 객체는 날짜만 나타낼 수 있으며 시간처리 불가
-# 날짜와 시간을 함께 처리하려면 POSIXct 또는 POSIXlt 타입의 객체 사용
+#[ 문제 ] 
+#회사별로 "suv" 자동차의 도시 및 고속도로 통합 연비 평균을 구해 
+#내림차순으로 정렬하고, 1~5위까지 출력하기
+#절차	기능	dplyr 함수
+#1	회사별로 분리	group_by()
+#2	suv 추출	filter()
+#3	통합 연비 변수 생성	mutate()
+#4	통합 연비 평균 산출	summarise()
+#5	내림차순 정렬	arrange()
+#6	1~5위까지 출력	head()
+library(ggplot2)
+mpg <- as.data.frame(mpg)
+str(mpg)
+mpg %>%
+  group_by(manufacturer) %>%           # 회사별로 분리
+  filter(class == "suv") %>%           # suv 추출
+  mutate(tot = (cty+hwy)/2) %>%        # 통합 연비 변수 생성
+  summarise(mean_tot = mean(tot)) %>%  # 통합 연비 평균 산출
+  arrange(desc(mean_tot)) %>%          # 내림차순 정렬
+  head(5)                              # 1~5위까지 출력
 
-pct <- as.POSIXct("2020/04/15 11:30:20") # 초시간인 numeric 객체
-plt <- as.POSIXlt("2020/04/15 11:30:20") # list() 객체
-pct # ct 와 lt 객체는 다르지만 출력할때는 같은 내용 출력
-plt
-class(pct)
-class(plt)
-as.integer(pct)
-as.integer(plt) # 이상한 값 ,, list 여서 의미가 없다
-unclass(plt) # list 인 것을 확인 할 수 있다
-plt$sec
-plt$min
-plt$hour
-plt$mday
-plt$mon # 0 - 1월
-plt$year
-plt$wday # 0-일요일
+mpg %>%
+  filter(class == "suv") %>%           
+  mutate(tot = (cty+hwy)/2) %>% 
+  group_by(manufacturer) %>%           
+  summarise(mean_tot = mean(tot)) %>%  
+  arrange(desc(mean_tot)) %>%          # 내림차순 정렬
+  head(5) 
 
 
 
-t<-Sys.time()
-ct<-as.POSIXct(t)
-lt<-as.POSIXlt(t)
-str(ct) 
-str(lt) 
-unclass(ct) 
-unclass(lt) 
-lt$mon+1
-lt$hour
-lt$year+1900
-as.POSIXct(1449994438,origin="1970-01-01")
-as.POSIXlt(1449994438,origin="1970-01-01")
+# 가로로 합치기
+# 중간고사 데이터 생성
+test1 <- data.frame(id = c(1, 2, 3, 4, 5, 6),  
+                    midterm = c(60, 80, 70, 90, 85, 100))
+# 기말고사 데이터 생성
+test2 <- data.frame(id = c(1, 5, 3, 4, 2, 7),  
+                    final = c(70, 80, 65, 95, 83, 0))
+
+# id 기준으로 합치기
+total <- full_join(test1, test2, by = "id")  # id 기준으로 합쳐 total에 할당
+# 다른 데이터 활용해 변수 추가하기
+# 반별 담임교사 명단 생성
+name <- data.frame(class = c(1, 2, 3, 4, 5), teacher = c("kim", "lee", "park", "choi", "jung"))
+
+# class 기준 합치기
+exam_new <- left_join(exam, name, by = "class")
+
+# 세로로 합치기
+# 학생 1~5번 시험 데이터 생성
+group_a <- data.frame(id = c(1, 2, 3, 4, 5),  test = c(60, 80, 70, 90, 85))
+# 학생 6~10번 시험 데이터 생성
+group_b <- data.frame(id = c(6, 7, 8, 9, 10),  test = c(70, 83, 65, 95, 80))
+#세로로 합치기
+group_all <- bind_rows(group_a, group_b)  # 데이터 합쳐서 group_all에 할당
 
 
-#올해의 크리스마스 요일 2가지방법(요일명,숫자)
-christmas2<-as.POSIXlt("2020-12-25")
-weekdays(christmas2) # 금요일
-christmas2$wday # 5
-#2020년 1월 1일 어떤 요일
-tmp<-as.POSIXct("2020-01-01")
-weekdays(tmp)
-#오늘은 xxxx년x월xx일x요일입니다 형식으로 출력
-tmp<-Sys.Date()
-format(tmp,'오늘은 %Y년 %B %d일 %A입니다')
-year<-format(tmp,'%Y')
-month<-format(tmp,'%m')
-day<-format(tmp,'%d')
-weekday<-format(tmp,'%A')
-paste("오늘은 ",year,"년 ",month,"월 ",day,"일 ",weekday," 입니다.",sep="")
+# 데이터 정제 : 결측치(NA)와 이상치 처리
 
-# 뺄셈 연산 가능
-as.Date("2020/01/01 08:00:00") - as.Date("2020/01/01 05:00:00")
-as.POSIXct("2020/01/01 08:00:00") - as.POSIXct("2020/01/01 05:00:00")
-as.POSIXlt("2020/01/01 08:00:00") - as.POSIXlt("2020/01/01 05:00:00")
+##########함수(df$값,na.rm=T), na.omit(df)####
 
+df <- data.frame(sex = c("M", "F", NA, "M", "F"), 
+                 score = c(5, 4, 3, 4, NA))
 
-# 문자열 처리 관련 주요 함수들
+### 결측치 확인하기
+is.na(df)         # 결측치 확인
+table(is.na(df))  # 결측치 빈도 출력
+# 변수별로 결측치 확인하기
+table(is.na(df$sex))    # sex 결측치 빈도 출력
+table(is.na(df$score))  # score 결측치 빈도 출력
+# 결측치 포함된 상태로 분석
+mean(df$score)  # 평균 산출
+sum(df$score)   # 합계 산출
+# 결측치 있는 행 제거하기
+library(dplyr) # dplyr 패키지 로드
+df %>% filter(is.na(score))   # score가 NA인 데이터만 출력
+df %>% filter(!is.na(score))  # score 결측치 제거
+# 결측치 제외한 데이터로 분석하기
+df_nomiss <- df %>% filter(!is.na(score))  # score 결측치 제거
+mean(df_nomiss$score)                      # score 평균 산출
+sum(df_nomiss$score)                       # score 합계 산출
+# 여러 변수 동시에 결측치 없는 데이터 추출하기
+# score, sex 결측치 제외
+df_nomiss <- df %>% filter(!is.na(score) & !is.na(sex))
+df_nomiss  
+# 결측치가 하나라도 있으면 제거하기
+df_nomiss2 <- na.omit(df)  # 모든 변수에 결측치 없는 데이터 추출
 
-x <- "We have a dream"
-nchar(x) # 문자 하나 하나의 개수
-length(x) # vector 개수 
-
-y <- c("We", "have", "a", "dream")
-length(y)
-nchar(y)
-
-letters
-sort(letters, decreasing=TRUE)
-
-fox.says <- "It is only with the HEART that one can See Rightly"
-tolower(fox.says)
-toupper(fox.says)
-
-## 원하는 위치의 문자열만 뽑아내기
-substr("Data Analytics", start=1, stop=4)
-substr("Data Analytics", 6, nchar("Data Analytics")) # nchar 사용
-substring("Data Analytics", 6)
-
-classname <- c("Data Analytics", "Data Mining", "Data Visualization")
-substr(classname, 1, 4)
-
-countries <- c("Korea, KR", "United States, US", "China, CN")
-substr(countries, nchar(countries)-1, nchar(countries))
-
-# 
-head(islands)
-landmesses <- names(islands)
-landmesses
-grep(pattern="New", x=landmesses) # find pattern after opening the files
-
-index <- grep("New", landmesses)
-landmesses[index]
-# 동일
-grep("New", landmesses, value=T) # value=T 하면 index 가 아닌 값 추출
+#분석에 필요한 데이터까지 손실 될 가능성 유의
+# 함수의 결측치 제외 기능 이용하기 - na.rm = T
+mean(df$score, na.rm = T)  # 결측치 제외하고 평균 산출
+sum(df$score, na.rm = T)   # 결측치 제외하고 합계 산출
+#summarise()에서 na.rm = T사용하기
+# 결측치 생성
+exam <- read.csv("data/csv_exam.csv")            # 데이터 불러오기
+table(is.na(exam))
+exam[1,"math"] ###data.frame 값 가져오는 방법[행 인덱스,열 인덱스]
+exam[c(3, 8, 15), "math"] <- NA             # 3, 8, 15행의 math에 NA 할당
+#평균 구하기
+exam %>% summarise(mean_math = mean(math))             # 평균 산출
+exam %>% summarise(mean_math = mean(math, na.rm = T))  # 결측치 제외하고 평균 산출
+# 다른 함수들에 적용
+exam %>% summarise(mean_math = mean(math, na.rm = T),      # 평균 산출
+                   sum_math = sum(math, na.rm = T),        # 합계 산출
+                   median_math = median(math, na.rm = T))  # 중앙값 산출
+boxplot(exam$math)
+mean(exam$math, na.rm = T)  # 결측치 제외하고 math 평균 산출
+# 평균으로 대체하기
+exam$math <- ifelse(is.na(exam$math), 55, exam$math)  # math가 NA면 55로 대체
+table(is.na(exam$math))                               # 결측치 빈도표 생성
+mean(exam$math)  # math 평균 산출
 
 
-txt <- "Data Analytics is useful. Data Analytics is also interesting."
-sub(pattern="Data", replacement="Business", x=txt) # 한개만 찾음
-gsub(pattern="Data", replacement="Business", x=txt) # 여러개(global)
+###이상치 처리
+# 이상치 포함된 데이터 생성 - sex 3, score 6
+outlier <- data.frame(sex = c(1, 2, 1, 3, 2, 1),  score = c(5, 4, 3, 4, 2, 6)) 
+# 이상치 확인하기= 개수를 세서 판단한다
+table(outlier$sex)
 
-x <- c("test1.csv", "test2.csv", "test3.csv", "test4.csv")
-gsub(".csv", "", x)
-# 반대로 붙이는 방법 : paste("test",".csv",sep="")
+table(outlier$score)
 
-words <- c("ct", "at", "bat", "chick", "chae", "cat", "cheanomeles", "chase", "chasse", "mychasse", "cheap", "check", "cheese", "hat", "mycat")
+# 결측 처리하기 - sex
+# sex가 3이면 NA 할당
+outlier$sex <- ifelse(outlier$sex == 3, NA, outlier$sex)
 
-grep("che", words, value=T)
-grep("at", words, value=T)
-grep("[ch]", words, value=T)
-grep("[at]", words, value=T)
-grep("ch|at", words, value=T)
-grep("ch(e|i)ck", words, value=T)
-grep("chase", words, value=T)
-grep("chas?e", words, value=T)
-grep("chas*e", words, value=T)
-grep("chas+e", words, value=T)
-grep("ch(a*|e*)se", words, value=T)
-grep("^c", words, value=T)
-grep("t$", words, value=T)
-grep("^c.*t$", words, value=T) # c로시작 t로 끝 가운데 몇개 아무 문자나
+#결측 처리하기 - score
+# score가 1~5 아니면 NA 할당
+outlier$score <- ifelse(outlier$score > 5, NA, outlier$score)
 
-words2 <- c("12 Dec", "OK", "http//", 
-            "<TITLE>Time?</TITLE>", 
-            "12345", "Hi there")
+# 결측치 제외하고 분석
+outlier %>%
+  filter(!is.na(sex) & !is.na(score)) %>%
+  group_by(sex) %>%
+  summarise(mean_score = mean(score))
 
-grep("[[:alnum:]]", words2, value=TRUE) ;# grep("\\w", words2, value=TRUE)
-grep("[[:alpha:]]", words2, value=TRUE) 
-grep("[[:digit:]]", words2, value=TRUE) ;# grep("\\d", words2, value=TRUE) 
-grep("[[:punct:]]", words2, value=TRUE)
-grep("[[:space:]]", words2, value=TRUE) ;# grep("\\s", words2, value=TRUE) 
-grep("\\w", words2, value=TRUE) # w = [[:alnum:]]
-grep("\\d", words2, value=TRUE) # d = [[:digit:]]
-grep("\\s", words2, value=TRUE) # s = [[:space:]]
-
-
-
-fox.said <- "What is essential is invisible to the eye"
-fox.said
-strsplit(x= fox.said, split= " ") # list() 객체
-strsplit(x= fox.said, split="")
-
-fox.said.words <- unlist(strsplit(fox.said, " ")) # vector 
-fox.said.words
-fox.said.words <- strsplit(fox.said, " ")[[1]]
-fox.said.words
-fox.said.words[3]
-p1 <- "You come at four in the afternoon, than at there I shall begin to the  happy"
-p2 <- "One runs the risk of weeping a little, if one lets himself be tamed"
-p3 <- "What makes the desert beautiful is that somewhere it hides a well"
-littleprince <- c(p1, p2, p3)
-strsplit(littleprince, " ")
-strsplit(littleprince, " ")[[3]] 
-strsplit(littleprince, " ")[[3]][5]
-
-
-
-
-
-
-### dplyr 패키지를 학습하자....
-
-install.packages("dplyr") 
-library(dplyr)
-install.packages("ggplot2")
-str(ggplot2::mpg)
-head(ggplot2::mpg)
 mpg <- as.data.frame(ggplot2::mpg)
-head(mpg)
-exam <- read.csv("data/csv_exam.csv")
-str(exam)
-dim(exam)
-head(exam);tail(exam)
-View(exam)
-# exam에서 class가 1인 경우만 추출하여 출력
-exam %>% filter(class == 1) # [참고] 단축키 [Ctrl+Shit+M]으로 %>% 기호 입력
-# 2반인 경우만 추출
-exam %>% filter(class == 2)
-# 1반이 아닌 경우
-exam %>% filter(class != 1)
-# 3반이 아닌 경우
-exam %>% filter(class != 3)
-# 수학 점수가 50점을 초과한 경우
-exam %>% filter(math > 50)
-# 수학 점수가 50점 미만인 경우
-exam %>% filter(math < 50)
-# 영어점수가 80점 이상인 경우
-exam %>% filter(english >= 80)
-# 영어점수가 80점 이하인 경우
-exam %>% filter(english <= 80)
-# 1반 이면서 수학 점수가 50점 이상인 경우
-exam %>% filter(class == 1 & math >= 50)
-# 2반 이면서 영어점수가 80점 이상인 경우
-exam %>% filter(class == 2 & english >= 80)
-# 수학 점수가 90점 이상이거나 영어점수가 90점 이상인 경우
-exam %>% filter(math >= 90 | english >= 90)
-# 영어점수가 90점 미만이거나 과학점수가 50점 미만인 경우
-exam %>% filter(english < 90 | science < 50)
-# 목록에 해당되는 행 추출하기
-exam %>% filter(class == 1 | class == 3 | class == 5)  # 1, 3, 5 반에 해당되면 추출
-# %in% 연산자 이용하기
-exam %>% filter(class %in% c(1,3,5))  # 1, 3, 5 반에 해당하면 추출
-# 추출한 행으로 데이터 만들기
-class1 <- exam %>% filter(class == 1)  # class가 1인 행 추출, class1에 할당
-class2 <- exam %>% filter(class == 2)  # class가 2인 행 추출, class2에 할당
-mean(class1$math)                      # 1반 수학 점수 평균 구하기
-mean(class2$math)                      # 2반 수학 점수 평균 구하기
+boxplot(mpg$hwy)
+View(mpg)
+table(mpg$hwy) # 숫자 비교롤 이상치 찾아내기 어렵다!
 
+#상자그림 통계치 출력하여 확인!!
+boxplot(mpg$hwy)
+boxplot(mpg$hwy,range=2)
 
-exam %>% select(math)  # math 추출
-exam %>% select(english)  # english 추출
-# 여러 변수 추출하기
-exam %>% select(class, math, english)  # class, math, english 변수 추출
-# 변수 제외하기
-exam %>% select(-math)  # math 제외
-exam %>% select(-math, -english)  # math, english 제외
-# dplyr 함수 조합하기
-# class가 1인 행만 추출한 다음 english 추출
-exam %>% filter(class == 1) %>% select(english)
-# 가독성 있게 줄 바꾸기
-exam %>%
-  filter(class == 1) %>%  # class가 1인 행 추출
-  select(english)         # english 추출
-# 일부만 출력하기
-exam %>%
-  select(id, math) %>%  # id, math 추출
-  head                  # 앞부분 6행까지 추출
-# 일부만 출력하기
-exam %>% 
-  select(id, math) %>%  # id, math 추출
-  head(10)              # 앞부분 10행까지 추출
+boxplot(mpg$hwy)$stats  # stats : summary 값 출력 
+summary(mpg$hwy)
 
-iris %>% pull(Species) # 결과값이 vector
-iris %>% select(Species) # data.frame
-iris %>% select_if(is.numeric) # select 에 조건주기, 값이 숫자인것들 
-iris %>% select(-Sepal.Length, -Petal.Length)
-
-# Select column whose name starts with "Petal"
-iris %>% select(starts_with("Petal"))
-
-# Select column whose name ends with "Width"
-iris %>% select(ends_with("Width"))
-
-# Select columns whose names contains "etal"
-iris %>% select(contains("etal"))
-
-# Select columns whose name maches a regular expression
-iris %>% select(matches(".t."))
-
-
-# 오름차순으로 정렬하기
-exam %>% arrange(math)  # math 오름차순 정렬
-# 내림차순으로 정렬하기
-exam %>% arrange(desc(math))  # math 내림차순 정렬
-# 정렬 기준 변수 여러개 지정
-exam %>% arrange(desc(class), desc(math))  # class 및 math 오름차순 정렬
-exam %>% arrange(desc(math)) %>% head(1)
-
-exam %>%
-  mutate(total = math + english + science) %>%  # 총합 변수 추가
-  head                                          # 일부 추출
-#여러 파생변수 한 번에 추가하기
-exam %>%
-  mutate(total = math + english + science,          # 총합 변수 추가
-         mean = (math + english + science)/3) %>%   # 총평균 변수 추가
-  head     
-exam %>%
-  mutate(total = math + english + science,          # 총합 변수 추가
-         mean = total/3) %>%   # 총평균 변수 추가
-  head 
-
-# 일부 추출
-# mutate()에 ifelse() 적용하기
-exam %>%
-  mutate(test = ifelse(science >= 60, "pass", "fail")) %>%
-  head
-#추가한 변수를 dplyr 코드에 바로 활용하기
-exam %>%
-  mutate(total = math + english + science) %>%  # 총합 변수 추가
-  arrange(total) %>%                            # 총합 변수 기준 정렬
-  head                                          # 일부 추출
-
+# 결측 처리하기
+# 12~37 벗어나면 NA 할당
+mpg$hwy <- ifelse(mpg$hwy < 12 | mpg$hwy > 37, NA, mpg$hwy)
+table(is.na(mpg$hwy))
+# 결측치 제외하고 분석하기
+mpg %>%
+  group_by(drv) %>%
+  summarise(mean_hwy = mean(hwy, na.rm = T))
 
 ```
 
