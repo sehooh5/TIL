@@ -77,5 +77,12 @@ DQL ----> DML -----> DDL
 #### 년도계산
 
 - rr/mm/dd : 0~49 현재 세기, 50~99 이전 세기
-
 - yy/mm/dd : 현재 세기를 붙임 (ex 20xx)
+
+
+
+#### 계정의 모든 테이블 백업, 복구(in bin directory)
+
+- exp userid=jdbctest/jdbctest file=c:/SEHO/backup.bak
+
+- imp userid=jdbctest/jdbctest file=c:/.../backup.bak full=y ignore=y
