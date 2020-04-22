@@ -29,7 +29,7 @@
 
   - C:\Program Files\R\R-xxxx\bin\x64 디렉토리에 복사한 후에 
 
-  - cmd 창을 띄우고 C:\Program Files\R\R-xxxx\bin\x64 디렉토리에 가서 다음 명령을 수행시킨다. 
+  - cmd 창을 띄우고 C:\Program Files\R\R-3.6.3\bin\x64 디렉토리에 가서 다음 명령을 수행시킨다. 
 
     ​	`Rserve --RS-encoding utf8`
 
