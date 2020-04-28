@@ -1,10 +1,8 @@
 # CLI 명령어
 
 - `startx` : X 윈도 실행
-
 - `gedit` : gedit 에디터 실행
 - `vi` : vi 에디터 실행
-
 - `ls -l` or `ll` : 리스트 자세하게 보여줌
 - `ls -a` : 숨겨진 파일까지 모두 보여줌
 - `ls -al` : 모든 파일 자세하게 보여줌
@@ -49,3 +47,8 @@
 - `sleep 숫자` : 
 - `sleep 숫자&` : `&` 은 백그라운드로 실행하게 하는 기능
 - `wc` : word counting
+- `tar` : unix, linux 를 연장한 것이 jar,,,
+  - `tar xvf(z)` : z는 압축까지 해제, 실행
+- `su 아이디` : 유저 변경
+- `Ctrl+d` : exit 하면서 로그아웃하는 단축키
+- 

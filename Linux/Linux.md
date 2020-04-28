@@ -51,7 +51,7 @@
     - 마운트 지점 : `swap` , `4G`
     - 마운트 지점 : `/`
 - ROOT 암호 설정
-  - password / password
+  - root / password
 - 사용자 생성
   - 모두 다 centos 로
 - 설치 후 라이센스 동의 후 `설정 완료`
