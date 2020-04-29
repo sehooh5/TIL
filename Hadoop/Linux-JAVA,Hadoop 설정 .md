@@ -118,7 +118,7 @@
 
 
 
-
+## Hadoop 작업환경
 
 ### 5.Hadoop 설치
 
@@ -232,36 +232,54 @@
    </configuration>
    ```
 
-6. 위 과정 후 로그아웃하고 VM 전부 종료시켜주기
+6. `cd $HADOOP_HOME/etc/hadoop` 로 들어가서 `slaves, masters`(생성,수정)
 
-7. 다시 VM 기동시키고 설치 CD 빼주기
+   - `vi slaves` : 
+
+     ```
+     slave1
+     slave2
+     slave3
+     ```
+
+   - `vi masters` :
+
+     ```
+     slave1 (SecondaryNameNode 설정할 컴퓨터)
+     ```
+
+     
+
+7. 위 과정 후 로그아웃하고 VM 전부 종료시켜주기
+
+8. 다시 VM 기동시키고 설치 CD 빼주기
 
    `m1` - `CD` - `Use phyical drive 체크`
 
-8. `c:/VM/` 밑에 `m1, m2, m3, m4` 폴더 복사해주기
+9. `c:/VM/` 밑에 `m1, m2, m3, m4` 폴더 복사해주기
 
-9. `m1.vmx` 파일을 메모장으로 열어서 `displayName` 을 각각 이름맞춰 지정(참고자료 14번 꼭해줘야함)
+10. `m1.vmx` 파일을 메모장으로 열어서 `displayName` 을 각각 이름맞춰 지정(참고자료 14번 꼭해줘야함)
 
-10. VM 에서 `Player-file-open` 해서 각각 인식시켜줌
+11. VM 에서 `Player-file-open` 해서 각각 인식시켜줌
 
-11. 각 컴퓨터의 네트워크를 각각 변경해줘야한다
+12. 각 컴퓨터의 네트워크를 각각 변경해줘야한다
 
-12. `Edit virtual machine settings - Network~ - Advanced - MAC Address(Generate)` 후 해당 주소 복사해놓기
+13. `Edit virtual machine settings - Network~ - Advanced - MAC Address(Generate)` 후 해당 주소 복사해놓기
 
     - m1 : 00:50:56:30:B5:B8
     - m2 : 00:50:56:28:F7:F3
     - m3 : 00:50:56:33:C4:11
     - m4 : 00:50:56:2A:00:77
 
-13. 리눅스를 각각 기동시킨다
+14. 리눅스를 각각 기동시킨다
 
     - `I moved it` 선택해야지 `copied` 하면 `MAC address` 바뀜
 
-14. 각각 이름 변경
+15. 각각 이름 변경
 
     `master, slave1, slave2, slave3`
 
-15. 각 머신의 고정 IP를 설정한다
+16. 각 머신의 고정 IP를 설정한다
 
     `cd  /etc/sysconfig/network-scripts/` - `vi ifcfg-eno~~~~`에서 수정
 
@@ -274,12 +292,47 @@
 
     3. 변경 후 네트워크 재시작 : `systemctl restart network` & `ifconfig`
 
-16. 네트워크 잘 연결됐는지 확인 : `ping 아이피 주소`
+17. 네트워크 잘 연결됐는지 확인 : `ping 아이피 주소`
 
     종료 : `Ctrl + c`  (interrupt)
 
-17. 사용자 이름으로 찾아가게끔 설정해주는 방법
 
-    - `vi /etc/hosts`
-    - `192.168.111.120 master` 이런식으로 지정해주기
 
+### Hadoop 완전 분산모드 기동
+
+1. 사용자 이름으로 찾아가게끔 설정해주는 방법
+
+   - `vi /etc/hosts`
+   - `192.168.111.120 master` 이런식으로 지정해주기
+
+2. 다른 컴퓨터로 접속하기 (나가기 : `Ctrl+d`)
+
+   - `ssh root@slave1` 실행 : 임시 키 발행하여 `slave1`에 보안 접속
+
+     - `password`입력이 필요하다..하지만 우리는 `password`를 몰라도 접속이 가능하게 만들어줘야한다
+     - **즉, 연결할 컴퓨터들 만의 `password`를 지정해줘야한다**
+
+   - `ssh-keygen -t rsa` : ssh 키를 생성하여 다른 시스템과 공유
+
+     ```
+     <전부 그냥 엔터 눌러주면 비밀번호 없이 사용 가능>
+     Enter file in which to save the key (/root/.ssh/id_rsa): 
+     Enter passphrase (empty for no passphrase): 
+     Enter same passphrase again:
+     ```
+
+   - `ssh-copy-id -i /root/.ssh/id_rsa.pub root@slave1` : 
+
+     공개 키를 나머지 리눅스 시스템과 공유(패스워드 1회 입력해야함)
+
+     우리는 `slave1 ,slave2, slave3, master` 모두 해주어야한다
+
+   - 잘됐는데 확인하려면 `ssh root@slave1` 다시 실행
+
+3. 이 과정을 통해 4개의 컴퓨터는 한 개의 **클러스터**로 묶였다
+
+4. `hdfs namenode -format` : 하둡 파일시스템을 포맷 (`master`에서만 수행)
+5. `start-dfs.sh` 을 마스터에서 실행
+   - `jps` 실행하면 `NameNode` 확인할 수 있음 (`demon` 수행 확인)
+   - `master` 에서만 실행했는데 다른 컴퓨터에서도 `SecondaryNameNode` 확인 가능
+   - ` stop-dfs.sh` 종료
