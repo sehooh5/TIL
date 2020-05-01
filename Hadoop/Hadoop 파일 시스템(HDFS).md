@@ -59,8 +59,72 @@
    [root@master sampledata]# hdfs dfs -mkdir /result
    [root@master sampledata]# hdfs dfs -chmod 777 /result
    ```
+   
+9. `시작할 때 start-dfs.sh` 명령어로 `demon`띄우기
 
 
+
+#### HADOOP 주요 API
+
+1. 
+
+2. `cat $HADOOP_HOME/etc/hadoop/hdfs-site.xml` 실행
+
+   ```
+   <configuration>
+    <property>
+         <name>dfs.replication</name>
+         <value>3</value>	##(3개 복제해준다)
+      </property>
+      <property>
+         <name>dfs.name.dir</name>
+         <value>/root/hadoop-2.7.7/hdfs/name</value>
+      </property>
+      <property>
+         <name>dfs.data.dir</name>
+         <value>/root/hadoop-2.7.7/hdfs/data</value>
+      </property>
+      <property>
+         <name>dfs.support.append</name>
+         <value>true</value>	##(append 해준다 - true)
+      </property>
+      <property>
+         <name>dfs.namenode.secondary.http-address</name>
+         <value>slave1:50090</value>	##(Secondary 노드 정보)
+      </property>
+      <property>
+         <name>dfs.namenode.secondary.https-address</name>
+         <value>slave1:50091</value>
+      </property> 
+   </configuration>
+   
+   ```
+
+3. `cd /root/hadoop-2.7.7/hdfs/data/current/BP-1276865796-192.168.111.120-1588127251595/current/finalized/subdir0/subdir0` 에 들어가면 우리가 저장한 자료들을 보여줌
+
+   ```
+   -rw-r--r--. 1 root root      7402  4월 29 14:27 blk_1073741825
+   -rw-r--r--. 1 root root        67  4월 29 14:27 blk_1073741825_1001.meta
+   -rw-r--r--. 1 root root     14174  4월 29 14:28 blk_1073741826
+   -rw-r--r--. 1 root root       119  4월 29 14:28 blk_1073741826_1002.meta
+   -rw-r--r--. 1 root root 134217728  4월 29 14:31 blk_1073741833
+   -rw-r--r--. 1 root root   1048583  4월 29 14:31 blk_1073741833_1009.meta
+   -rw-r--r--. 1 root root 134217728  4월 29 14:31 blk_1073741834
+   -rw-r--r--. 1 root root   1048583  4월 29 14:31 blk_1073741834_1010.meta
+   -rw-r--r--. 1 root root 134217728  4월 29 14:31 blk_1073741835
+   -rw-r--r--. 1 root root   1048583  4월 29 14:31 blk_1073741835_1011.meta
+   -rw-r--r--. 1 root root 134217728  4월 29 14:31 blk_1073741836
+   -rw-r--r--. 1 root root   1048583  4월 29 14:31 blk_1073741836_1012.meta
+   -rw-r--r--. 1 root root 134217728  4월 29 14:31 blk_1073741837
+   -rw-r--r--. 1 root root   1048583  4월 29 14:31 blk_1073741837_1013.meta
+   -rw-r--r--. 1 root root  18324704  4월 29 14:31 blk_1073741838
+   -rw-r--r--. 1 root root    143171  4월 29 14:31 blk_1073741838_1014.meta
+   -rw-r--r--. 1 root root       940  4월 29 17:10 blk_1073741839
+   -rw-r--r--. 1 root root        15  4월 29 17:10 blk_1073741839_1015.meta
+   
+   ```
+
+   
 
 
 
@@ -250,4 +314,313 @@
      
      ```
 
+  4. 앞에 기능 전부 있음
+
+     ```java
+     package hdfsexam;
      
+     import java.io.BufferedInputStream;
+     import java.io.BufferedOutputStream;
+     import java.io.File;
+     import java.io.FileInputStream;
+     import java.io.FileOutputStream;
+     import java.io.IOException;
+     import java.io.InputStream;
+     import java.io.OutputStream;
+     
+     import org.apache.hadoop.conf.Configuration;
+     import org.apache.hadoop.fs.FSDataInputStream;
+     import org.apache.hadoop.fs.FSDataOutputStream;
+     import org.apache.hadoop.fs.FileSystem;
+     import org.apache.hadoop.fs.Path;
+     
+     public class FileSystemOperations {
+       public void addFile(String source, String dest, Configuration conf) throws IOException {
+         FileSystem fileSystem = FileSystem.get(conf);
+     
+         String filename = source.substring(source.lastIndexOf('/') + 1,source.length());
+     
+         if (dest.charAt(dest.length() - 1) != '/') {
+           dest = dest + "/" + filename;
+         } else {
+           dest = dest + filename;
+         }
+     
+         Path path = new Path(dest);
+         if (fileSystem.exists(path)) {
+           System.out.println("File " + dest + " already exists");
+           return;
+         }
+     
+         FSDataOutputStream out = fileSystem.create(path);
+         InputStream in = new BufferedInputStream(new FileInputStream(new File(
+             source)));
+     
+         byte[] b = new byte[1024];
+         int numBytes = 0;
+         while ((numBytes = in.read(b)) > 0) {
+           out.write(b, 0, numBytes);
+         }
+         in.close();
+         out.close();
+         fileSystem.close();
+       }
+     
+       public void readFile(String file, Configuration conf) throws IOException {
+         FileSystem fileSystem = FileSystem.get(conf);
+     
+         Path path = new Path(file);
+         if (!fileSystem.exists(path)) {
+           System.out.println("File " + file + " does not exists");
+           return;
+         }
+     
+         FSDataInputStream in = fileSystem.open(path);
+     
+         String filename = file.substring(file.lastIndexOf('/') + 1,
+             file.length());
+     
+         OutputStream out = new BufferedOutputStream(new FileOutputStream(
+             new File(filename)));
+     
+         byte[] b = new byte[1024];
+         int numBytes = 0;
+         while ((numBytes = in.read(b)) > 0) {
+           out.write(b, 0, numBytes);
+         }
+     
+         in.close();
+         out.close();
+         fileSystem.close();
+       }
+     
+       public void deleteFile(String file, Configuration conf) throws IOException {
+         FileSystem fileSystem = FileSystem.get(conf);
+     
+         Path path = new Path(file);
+         if (!fileSystem.exists(path)) {
+           System.out.println("File " + file + " does not exists");
+           return;
+         }
+     
+         fileSystem.delete(new Path(file), true);
+     
+         fileSystem.close();
+       }
+     
+       public void mkdir(String dir, Configuration conf) throws IOException {
+         FileSystem fileSystem = FileSystem.get(conf);
+     
+         Path path = new Path(dir);
+         if (fileSystem.exists(path)) {
+           System.out.println("Dir " + dir + " already not exists");
+           return;
+         }
+     
+         fileSystem.mkdirs(path);
+     
+         fileSystem.close();
+       }
+     
+       public static void main(String[] args) throws IOException {
+     
+         if (args.length < 1) {
+           System.out.println("Usage: FileSystemOperations add/read/delete/mkdir"
+               + " [<local_path> <hdfs_path>]");
+           System.exit(1);
+         }
+     
+         FileSystemOperations client = new FileSystemOperations();
+     
+         Configuration conf = new Configuration();
+     	conf.set("fs.defaultFS", "hdfs://192.168.111.120:9000");
+     
+         if (args[0].equals("add")) {
+           if (args.length < 3) {
+             System.out.println("Usage: hdfsclient add <local_path> "
+                 + "<hdfs_path>");
+             System.exit(1);
+           }
+     
+           client.addFile(args[1], args[2], conf);
+     
+         } else if (args[0].equals("read")) {
+           if (args.length < 2) {
+             System.out.println("Usage: hdfsclient read <hdfs_path>");
+             System.exit(1);
+           }
+     
+           client.readFile(args[1], conf);
+     
+         } else if (args[0].equals("delete")) {
+           if (args.length < 2) {
+             System.out.println("Usage: hdfsclient delete <hdfs_path>");
+             System.exit(1);
+           }
+     
+           client.deleteFile(args[1], conf);
+     
+         } else if (args[0].equals("mkdir")) {
+           if (args.length < 2) {
+             System.out.println("Usage: hdfsclient mkdir <hdfs_path>");
+             System.exit(1);
+           }
+     
+           client.mkdir(args[1], conf);
+     
+         } else {
+           System.out.println("Usage: hdfsclient add/read/delete/mkdir"
+               + " [<local_path> <hdfs_path>]");
+           System.exit(1);
+         }
+     
+         System.out.println("Done!");
+       }
+     }
+     
+     ```
+
+     - 실행 방법 : 
+       - read 실행 하려면 `RunConfiguration` 에서 `read /edudata/dessert-menu.csv` 해줘야 한다...여기서 최상위 폴더인 /edudata 를 패스의 첫번째로 준다
+       - add arguments : `add c:/Temp/hadoopexam/dessert-order.csv /edudata` 
+
+
+
+### 3. HADOOP 주요 API 
+
+![image-20200501104105737](C:\Users\student\AppData\Roaming\Typora\typora-user-images\image-20200501104105737.png)
+
+
+
+
+
+### 4. HDFS 시스템 이용하여 파일 읽기 및 쓰기
+
+#### 폴더 내 여러 텍스트 파일 읽어서 합치고 작성하여 HDFS 에 저장
+
+```java
+package hdfsexam;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+
+public class TomcatLogHDFS_Save {
+
+  public static void main(String[] args) throws IOException {
+	  //1. 읽어올 패스(=path) 및 작성할 패스(=writePath) 지정
+	  String path= "C:\\Users\\student\\eclipse-workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\logs\\";
+	  String writePath = "c:/Temp/";
+	  
+      //2. File 의 패스들을 뽑아내는 과정
+	  File dir = new File(path);
+	  //System.out.println(dir);//패쓰 나옴 /logs
+	  File[] fileList = dir.listFiles();
+	  //System.out.println(fileList[1]);//[Ljava.io.File;@15db9742
+      //[1]주면 첫번째 파일의 전체 패스가 나온다
+	  
+      //3. fileList 가 있는 만큼 반복문인데 file 에 하나씩 뽑는다
+	  for(File file : fileList) {
+		  if(file.isFile()) {
+              //fileName 만 받아와서
+			  String fileName = file.getName();
+			  //System.out.println(fileName);
+              
+              ///각각 패스와 파일이름으로 파일을 읽어준다
+			  try(FileReader reader = new FileReader(path+fileName);
+                  //BufferedReader 는 한줄씩 읽을수 있게 해주는 기능
+					  BufferedReader br = new BufferedReader(reader);
+                  //FileWriter 까지 한꺼번에 try구문 안에 넣어준다, true = append
+					  FileWriter writer = new FileWriter(writePath+"tomcat_access_log.txt", true);
+                  BufferedWriter bw = new BufferedWriter(writer);
+					  ){
+                  //글 내용 넣어줄 String 객체 data 초기화
+				  String data = null;
+                  //data 에 한줄씩 읽어주는데 null 값이 아니면
+				  while((data=br.readLine())!=null) {
+                      //FileWriter 객체로 읽어준다
+					  bw.write(data);
+					  bw.newLine();
+					  
+				  
+				
+				}
+                  //작성한 파일을 내보내주는 기능
+				    bw.flush();
+				  
+			  }catch(IOException e) {
+				  System.out.println(e);
+			  }
+		  }
+	  }
+	  System.out.println("Temp 폴더에 파일 작성 완료");
+	  try {
+			Configuration conf = new Configuration();
+			conf.set("fs.defaultFS", "hdfs://192.168.111.120:9000");
+			FileSystem hdfs = FileSystem.get(conf);
+			String fname = "tomcat_access_log.txt";
+			File f = new File("c:/Temp/" + fname);
+			if (!f.exists()) {
+				System.out.println("파일이 없음!!");
+				return;
+			}
+			Path path2 = new Path("/edudata/" + fname);
+			if (hdfs.exists(path2)) {
+				hdfs.delete(path2, true);
+			}
+			long size = f.length();
+			FileReader fr = new FileReader(f);
+			char[] content = new char[(int) size];
+			fr.read(content);
+			FSDataOutputStream outStream = hdfs.create(path2);
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+			writer.write(content);
+			writer.close();
+			outStream.close();
+			fr.close();
+			System.out.println(size + " 크기의 데이터 출력 완료!!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	  
+  }
+}
+
+```
+
+
+
+
+
+### 5. Hadoop 과 Spring 연동
+
+#### 1. 시스템 환경변수 설정
+
+Spring MVC에서 Hadoop 연동하여 HDFS 나 MapReduce 기능을 사용하려면
+hadoop 폴더를 c:\ 에 저장한 후에 
+
+1. HADOOP_HOME  ---> c:\hadoop
+2. PATH  ---> %HADOOP_HOME%\bin
+   을 추가 설정한다.
+
+확인 : cmd 창을 열고 echo %HADOOP_HOME%, echo %PATH%
+
+#### 2. Eclipse 재기동
+
+#### 3. Pom.xml 에 dependency 추가
+
+#### 5. 자바 소스 각 위치에 넣기
+
+#### 4. servlet-context.xml 에 추가
+
+- 새로운 프리픽스이므로 `Namespaces`탭에 가서 해당 프리픽스를 설정해줘야한다
+
