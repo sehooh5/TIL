@@ -457,6 +457,364 @@ public class DelayCountReducer extends Reducer<Text, IntWritable, Text, IntWrita
 
 
 
+---
+
+### Spring MVC에서의 MapReduce
+
+- `springedu` 에 `HadoopDAO3, HadoopController3`, `mapred` 폴더 넣기
+
+#### HadoopController3.java
+
+```java
+package my.spring.springedu;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import dao.HadoopDAO3;
+@Controller
+public class HadoopController3 {
+	@Autowired
+	HadoopDAO3 dao;	
+	public HadoopController3() {
+		System.out.println("HadoopController3");
+	}
+	@RequestMapping("/hadoopmr")  
+	public ModelAndView put(String action){
+		String result = "";
+		if(action.equals("mapreduce")) 
+			result = dao.mapreduce();
+		else if(action.equals("result")) 
+			result = dao.mrresult();
+		else 
+			result = "Query 문자열을 확인해 주세요.";
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("hadooprw", result);
+		mav.setViewName("hadoopView");		
+		return mav;
+	}	
+}
+
+```
+
+
+
+#### HadoopDAO3.java
+
+```java
+package dao;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+
+
+@Repository
+public class HadoopDAO3 {
+	@Autowired
+	private Configuration conf;//bin 설정 파일에 정의된 것을 받아와서 Autowired
+
+	public HadoopDAO3() {
+		System.out.println("HadoopDAO3");
+		
+	}
+	public String mapreduce() {
+		String result = "";
+		//try-catch를 사용해 FileSystem 객체생성하므로 자동 close 해준다
+		try (FileSystem hdfs = FileSystem.get(conf)) {
+			Path filePath = new Path("/result/springmr");
+			if (hdfs.exists(filePath)) {
+				hdfs.delete(filePath, true);//filePath 가 잇으면 지워버리는 구문, true 주면 폴더 아래 모든내용 지움
+			}
+			
+			//이름 임의로 주어지지만 이름 설정해줌
+			Job job = Job.getInstance(conf, "SPRINGHW");
+
+		    job.setJarByClass(HadoopDAO3.class);//DAO 가 DriverClass
+		    job.setMapperClass(mapred.MyMapper.class);//MapperClass지정 실행
+		    job.setReducerClass(mapred.MyReducer.class);//ReducerClass지정 실행
+
+		    job.setInputFormatClass(TextInputFormat.class);//Text이기때문에 Input,Output지정
+		    job.setOutputFormatClass(TextOutputFormat.class);
+
+		    job.setOutputKeyClass(Text.class);
+		    job.setOutputValueClass(IntWritable.class);//횟수...숫자이므로 IntWritable
+
+		    FileInputFormat.addInputPath(job, new Path("/edudata/product_click.log"));
+		    FileOutputFormat.setOutputPath(job, new Path("/result/springmr"));
+
+		    job.waitForCompletion(true);//job 을 보내고 수행끝날대까지 대기
+	
+			result = "맵리듀스작업 성공!! ";
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "맵리듀스작업 실패!! ";
+		}
+		return result;
+	}
+	//result 에 저장된거 불러와서 읽어주는 메소드
+	public String mrresult() {
+		String result = "";
+		try (FileSystem hdfs = FileSystem.get(conf)) {
+			Path filePath = new Path("/result/springmr/part-r-00000");
+			if (hdfs.exists(filePath)) {
+				BufferedReader r = new BufferedReader(new InputStreamReader(hdfs.open(filePath), "utf-8"));
+				String line = null;
+				while ((line = r.readLine()) != null) {
+					System.out.println(line);
+					result += line + "<br>";
+				}
+				r.close();
+			} else {
+				result = "MR 결과가 존재하지 않습니다!!";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = "오류가 발생했어요";
+		}
+		return result;
+	}
+}
+
+```
+
+
+
+#### MyMapper, MyReducer, LogParser
+
+- `LogParser`가 글짜들 읽어주는 기능
+
+```java
+package mapred;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MyMapper extends Mapper<LongWritable, Text, Text, IntWritable>{
+	private final static IntWritable outputvalue=new IntWritable(1);
+	private Text outputkey=new Text();
+	
+	public void map(LongWritable key, Text value, Context context)
+	throws IOException, InterruptedException{		
+		LogParser parser=new LogParser(value);//LogParser 를 만들어줘서 기능을 실행해줌
+		outputkey.set(parser.getProduct());
+		context.write(outputkey, outputvalue);
+	}
+}
+
+
+package mapred;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MyReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+	private IntWritable result = new IntWritable();
+
+	public void reduce(Text key, Iterable<IntWritable> values, Context context)
+			throws IOException, InterruptedException {
+		int sum = 0;
+		result = new IntWritable();
+		for (IntWritable value : values) {
+			System.out.println(key.toString()+":"+value.get());
+			sum += value.get();
+		}
+		result.set(sum);
+		context.write(key, result);		
+	}
+}
+
+
+
+
+package mapred;
+
+import org.apache.hadoop.io.Text;
+
+public class LogParser {
+	private String product;
+	
+	public LogParser(Text text){
+		try{
+			String[] columns=text.toString().split(" ");//문장을 나눠줌
+			product=columns[1];
+			
+		}catch(Exception e){
+			System.out.println("!!"+e.getMessage());
+		}
+	}
+
+	public String getProduct() {
+		return product;
+	}
+	
+}
+
+
+```
+
+
+
+#### ---같은기능인데 어플리케이션---
+
+#### ProductCount.java (hadoopexam..not MVC)
+
+- 전반적으로 똑같은 로직, try catch 로 디렉토리 갱신만 잡아줌
+
+```java
+package exerise3;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+
+public class ProductCount {
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();//configuration 객체 생성
+		conf.set("fs.default.name", "hdfs://192.168.111.120:9000");
+		
+		try (FileSystem hdfs = FileSystem.get(conf)) {
+			Path filePath = new Path("/result/spring1");
+			if (hdfs.exists(filePath)) {
+				hdfs.delete(filePath, true);//filePath 가 잇으면 지워버리는 구문, true 주면 폴더 아래 모든내용 지움
+			}
+		//[1] conf객체 [2] (DriverClass 의 이름)
+		Job job = Job.getInstance(conf, "ProductCount");
+
+		job.setJarByClass(ProductCount.class);
+		job.setMapperClass(ProductMapper.class);
+		job.setReducerClass(ProductReducer.class);
+
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+		
+		job.setOutputKeyClass(Text.class);//Text ..
+		job.setOutputValueClass(IntWritable.class);
+		
+		FileInputFormat.addInputPath(job, new Path("/edudata/product_click.log"));
+		FileOutputFormat.setOutputPath(job, new Path("/result/exerout3"));
+
+		job.waitForCompletion(true);
+		System.out.println("처리가 완료되었습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+}
+
+```
+
+
+
+#### ProductMapper,Reducer,LogParser
+
+- `ProductMapper` 만 `LogParser`로 작동하게 바꿔줬다
+
+```java
+package exerise3;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class ProductMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+
+	private final static IntWritable one = new IntWritable(1);
+	private Text word = new Text();
+
+	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+		LogParser parser=new LogParser(value);
+		
+		word.set(parser.getProduct());
+		context.write(word, one);
+
+	}
+}
+
+
+package exerise3;
+
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class ProductReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+	private IntWritable result = new IntWritable();
+	
+	
+	public void reduce(Text key, Iterable<IntWritable> values, Context context)
+			throws IOException, InterruptedException {
+		int sum = 0;
+		for (IntWritable val : values) {
+			sum += val.get();
+		}
+
+			result.set(sum);
+			context.write(key, result);
+	}
+}
+
+
+
+
+package exerise3;
+
+import org.apache.hadoop.io.Text;
+
+public class LogParser {
+	private String product;
+	
+	public LogParser(Text text){
+		try{
+			String[] columns=text.toString().split(" ");//문장을 나눠줌
+			product=columns[1];
+			
+		}catch(Exception e){
+			System.out.println("!!"+e.getMessage());
+		}
+	}
+
+	public String getProduct() {
+		return product;
+	}
+	
+}
+
+```
+
 
 
 ---
