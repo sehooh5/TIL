@@ -205,7 +205,7 @@ class ThreadLab1_1 extends Thread {
 	public void run() {
 		for (int i = 0; i < 3; i++) {
 			Date today = new Date();
-			SimpleDateFormat date = new SimpleDateFormat("오늘은 MM월 dd일입니다.");
+			SimpleDateFormat date = new 		SimpleDateFormat("오늘은 MM월 dd일입니다.");
 			System.out.println(date.format(today));
 			try {
 				sleep(10000);
@@ -340,9 +340,107 @@ class ThreadLab2_2 implements Runnable {
   
   ```
 
+### Inner Class 의 종류
+
+#### Member Class
+
+##### 1. Instance Class
+
+- `OuterName$InnerName.class` 명의 `.class` 파일 만들어짐
+- `OuterClass`의 인스턴스 멤버처럼 다루어짐
+- `Instance Class`에서는 static 멤버를 정의할 수 없다
+
+##### 2. Static Class
+
+- `OuterName$InnerName.class` 명의 `.class` 파일 만들어짐
+
+- `OuterClass`의 static 멤버처럼 다루어짐
+- `OuterClass`의 클래스 메서드내에서 사용될 목적으로 정의
+
+##### 3. 접근방법 (동일, 외부 클래스 밖에서 접근 가능)
+
+```java
+class A{
+	class B{
+        멤버..
+    }
+    static class C{
+        멤버
+    }
+}
+```
+
+- `Instance Class` : 변수 정의 후 접근 가능
+  - A a = new A();
+  - A.B b =a.new B();
+  - b.멤버
+- `Static Class` : 바로 접근 가능
+  - A.C.멤버
+
+
+
+#### Local Class
+
+- **메서드 내**에 정의되는 클래스
+
+- 활용 범위 : 정의되어 있는 메서드 블럭 내부로 제한
+
+- Interface 는 로컬로 정의될 수 없다
+
+- 포함하는 **클래스**의 **멤버 변수**와
+
+  포함하는 **메서드**의 **final 로컬변수**, **final 매개변수** 사용 가능
+
+##### 1. 이름있는 Local Class
+
+- `X$1$Y.class` 명의 클래스 파일이 만들어진다
+
+- Y 클래스 내에서는 X 클래스의 멤버 변수 num,sam() 메서드의 final 지역변수 s를 사용할 수 있다
+
+- Y 클래스는 sam() 메서드 내에서만 사용 가능하다
+
+- ```java
+  class X{
+      int num;
+      void sam(final int i){
+          int total = 20;
+          final String s = "text";
+          class Y{
+              멤버들
+          }
+          Y y = new Y();
+          y.멤버들...;
+      }
+  }
+  ```
+
+
+
+##### 2. Annonymous Local Class
+
+- `N$1.class` 명의 클래스 파일이 만들어 진다
+
+- 정의된 위치에서 한번만 객체 생성이 가능하다
+
+- **클래스 정의와 객체생성을 동시**에 하는 1회용
+
+- <u>new 키워드 뒤의 생성자 메서드의 명칭</u>이 ***기존 클래스 명***인 경우에는 자동적으로 ***이 클래스의 자손클래스***가 되고,,,,***인터페이스 명***인 경우 이 인터페이스를 구현하여 추가 ***상속하는 자손클래스***로서 부모 클래스는 Object 가 된다
+
+- ```java
+  class N{
+      void pr(Test t){
+          ...ㅊ
+      }
+      void sam(){
+          pr(new Test(){
+              멤버들...
+          });
+          ...
+      }
+  }
+  ```
+
   
-
-
 
 ### Innerexam
 
