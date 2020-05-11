@@ -10,15 +10,15 @@
 
   
 
-
 [ Selenium 서버기동과정]
 (1) selenium-server-standalone-master.zip, chromedriver.exe 를복사한다.
 (2) 적당한디렉토리에selenium-server-standalone-master.zip 파일의압축을
 해제한다
-(3) bin 디렉토리안에chromedriver.exe 를복사한다.
+(3) bin 디렉토리안에 chromedriver.exe 를복사한다.
 (4) Selenium 을기동시킨다. (박스속의명령을CMD 창에서실행시켜야한다.)
 
 ```
+cd bin위치로 이동
 java -jar selenium-server-standalone.jar -port 4445
 ```
 
