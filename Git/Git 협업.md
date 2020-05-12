@@ -21,6 +21,7 @@
 - `git branch -D [branch name]` : 필요없는 브랜치 지우기
 - `git merge [branch name]` : 합치는 주체 브랜치에서 합쳐지는 브랜치 이름 입력 
   - 내용이 복사되는 느낌이고 합쳐진 브랜치도 존재한다
+- `git push --set-upstream origin 브랜치명` : 브랜치를 `github`에 올리기
 
 
 

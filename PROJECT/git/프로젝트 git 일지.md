@@ -12,3 +12,16 @@
 - `git remote add origin` + `복사한 url`
 - 가능한 동작 확인하기 : `git remote -v`
 
+
+
+## 5/12(화)
+
+- 브랜치 분할함 :
+
+  `Feature` - `development` - `release` - `master`
+
+- 각자의 `repository` 에만 저장하고 
+
+- `Pull Request`는 `development` 브랜치에만 하기!
+
+- 각지의 `master`는 백업용!
