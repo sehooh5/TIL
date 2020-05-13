@@ -25,3 +25,10 @@
 - `Pull Request`는 `development` 브랜치에만 하기!
 
 - 각지의 `master`는 백업용!
+
+
+
+## 5/13(수)
+
+- `PR` 한것 리뷰하고 `merge`
+- 
