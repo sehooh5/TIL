@@ -194,7 +194,7 @@ DT::datatable(head(df3 %>% select(article, KoreanSentiment, pos_neg), n = 200),
               options = list(pageLength = 5, autoWidth = TRUE, scrollX = TRUE))
 
 df3 %>% filter(!is.na(df3$pos_neg))->df3
-
+ 
 ##막대 그래프로 표현
 ggplot(df3, aes(x = factor(pos_neg))) + 
   geom_bar(stat = "count", width = 0.7, fill = "steelblue") + 
