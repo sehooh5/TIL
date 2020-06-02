@@ -644,9 +644,9 @@ function startPrompt() {
 
 
 
-### JASON(대세)
+### JSON(대세)
 
-- jason.org 참고
+- json.org 참고
 
 - 객체 리터럴 만드는 방식으로 문서를 작성한다. 중괄호 사용. JavaScript 와 호환성굿
 
