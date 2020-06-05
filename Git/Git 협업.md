@@ -21,6 +21,7 @@
 - `git branch -D [branch name]` : 필요없는 브랜치 지우기
 - `git merge [branch name]` : 합치는 주체 브랜치에서 합쳐지는 브랜치 이름 입력 
   - 내용이 복사되는 느낌이고 합쳐진 브랜치도 존재한다
+- `git push --set-upstream origin 브랜치명` : 브랜치를 `github`에 올리기
 
 
 
@@ -90,8 +91,33 @@
 - ```
   
   git clone https://github.com/sehooh5/baekil.git
-  
   ```
+  
 
-- 
 
+
+
+
+## Branching 협업 시나리오 
+
+- /practice/collabo
+- README.md , index.html 작성
+- README.md : by boss
+- index.html : by slave
+- commit
+- remote add
+- push
+- git hub 에서 setting -> 권한 주기
+- 각자의 브랜치 만들고 작업후 푸시 **각자의 브랜치로 푸시**
+- git hub 에서 각자 Pull Request해줌
+- 그다음 PR을 점검하고 merge
+- **merge 후에는 "master"를 기준으로 pull 을 통해 동기화한다** 
+  - 이걸 안해서 conflict 발생경우가 많다
+- 그리고 **기존 브랜치는 삭제**해준다 (로컬 컴퓨터)
+- (대장/노예) Git Hub 브랜치도 삭제해준다
+
+
+
+
+
+**이 시나리오를 매일매일 하게 된다**

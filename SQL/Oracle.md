@@ -29,7 +29,8 @@ Delete : 삭제
 DQL ----> DML -----> DDL
 
 1. cmd 창에 들어가서 sqlplus라는 명령을 수행시킨다.
-2. sqldeveloper 라는 추가 프로그램을 설치하여 사용한다 - UI 사용할 수 있음
+2. 비번 까먹으면 : `sys as sysdba`, 비번 필요없음
+3. sqldeveloper 라는 추가 프로그램을 설치하여 사용한다 - UI 사용할 수 있음
 
 **학습용 일반계정 : scott, hr(락해제)**
 
