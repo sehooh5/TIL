@@ -2,7 +2,7 @@
 
 ### Sequence(Ordered)
 
-- `string`
+- `string`d
 - `list` : 가변
 - `tuple`
 - `range()`
