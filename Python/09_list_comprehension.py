@@ -5,7 +5,7 @@
 # 장점 : 
 # 1.간결함   2.성능(일반화의 위험성)   3.표현력(Pythonic)
 # 단점 : 
-# 남용하면 안된다 (ex. for + if else 사용할 때)
+# 남용하면 안된py다 (ex. for + if else 사용할 때)
 
 my_list = []
 
@@ -39,11 +39,11 @@ print(my_numbers_1)
 my_numbers_2 = []
 for number in numbers:
     if number >= 50:
-        my_numbers_2.append(number +7)
+        my_numbers_2.append(number + 7)
     else:
-        my_numbers_2.append(number +5)
+        my_numbers_2.append(number + 5)
 
-my_numbers_2 = [number +7 if number >= 50 else number +5 for number in numbers]
+my_numbers_2 = [number + 7 if number >= 50 else number + 5 for number in numbers]
 print(my_numbers_2)
 
 

@@ -42,7 +42,7 @@ print(3 * 'hey' + 'you!')
 # string interpolation
 name = 'kim'
 # 1. %-formatting
-print('Hello,%s' % name)
+print('Hello, %s' % name)
 # 2. .format()
 print('Hello, {}'.format(name))
 # 3. f-string (Literal String Interpolation) -v3.6 부터 사용

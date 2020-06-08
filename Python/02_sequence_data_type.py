@@ -42,7 +42,7 @@ print(type(single_tuple))
 # range가 돌려준 객체(iterable : 반복 가능한 개체)는 리스트인 것 같지만, 리스트가 아니다. 
 # 반복할 때 원하는 시퀀스 항목들을순서대로 돌려주는 객체이지만 실제로는 리스트를 만들지 않아서 
 # 공간을 절약하는 원리이다.
-print(type(range(1)))
+print(list(range(1)))
 print(range(10)) # range(0,10) : [0,1,2,3,4,5,6,7,8,9]
 print(list(range(10)))
 print(list(range(1,10,2))) # [1,3,5,7,9]
