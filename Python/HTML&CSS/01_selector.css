@@ -1,0 +1,20 @@
+h1{
+    color : red;
+}
+
+#hi {
+    color : steelblue;
+}
+
+.bye{
+    color : palevioletred;
+}
+
+a[href]{
+    color : darkgoldenrod
+}
+
+a[href="www.google.com"] {
+    color : magenta;
+}
+
