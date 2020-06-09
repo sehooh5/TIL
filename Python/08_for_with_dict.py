@@ -21,5 +21,6 @@ for member in classroom.values():
     print(member)   # values 출력
 
 
+# items : 둘 다 출력
 for key, value in classroom.items():
     print(key,":" , value)  # tuple 객체
