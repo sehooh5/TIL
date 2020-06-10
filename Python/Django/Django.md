@@ -6,7 +6,6 @@
 
 ## Django 의 구조
 
-- MVC - 소프트웨어 디자인 패턴
 - `Django` 는 MVC와 비슷하지만 Model - Template - View : **MTV**
 - M : 데이터 관리  //  T : 사용자가 보는 화면  //  V : 중간 관리자
 
@@ -111,21 +110,204 @@
    from articles import views
    
    urlpatterns = [
-       path('admin/', admin.site.urls), # admin 은 포트 뒤에 주소
-     	path('index/', views)
-     	# path 라는 내장함수 사용, address+/(end slash)필수
+       path('admin/', admin.site.urls),
+       path('index/', views.index),
+       path('dinner/', views.dinner),
+       path('pic/', views.pic),
+       # 뒤에 동적 변수를 사용하고싶으면 <타입 : 변수명>
+       # str 타입 명시는 생략 가능
+       path('hello/<str:name>/', views.hello),
+       path('intro/<name>/<int:age>/', views.intro),
+       path('multiple/<int:x>/<int:y>/', views.multiple),
+       path('dtl-practice/', views.dtl_practice),
+       path('routing/<word>/', views.routing),
    ]
    ```
 
 5. `views.py` 작성 : 
 
    ```python
+   # Django import style guide
+   # 1. standard library
+   # 2. 3rd party library (외부 설치 ex.request)
+   # 3. django
+   # 4. local django
+   
+   import random
+   from datetime import datetime  # datetime : 날짜 주관하는 패키지 및 파일
+   from django.shortcuts import render
+   
+   # Create your views here.
+   
+   
    def index(request):
        # import 된 render 함수의 필수인자 두개 사용 1. request 2. template_name
-       return render(request, ???,)
+       # template 는 templates 폴더 안에 있다고 자동으로 인식해서 주소 안써줘도됨
+       return render(request, 'index.html')
+   
+   
+   def dinner(request):  # 무조건 request를 넣어줌
+       foods = ['보쌈', '치킨', '햇반', '단무지', '김밥']
+       pick = random.choice(foods)
+       context = {
+           'pick': pick,  # ''인용 부호 안에 있는게 보내는 키 값
+       }
+       # render 의 세번째 context = dic 값을 같이 보내줌
+       return render(request, 'dinner.html', context)
+   
+   
+   def pic(request):
+       id = random.choice(range(1000))
+       pic = f'http://i.picsum.photos/id/{id}/200/300.jpg'  # 사진 랜덤으로 뽑아주는 url
+       context = {
+           'pic': pic,
+       }
+       return render(request, 'pic.html', context)
+   
+   
+   def hello(request, name):  # url 에서 전달받을 변수
+       context = {
+           'name': name,
+       }
+       return render(request, 'hello.html', context)
+   
+   
+   def intro(request, name, age):
+       context = {
+           'name': name,
+           'age': age,
+       }
+       return render(request, 'intro.html', context)
+   
+   
+   def multiple(request, x, y):
+       result = x * y
+       context = {
+           'x': x,
+           'y': y,
+           'result': result,
+       }
+       return render(request, 'multiple.html', context)
+   
+   
+   def dtl_practice(request):
+       foods = ['짜장면', '짬뽕', '차돌짬뽕', '콩국수']
+       empty_list = []
+       messages = 'hello my name is python which has super power language'
+       datetime_now = datetime.now()
+       context = {
+           'foods': foods,
+           'empty_list': empty_list,
+           'messages': messages,
+           'datetime_now': datetime_now,
+       }
+       return render(request, 'dtl_practice.html', context)
+   
+   
+   def routing(request, word):
+       # reverse_word = ''
+       # for char in word:
+       #     reverse_word = char + reverse_word
+       # if word == reverse_word:
+       #     result = '회문'
+       # else:
+       #     result = '회문이 아니다'
+       reverse_word = word[::-1]
+       if word == word[::-1]:
+           result = '회문'
+       else:
+           result = '회문이 아니다'
+       context = {
+           'result': result,
+           'word': word,
+           'reverse_word': reverse_word,
+       }
+       return render(request, 'routing.html', context)
+   
    ```
 
 6. `template ` 작성 : app안에 존재하는 `templates`에  작성되야함 
+
+   ```python
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>dtl practice</title>
+   </head>
+   <body>
+       <h3>1. 반복문</h3>
+       <!-- 사용자들에게 보여지지 않는것은 {% 를 사용한다 -->
+       <!-- for, if 문이 열리면 endfor 로 닫아줘야 한다 -->
+   
+       {% comment %} {% for food in foods %}
+           <p>{{ food }}</p>
+       {% endfor %}  {% endcomment %}
+       {% for food in foods %}
+           <p>{{ forloop.counter }} {{ food }}</p>
+       {% endfor %} 
+   
+       {% for element in empty_list %}
+           <p> {{ element }} </p>
+       {% empty %}
+           <p>지금 아무것도 없네요</>
+       {% endfor %}
+   
+       <h3>2. 조건문</h3>
+       {% if '짜장면' in foods %}
+           <p>짜장면 맛잇겟드아</p>
+       {% endif %}
+   
+       {% for food in foods %}
+           {% if forloop.first %}
+               <p>짜장면보단 짬뽕이지</p>
+           {% else %}
+               <p>{{ food }}</p>
+           {% endif %}
+       {% endfor %}
+   
+       <h3>3. length filter</h3>
+       {% for food in foods %}
+           {% if food|length > 2 %} <!-- 길이를 재주는 필터 : |뒤에 length-->
+               <p>메뉴 이름이 너무 길어요</p>
+           {% else %}
+               <p>{{ food }}, {{ food|length }}</p>
+           {% endif %}
+       {% endfor %}
+   
+       <h3>4. lorem ipsum</h3> <!-- deleting dummy data : lorem + tab -->
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda tenetur facere, a, accusantium molestiae perspiciatis minus ab laboriosam tempore porro cum nesciunt consectetur distinctio voluptate quibusdam accusamus fugiat natus quos!</p>
+           <p>Lorem ipsum dolor sit.</p>
+           <p>{% lorem %}</p>
+           <hr>
+           <p>{% lorem 3 w %}</p>   
+           <p>{% lorem 3 w random %}</p> 
+   
+       <h3>5. 글자수 제한</h3>
+           <p>{{ messages|truncatewords:3 }} </p> <!-- truncatewords 글자수 제한 필터 -->
+           <p>{{ messages|truncatechars:10 }} </p>  
+   
+       <h3>6. 글자 관련 필터</h3>
+           <p>{{ 'ABC'|lower }}</p>
+           <p>{{ messages|title }}</p>
+           <p>{{ messages|capfirst }}</p> <!-- 맨 앞글자만 capital -->
+           <p>{{ foods|random }}</p> <!-- sequence 에서 random 출력 -->
+   
+       <h3>7. 연산</h3>
+           <p>{{ 4|add:6 }} </p>
+   
+       <h3>8. 날짜표현</h3>
+           <p>view 에서 계산 후 출력 : {{ datetime_now }}</p> 
+           <p>DATETIME_FORMAT : {% now "DATETIME_FORMAT" %}</p> <!-- DATETIME_FORMAT 바꿔줄수 잇다 -->
+           <p>DATE_FORMAT : {% now "DATE_FORMAT" %}</p>
+           <p>SHORT_DATETIME_FORMAT : {% now "SHORT_DATETIME_FORMAT" %}</p>
+           <p>SHORT_DATE_FORMAT : {% now "SHORT_DATE_FORMAT" %}</p>
+   </body>
+   </html>
+   ```
+
+   
 
 ![image-20200610104612830](/Users/seho/Library/Application Support/typora-user-images/image-20200610104612830.png)
 
