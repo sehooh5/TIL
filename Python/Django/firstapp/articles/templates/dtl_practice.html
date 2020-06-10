@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dtl practice</title>
+</head>
+<body>
+    <h3>1. 반복문</h3>
+    <!-- 사용자들에게 보여지지 않는것은 {% 를 사용한다 -->
+    <!-- for, if 문이 열리면 endfor 로 닫아줘야 한다 -->
+
+    {% comment %} {% for food in foods %}
+        <p>{{ food }}</p>
+    {% endfor %}  {% endcomment %}
+    {% for food in foods %}
+        <p>{{ forloop.counter }} {{ food }}</p>
+    {% endfor %} 
+
+    {% for element in empty_list %}
+        <p> {{ element }} </p>
+    {% empty %}
+        <p>지금 아무것도 없네요</>
+    {% endfor %}
+
+    <h3>2. 조건문</h3>
+    {% if '짜장면' in foods %}
+        <p>짜장면 맛잇겟드아</p>
+    {% endif %}
+
+    {% for food in foods %}
+        {% if forloop.first %}
+            <p>짜장면보단 짬뽕이지</p>
+        {% else %}
+            <p>{{ food }}</p>
+        {% endif %}
+    {% endfor %}
+
+    <h3>3. length filter</h3>
+    {% for food in foods %}
+        {% if food|length > 2 %} <!-- 길이를 재주는 필터 : |뒤에 length-->
+            <p>메뉴 이름이 너무 길어요</p>
+        {% else %}
+            <p>{{ food }}, {{ food|length }}</p>
+        {% endif %}
+    {% endfor %}
+
+    <h3>4. lorem ipsum</h3> <!-- deleting dummy data : lorem + tab -->
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda tenetur facere, a, accusantium molestiae perspiciatis minus ab laboriosam tempore porro cum nesciunt consectetur distinctio voluptate quibusdam accusamus fugiat natus quos!</p>
+        <p>Lorem ipsum dolor sit.</p>
+        <p>{% lorem %}</p>
+        <hr>
+        <p>{% lorem 3 w %}</p>   
+        <p>{% lorem 3 w random %}</p> 
+
+    <h3>5. 글자수 제한</h3>
+        <p>{{ messages|truncatewords:3 }} </p> <!-- truncatewords 글자수 제한 필터 -->
+        <p>{{ messages|truncatechars:10 }} </p>  
+</body>
+</html>

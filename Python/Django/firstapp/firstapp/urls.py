@@ -27,4 +27,5 @@ urlpatterns = [
     path('hello/<str:name>/', views.hello),
     path('intro/<name>/<int:age>/', views.intro),
     path('multiple/<int:x>/<int:y>/', views.multiple),
+    path('dtl-practice/', views.dtl_practice),
 ]

@@ -48,4 +48,10 @@
 
    : CSS 파일 속성 자동 완성 기능 제공, html에서 CSS 파일의 class 자동완성
 
-   
+10. Live Sass Compiler
+
+    : 라이브 컴파일러
+
+11. Live Server
+
+    : html 소스 등의 내용을 실시간으로 서버로 띄워 화면에 출력

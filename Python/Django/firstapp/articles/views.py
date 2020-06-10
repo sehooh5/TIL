@@ -58,3 +58,15 @@ def multiple(request, x, y):
         'result': result,
     }
     return render(request, 'multiple.html', context)
+
+
+def dtl_practice(request):
+    foods = ['짜장면', '짬뽕', '차돌짬뽕', '콩국수']
+    empty_list = []
+    messages = 'hello my name is python which has super power language'
+    context = {
+        'foods': foods,
+        'empty_list': empty_list,
+        'messages': messages,
+    }
+    return render(request, 'dtl_practice.html', context)
