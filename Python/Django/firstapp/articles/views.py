@@ -33,3 +33,28 @@ def pic(request):
         'pic': pic,
     }
     return render(request, 'pic.html', context)
+
+
+def hello(request, name):  # url 에서 전달받을 변수
+    context = {
+        'name': name,
+    }
+    return render(request, 'hello.html', context)
+
+
+def intro(request, name, age):
+    context = {
+        'name': name,
+        'age': age,
+    }
+    return render(request, 'intro.html', context)
+
+
+def multiple(request, x, y):
+    result = x * y
+    context = {
+        'x': x,
+        'y': y,
+        'result': result,
+    }
+    return render(request, 'multiple.html', context)

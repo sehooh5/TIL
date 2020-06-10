@@ -47,3 +47,5 @@
 9. HTML CSS Support
 
    : CSS 파일 속성 자동 완성 기능 제공, html에서 CSS 파일의 class 자동완성
+
+   
