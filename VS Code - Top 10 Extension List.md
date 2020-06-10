@@ -38,4 +38,12 @@
 
    ​				클릭 시 요청하여 응답의 소스를 보여줌
 
-8. 
+8. CSS Peek
+
+   : html 파일에 css를 사용한 class 의 해당 css 파일의 위치로 이동해줌
+
+   : 사용법 - html 태그에서 css를 사용한 부분에는 `Ctrl + 마우스 클릭` 또는 `F12`
+
+9. HTML CSS Support
+
+   : CSS 파일 속성 자동 완성 기능 제공, html에서 CSS 파일의 class 자동완성

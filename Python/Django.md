@@ -38,4 +38,11 @@
   python manage.py runserver
   ```
 
-  
+
+
+## 구성 내용
+
+- `__init__.py` : 해당 디렉토리를 패키지화 해주는 파일 (ex. import firstapp 가능)
+- `settings.py` : 모든 설정을 관리해주는 파일
+- `urls.py` : 요청 url
+- `wsgi.py` : 배포할 때 사용
