@@ -56,5 +56,21 @@
     <h3>5. 글자수 제한</h3>
         <p>{{ messages|truncatewords:3 }} </p> <!-- truncatewords 글자수 제한 필터 -->
         <p>{{ messages|truncatechars:10 }} </p>  
+
+    <h3>6. 글자 관련 필터</h3>
+        <p>{{ 'ABC'|lower }}</p>
+        <p>{{ messages|title }}</p>
+        <p>{{ messages|capfirst }}</p> <!-- 맨 앞글자만 capital -->
+        <p>{{ foods|random }}</p> <!-- sequence 에서 random 출력 -->
+
+    <h3>7. 연산</h3>
+        <p>{{ 4|add:6 }} </p>
+
+    <h3>8. 날짜표현</h3>
+        <p>view 에서 계산 후 출력 : {{ datetime_now }}</p> 
+        <p>DATETIME_FORMAT : {% now "DATETIME_FORMAT" %}</p> <!-- DATETIME_FORMAT 바꿔줄수 잇다 -->
+        <p>DATE_FORMAT : {% now "DATE_FORMAT" %}</p>
+        <p>SHORT_DATETIME_FORMAT : {% now "SHORT_DATETIME_FORMAT" %}</p>
+        <p>SHORT_DATE_FORMAT : {% now "SHORT_DATE_FORMAT" %}</p>
 </body>
 </html>

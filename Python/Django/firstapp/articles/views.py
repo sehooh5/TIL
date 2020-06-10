@@ -5,6 +5,7 @@
 # 4. local django
 
 import random
+from datetime import datetime  # datetime : 날짜 주관하는 패키지 및 파일
 from django.shortcuts import render
 
 # Create your views here.
@@ -64,9 +65,32 @@ def dtl_practice(request):
     foods = ['짜장면', '짬뽕', '차돌짬뽕', '콩국수']
     empty_list = []
     messages = 'hello my name is python which has super power language'
+    datetime_now = datetime.now()
     context = {
         'foods': foods,
         'empty_list': empty_list,
         'messages': messages,
+        'datetime_now': datetime_now,
     }
     return render(request, 'dtl_practice.html', context)
+
+
+def routing(request, word):
+    # reverse_word = ''
+    # for char in word:
+    #     reverse_word = char + reverse_word
+    # if word == reverse_word:
+    #     result = '회문'
+    # else:
+    #     result = '회문이 아니다'
+    reverse_word = word[::-1]
+    if word == word[::-1]:
+        result = '회문'
+    else:
+        result = '회문이 아니다'
+    context = {
+        'result': result,
+        'word': word,
+        'reverse_word': reverse_word,
+    }
+    return render(request, 'routing.html', context)
