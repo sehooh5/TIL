@@ -29,4 +29,6 @@ urlpatterns = [
     path('multiple/<int:x>/<int:y>/', views.multiple),
     path('dtl-practice/', views.dtl_practice),
     path('routing/<word>/', views.routing),
+    path('throw/', views.throw),
+    path('catch/', views.catch)
 ]

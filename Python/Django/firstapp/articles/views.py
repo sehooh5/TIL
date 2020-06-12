@@ -5,6 +5,7 @@
 # 4. local django
 
 import random
+from pprint import pprint
 from datetime import datetime  # datetime : 날짜 주관하는 패키지 및 파일
 from django.shortcuts import render
 
@@ -94,3 +95,18 @@ def routing(request, word):
         'reverse_word': reverse_word,
     }
     return render(request, 'routing.html', context)
+
+
+def throw(request):
+    return render(request, 'throw.html')
+
+
+def catch(request):
+    msg = request.GET.get('message')
+    msg2 = request.GET.get('second')
+    context = {
+        'msg': msg,
+        'msg2': msg2,
+    }
+    # print(request.GET.get('message'))  # dic 객체에서 key 값으로 불러오는 방법 dic객체.get
+    return render(request, 'catch.html', context)
