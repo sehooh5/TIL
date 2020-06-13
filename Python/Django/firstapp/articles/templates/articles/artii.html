@@ -1,0 +1,19 @@
+{% extends 'base.html'%} 
+<!-- 부모 템플릿 확장하기 '주소' (firstapp 에 있기 때문에 앞에 url 없음-->
+<!-- extends 태그는 최상단에 위치시켜줘야 한다!! -->
+
+{% block title %} ARTII TITLE
+{% endblock %}
+{% block content %}
+<h1>나만의 ASCII ARTII</h1>
+<form action="{% url 'articles:artii-result' %}" method="GET">
+  단어를 입력해주세요 : <input type="text" name="word"><br>
+  폰트를 정해주세요 : 
+  <select name="font">
+    {% for font in fonts_list %}
+      <option value="{{ font }}">{{ font }}</option>
+    {% endfor %}
+  </select>
+  <input type="submit" value="만들기!">
+</form>
+{% endblock %}

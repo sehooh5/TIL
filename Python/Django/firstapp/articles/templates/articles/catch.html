@@ -1,0 +1,11 @@
+{% extends 'base.html'%} 
+
+{% block title %}
+    Catch
+{% endblock  %}
+
+{% block content %}
+    <h1>제가 Catch 한 데이터는</h1>
+    <H1>"{{ msg }}" 입니다. 우가우가</H1>
+    <h2>{{ msg2 }} 도 들어왔습니다 우가부가 : {% now "DATE_FORMAT" %}</h2>
+{% endblock  %}

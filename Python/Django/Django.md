@@ -350,3 +350,95 @@
 
 - 이 요청은 서버로부터 정보를 조회하는데 사용된다
 - 서버의 데이터나 상태를 변경시키지 않기 때문에 단순 조회(html)할 때 사용
+
+
+
+## 폴더 구조 변경
+
+app_name/
+
+​	templates/
+
+​		app_name/ <- name space 분리 역할
+
+​			index.html
+
+​	static/
+
+​		app_name/
+
+​			stylesheet/
+
+​				css....
+
+​			images/
+
+​				image,,,,,,
+
+​	
+
+
+
+## 여러 앱의 URL 나누기
+
+
+
+
+
+## 여러 앱의 templates 주소 나눠주기
+
+- 중간 경로 만들어주기 
+- `templates` 안에 `app_name` 폴더 만들고 거기에 템플릿 작성\\
+
+
+
+## Template inheritance(템플릿 상속)
+
+- `firstapp` 폴더에 `templates` 폴더 만들고 `base.html` 만드러 부트스트랩 적용
+- `{% block %}` 설정
+
+### Django 의 Namespace
+
+- `settings.py` 의 `TEMPLATES - DIRS` 수정
+
+- ```python
+  # 경로는 차곡차고고 `,`  로 작성 //BASE_DIR 은 기본 경로
+  'DIRS': [os.path.join(BASE_DIR, 'firstapp', 'templates')],
+  ```
+
+- Django 는 기본적으로 templates를 `app_name/templates`에서 찾는다
+
+- 상속 받아서 사용할 template 에 `extends` 시켜주면 된다
+
+
+
+## Static 
+
+- 해당 내용이 서버에 기본적으로 있는 파일들
+
+- 웹 사이트의 구성 요소 중에서 image, css, js 파일과 같이 해당 내용이 고정되어, 응답을 할 때 별도의 처리 없이 파일 내용을 그대로 보여주는 파일 (정적파일)
+
+- 사용자의 요청에 따라 내용이 바뀌는 것이 아니라 요청한 것을 그대로 응답해주면 되는 것
+
+- `load`  를 반드시 해줘야함
+
+  ```python
+  {% load static %}
+  ```
+
+- css 를 로드하고싶으면 base.html 에서 css block을 만들어주고
+
+  해당 template 에서 link 를 걸어주면 된다
+
+  ```python
+  <head>
+  {% block css %}{% endblock  %}
+  </head>
+  
+  
+  {% block css %}
+      <link rel="stylesheet" href="{% static 'pages/stylesheet/style.css' %}"
+  {% endblock  %}
+  ```
+
+  

@@ -1,0 +1,11 @@
+{% extends 'base.html'%} 
+
+
+{% block content %}
+    <h1>Throw</h1>
+    <form action="{% url 'articles:catch'%}" method="GET"> <!--url~~~/catch/ 로 보낼것이다 -->
+        <input type="text" name="message">
+        <input type="text" name="second">
+        <input type="submit">
+    </form>
+{% endblock  %}
