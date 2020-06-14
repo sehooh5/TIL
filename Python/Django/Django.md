@@ -353,6 +353,37 @@
 
 
 
+## 분리 및 상속, static(0613)
+
+- 문제점 : 두번 째 app 이 생성됨 = 하나의 `urls.py` 에서 모든 path 관리하기가 어렵
+
+1. URL 로직 분리
+   - 문제점 : 기존 url이 바뀌어 버려서 지금까지 작성한 모든 url을 다시 손봐줘야함
+   - 그건 어려우니까 **그냥 url 이름을 만들어서 사용**
+2. URL Name
+   - 문제점 : 그런데 두개의 앱의 url 이름이 같다면..?
+   - 해결 : 어떤 앱의 url 이름인지 **app_name을 설정**하자
+3. URL Namespace
+   - url 3번 째 변수에 `name='app_name'` 주기
+
+---
+
+- 문제점 : 분명히 app 의 index 주소로 요청을 보냈는데, 템플릿은 계속 첫번 째 app의 index.html 을 보여준다 (`setting.py` 맨 위 앱꺼)
+
+1. Django Namespace
+   - app_name/templates 이후에 **app_name 폴더**를 하나 더 둠으로써 이름 공간을 생성한다
+   - 여러 페이지에 동일한 구조를 적용시키고 싶다
+   - 템플릿의 재사용성에 초점
+
+---
+
+1. Templates Inheritance
+2. Static
+
+---
+
+
+
 ## 폴더 구조 변경
 
 app_name/
@@ -381,14 +412,29 @@ app_name/
 
 ## 여러 앱의 URL 나누기
 
+- `project_name` 폴더 아래 있는 `urls.py` 에 app 들의 `urls` 포함시켜주기
 
+  ```python
+  from django.contrib import admin
+  from django.urls import path, include # include 임포트
+  from articles import views
+  from pages import views
+  
+  urlpatterns = [
+      path('admin/', admin.site.urls),
+      path('articles/', include('articles.urls')),
+      path('pages/', include('pages.urls')), # include
+  ]
+  ```
+
+- 
 
 
 
 ## 여러 앱의 templates 주소 나눠주기
 
 - 중간 경로 만들어주기 
-- `templates` 안에 `app_name` 폴더 만들고 거기에 템플릿 작성\\
+- `templates` 안에 `app_name` 폴더 만들고 거기에 템플릿 작성\
 
 
 
@@ -439,6 +485,14 @@ app_name/
   {% block css %}
       <link rel="stylesheet" href="{% static 'pages/stylesheet/style.css' %}"
   {% endblock  %}
+  ```
+
+- custom 경로 넣기 : `settings.py`
+
+  ```python
+  STATICFILES_DIRS = [
+      os.path.join(BASE_DIR, 'firstapp', 'static')
+  ]
   ```
 
   
