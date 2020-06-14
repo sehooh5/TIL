@@ -128,6 +128,8 @@ def lotto_catch(request):
     }
     return render(request, 'articles/lotto_catch.html', context)
 
+# arti..\n으로 나누는거 한듯
+
 
 def artii(request):
     response = requests.get('http://artii.herokuapp.com/fonts_list').text
