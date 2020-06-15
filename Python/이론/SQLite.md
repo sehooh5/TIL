@@ -12,3 +12,165 @@
 ### 단점
 
 - ORM 만으로 완전한 서비스를 구현하는데에는 어렵다.
+
+
+
+## Model 작성 단계
+
+- `models.py`에 class 를 작성해서 **데이터베이스 틀** 잡아주기
+- `python manage.py makemigrations` 실행 :  **설계도** 만들기
+  - migrations 폴더 안에 작성됨 : sql 해석 전에 python 으로 된 설계도
+- `python manage.py sqlmigrate articles 0001` : 설계도 확인(app + 번호만)
+- `python manage.py migrate` : **데이터 테이블 만들기**
+
+
+
+## ipython
+
+- 다운로드 : `pip install ipython`
+- 그냥 실행 : `ipython`
+- 장고에서 실행 : `python manage.py shell`
+- Django extension 설치 : `pip install django-extensions`
+  - setting.py 에 INSTALLED_APPS 에 등록 :  'django_extensions',
+  - <mark>shell plus 사용</mark> : `python manage.py shell_plus` (이거로 실행해야댐!)
+
+
+
+## SQLite 
+
+- extension 다운로드
+- `ctrl+shift+p` 에서 `Sqlite : opne database`
+
+
+
+## ORM 조작
+
+- `Article.objects.all()` : objects 는 함수를 사용할 수 있게하는 매니저 역할
+  - `: dir(Article.objects) ` 로 사용 가능한 함수 확인 가능
+
+### Objects
+
+- models.py 에 작성한 클래스를 불러와서 사용할 때 DB 와의 인터페이스 역할을 하는 manager
+- Python class(python) ----- objects(manager) ----- DB(SQL)
+
+### QuerySet
+
+- `<QuerySet []>` : objects 매니저를 사용하여 복수의 데이터를 가져오는 함수를 사용할 때 반환되는 객체 타입
+- 단일 객체는 Query (class 의 인스턴스로 반환)
+- query(질문)를 DB 에게 보내서 글을 조회하거나 생성, 수정, 삭제
+- query를 보내는 언어를 활용해서 DB에게 데이터에 대한 조작을 실행
+
+
+
+## CRUD
+
+##### READ
+
+``` python
+# 모든 객체 조회
+Article.objects.all()
+
+# 특정 객체 조회
+Article.objects.get(pk=1)
+
+# 특정 조건 객체 가져오기
+Article.objects.filter(title='first')
+Article.objects.filter(title='first', content='내용')
+
+#내림차순
+Article.objects.order_by('-pk')
+
+#LIKE
+Article.objects.filter(title__contains = 'fi') # %fi%
+Article.objects.filter(title__startswith = 'fi') # fi%
+Article.objects.filter(title__endswithcontains = '!') # %!
+```
+
+- .get()을 사용할 때 
+  - 해당 객체가 없으면 DoesNotExist 에러가 발생
+  - 여러개의 경우에 MultileObjectReturned 에러가 발생
+- 이와 같은 특징 때문에 unique한 속성을 가지고 있는 데이터에 사용해야 함 (pk : 100% unique보장, pk=id)
+
+
+
+##### CREATE 
+
+- SQL문을 ORM으로 대체해서 사용
+
+``` python
+# 1
+article = Article()
+article.title = 'first'
+article.content = 'django!'
+article.save()
+
+# 2
+article = Article(title='second', content='django!!')
+article.save()
+
+# 3 - 인스턴스 생성하지 않음!! ->> 내부적으로 save 해줌
+Article.objects.create(title='third', content='django!!!')
+```
+
+
+
+##### UPDATE
+
+``` python
+article = Article.objects.get(pk=1)
+article.title = 'edit title'
+article.save()
+```
+
+- save() 꼭 해줘야 함
+
+
+
+##### DELETE
+
+``` python
+article = Article.objects.get(pk=1)
+article.delete()
+```
+
+
+
+#### admin 슈퍼 계정 생성
+
+1. python manage.py createsuperuser
+
+   ``` python
+   $ python manage.py createsuperuser
+   사용자 이름 (leave blank to use 'user'): admin
+   이메일 주소: 
+   Password: password
+   Password (again): password
+   비밀번호가 너무 일상적인 단어입니다.
+   Bypass password validation and create user anyway? [y/N]: y
+   Superuser created successfully.
+   ```
+
+   - 이메일 주소 입력하지 않아도 됨
+   - password는 본인이 하고 싶은 password
+
+   - <mark>계정 또한 데이터이기 떄문에 반드시 migrate 작업 후에 관리자 계정을 생성해야 함</mark>
+
+2. admin.py작성
+
+   ``` python
+   from django.contrib import admin
+   from .models import Article
+   
+   # Register your models here.
+   admin.site.register(Article)
+   # admin site에 등록(register)하겠다. -> 자동완성 안됨
+   ```
+
+3. 서버 들어가서 쿼리문에 `/admin` 추가해주면 admin 페이지 들어감
+
+
+
+### 데이터 베이스 초기화
+
+1. migrations 에 있는 넘버링된 파일들 삭제
+2. db.sqlite3 까지 삭제
