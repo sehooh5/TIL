@@ -93,7 +93,7 @@ Article.objects.filter(title__endswithcontains = '!') # %!
 
 
 
-##### CREATE 
+##### CREATE (View x 2)
 
 - SQL문을 ORM으로 대체해서 사용
 
@@ -114,7 +114,7 @@ Article.objects.create(title='third', content='django!!!')
 
 
 
-##### UPDATE
+##### UPDATE (View x 2)
 
 ``` python
 article = Article.objects.get(pk=1)
@@ -245,4 +245,47 @@ article.delete()
   https://docs.djangoproject.com/ko/3.0/ref/templates/builtins/ + url 검색
 
 
+
+## Delete
+
+- urls.py, views.py, detail.html 추가
+- 요청 방식 알려주는 메서드 : views 에서 `request.method`
+
+
+
+## Update
+
+- views 두개 : 수정내용, 저장
+- 기본적으로 create와 비슷
+
+
+
+
+
+## 필요한 views
+
+### create
+
+- /pages/new/
+  - /pages/create/	`post`
+
+
+
+### read
+
+- /pages/
+- /pages/1/
+
+
+
+## update
+
+- /pages/1/edit/
+  - /pages/1/update/`post`
+
+
+
+## delete
+
+- /pages/1/delete/ 	`post`
 

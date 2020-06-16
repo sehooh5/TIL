@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Article
+from datetime import datetime
 
 # Create your views here.
 
@@ -46,6 +47,39 @@ def detail(request, pk):
     # pk1 : Article 이 갖고있는 pk  /   pk2: url 로 받아온 variable pk
     article = Article.objects.get(pk=pk)
     context = {
-        'article': article
+        'article': article,
     }
     return render(request, 'articles/detail.html', context)
+
+# 요청이 GET인지 POST 인지 확인하는 방법 추가
+
+
+def delete(request, pk):
+    print(request.method)
+    article = Article.objects.get(pk=pk)
+    if request.method == 'POST':
+        article.delete()
+        return redirect('articles:index')
+    else:
+        return redirect('articles:detail', article.pk)
+
+
+# 기본적으로 create 의 new 와 비슷한 기능
+def edit(request, pk):
+    article = Article.objects.get(pk=pk)
+    context = {
+        'article': article,
+    }
+    return render(request, 'articles/edit.html', context)
+
+
+def update(request, pk):
+    article = Article.objects.get(pk=pk)
+    # 1. edit 에서 보낸 데이터 받기
+    title = request.POST.get('title')
+    content = request.POST.get('content')
+    # 2. 받아오는 값으로 변경 후 저장
+    article.title = title
+    article.content = content
+    article.save()
+    return redirect('articles:detail', article.pk)
