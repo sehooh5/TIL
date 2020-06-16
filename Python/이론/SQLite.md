@@ -174,3 +174,75 @@ article.delete()
 
 1. migrations 에 있는 넘버링된 파일들 삭제
 2. db.sqlite3 까지 삭제
+
+
+
+## Create할 때 인덱스 보여주기(POST)
+
+### POST 사용
+
+#### articles app/crud 에서 
+
+- 사용자는 Django 에게 'html 파일을 줘!(GET)'가 아니라 '~한 레코드(글)을 생성해줘!!(POST)'이기 때문에 http method POST를 사용해야 한다.
+- 데이터는 URL에 직접 노출되서는 안된다.
+- 우리가 URL에 접근하는 방식은 모두 GET
+- query의 형태를 통해 DB 구조(schema)를 유추할 수 있고 이는 보안적인 측면에서 매우 취약하다
+- **DB를 조작**하는 친구는 GET이 아닌 **POST**!! 왜? 중요한 요청이기 때문에 최소한의 신원 확인이 필요!
+
+### 사용방법
+
+- templates, views 모두 POST 로 변경
+
+- 승인을 위한 토큰이 필요함!!!
+  - form태그 안에 : **{% *csrf_token* %}** 를 사용해준다!!!!
+- `views.py` 에 render 가 아닌 **redirect** 를 import 하고 사용
+
+
+
+
+
+## 상세페이지 만들기(Read-detail)
+
+- `urls.py` 에 path 추가해주는데 `pk` 를 `int` 형으로 주고 받게 해줌
+
+  ```python
+  path('<int:pk>/', views.detail, name='detail'),
+  ```
+
+- `views.py` 에 pk를 받아와서 데이터 베이스의 값을 받아와서 context 로 전달
+
+- template 에서 값들 받아오기
+
+  ```python
+  {% block content %}
+      <h1>DETAIL</h1>
+      <h2>{{ article.pk }} 번 글</h2>
+      <hr>
+      <p>제목 : {{article.title}}</p>
+      <p>내용 : {{article.content}}</p>
+      <p>작성시각 : {{article.created_at}}</p>
+      <p>수정시각 : {{article.updated_at}}</p>
+      <hr>
+      <a href="{% url 'articles:index' %}">back</a>
+  {% endblock %}
+  ```
+
+
+
+### Index 페이지에 Detail 연결시키기
+
+- template 에서 a 태그 추가
+
+  ```python
+  # path('<int:pk>/', views.detail, name='detail'),
+  # {% url 'app_name:view_name' article.pk %}
+  
+  <a href="{% url 'articles:detail' article.pk %}">DETAIL</a>
+  ```
+
+- 참고
+
+  https://docs.djangoproject.com/ko/3.0/ref/templates/builtins/ + url 검색
+
+
+
