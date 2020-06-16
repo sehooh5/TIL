@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>수정 공간</h1>
+    <form action="{% url 'pages:update' pages.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="text" value="{{ pages.title }}" name="title"><br>
+        <input type="text" value="{{ pages.writer }}" name="writer"><br>
+        <textarea name="content">{{ pages.content }}</textarea>
+    <button>수정</button>
+    </form>
+{% endblock  %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ pages.pk }}번 글 내용</h1>
+    <hr>
+    제목 :<br>
+    <p>{{ pages.title }}</p>
+    작성자 :<br>
+    <p>{{ pages.writer }}</p>
+    내용 :<br>
+    <p>{{ pages.content }}</p>
+    작성 시간 :<br>
+    <p>{{ pages.created_at }}</p>
+    수정 시간 :<br>
+    <p>{{ pages.updated_at }}</p>
+    <hr>
+    <a href="{% url 'pages:edit' pages.pk %}">수정</a><br>
+    <form action="{% url 'pages:delete' pages.pk %}" method="POST">
+        {% csrf_token %}
+        <button>삭제</button>
+    </form>
+    <a href="{% url 'pages:index' %}"> 뒤로가기</a>
+{% endblock  %}

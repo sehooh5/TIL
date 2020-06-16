@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .models import Article
-from datetime import datetime
 
 # Create your views here.
 

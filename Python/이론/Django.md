@@ -440,7 +440,7 @@ app_name/
 
 ## Template inheritance(템플릿 상속)
 
-- `firstapp` 폴더에 `templates` 폴더 만들고 `base.html` 만드러 부트스트랩 적용
+- `firstapp=project` 폴더에 `templates` 폴더 만들고 `base.html` 만드러 부트스트랩 적용
 - `{% block %}` 설정
 
 ### Django 의 Namespace

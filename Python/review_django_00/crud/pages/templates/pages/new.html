@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>작성 페이지</h1>
+    <form action="{% url 'pages:create' %}" method="POST">
+        {% csrf_token %}
+        제목 :<br>
+        <input type="text" name="title"><br>
+        작성자 :<br>
+        <input type="text" name="writer"><br>
+        내용 :<br>
+        <textarea name="content" ></textarea>
+        <button>저장</button>
+    </form>
+{% endblock  %}
