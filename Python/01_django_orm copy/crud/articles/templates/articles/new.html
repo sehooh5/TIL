@@ -4,8 +4,7 @@
     <h1>NEW</h1>
     <form action="{% url 'articles:create'%}" method="POST">
         {% csrf_token %}
-        <input type="text" name="title"><br>
-        <textarea name="content"></textarea><br>
+        {{ form.as_p }} 
         <button class="btn btn-primary">제출</button>
     </form>
 {% endblock  %}
