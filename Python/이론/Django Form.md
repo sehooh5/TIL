@@ -13,7 +13,18 @@
 
 - <mark>**코드의 반복을 줄여준다**</mark>
 
+- form 내 field들 , field 배치, widget, label 유효한 값 등을 정의하고 비유효한 field에 관련된 에러메시지를 결정한다
+
+- 직접 form 태그를 작성하는 것보다 유효한 데이터에 요구되는 여러 동작을 올바르게 하기 위해서 제공하는 기능
+
+
+
+
+
 ## Model Form
+
+- Django가 해당하는 모델에서 양식에 필요한 모든 정보를 이미 정의한다
+- Meta 정보를 통해 어떤 model을 정의하는지 이미 알고 있기 때문에 검증이 끝나면 바로 save() 가 가능하다
 
 - 우리가 작성한 Model 기준으로 자동으로 작성해준다
 
@@ -94,7 +105,10 @@
           return redirect('articles:new')
   ```
 
-- create 기능과 new기능을 합쳐서 줄여주기
+- create+new기능을 합치기 & update+edit
+
+  - GET : 수정,작성 페이지(html)을 렌더링 해주면 됨
+  - POST : 수정,작성 내용을 작성한다
 
   ```python
   def create(request):
@@ -122,12 +136,39 @@
           'form': form,
       }
       return render(request, 'articles/new.html', context)
+    
+    
+  
+    
   ```
 
   - <mark>작성 후 두개로 나뉘었던 것들 다 지워줘야함</mark>
-    - urls - new 삭제
-    - views - new 삭제
+    - urls - 삭제
+    - views - 삭제
     - templates - 삭제
+
+## View Decorator(심화: 좀더 단단한 서버 만들기)
+
+- 함수에 추가기능을 부여하는 기능
+
+  1. `views.py` 에 import : 
+
+     ```
+     from django.views.decorators.http import require_http_methods, require_POST
+     ```
+
+     
+
+     `from django.views.decorators.http import require_http_methods`
+
+  2. 원하는 함수에 Decorator 추가 : 
+
+     ```
+     @require_http_methods(['GET', 'POST'])
+     @require_POST
+     ```
+
+     
 
 
 
@@ -170,5 +211,84 @@
 
   
 
+## Form 커스터마이징
 
+- templates 에서 form 을 직접 쪼개서 사용
+
+  ```html
+  <h3>Version 1</h3>
+          {{ form.as_p }}
+  
+          <hr>
+  
+          <h3>Version 2</h3>
+          <div>
+              {{ form.title.errors }}
+              {{ form.title.label_tag }}
+              {{ form.title }}
+          </div>
+          <div>
+              {{ form.content.errors }}
+              {{ form.content.label_tag }}
+              {{ form.content }}
+          </div>
+  
+          <hr>
+  **Form Control**
+          <h3>Version 3</h3>
+          {% for field in form %}
+              <div class="form-group">
+              {{ field.label_tag }}
+              {{ field }}
+              </div>
+          {% endfor %}
+  ```
+
+- `forms.py` 의 widget에 class에   `form-control` 추가해서 변경해줌
+
+  ```python
+  title = forms.CharField(
+          label='제목',
+          widget=forms.TextInput(
+              # Dictionary 구조 사용하여 속성값 주기
+              attrs={
+                  'class': 'my-title form-control',
+                  'placeholder': '제목을 입력하세요.',
+              }
+          )
+      )
+  ```
+
+- 참고 : https://getbootstrap.com/docs/4.5/components/forms/#form-controls
+
+
+
+### Library 다운받아 사용
+
+**bootstrap4 다운로드해서 사용 :** 
+
+- `pip install django-bootstrap4`
+
+- setting.py - INSTALLED_APP에 추가 : 'bootstrap4'
+
+- template 에 load 시켜주기 : `{% load bootstrap4 %}`
+
+  ```html
+  {% extends 'base.html' %}
+  {% load bootstrap4 %}
+  
+  {% block content %}
+      <h1>UPDATE</h1>
+      <!-- form 에 action 이 없으면 본인의 주소로 다시 연결되므로 생략 가능 -->
+      <form action="" method="POST">
+          {% csrf_token %}
+      {% bootstrap_form form %}
+      {% buttons %}
+          <button type="submit" class="btn btn-primary">Submit</button>
+      {% endbuttons %}
+      </form>
+  {% endblock  %}
+  ```
+
+- 참고 : https://pypi.org/project/django-bootstrap4/
 

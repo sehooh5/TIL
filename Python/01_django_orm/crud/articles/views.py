@@ -13,12 +13,8 @@ def index(request):
     return render(request, 'articles/index.html', context)
 
 
-# def new(request):
-#     form = ArticleForm()
-#     context = {
-#         'form': form,
-#     }
-#     return render(request, 'articles/new.html', context)
+def new(request):
+    return render(request, 'pages/new.html')
 
 # GET 메서드는 url이 변경되지 않는다
 # ex) index 로 돌아가야하는데 계속 create url을 보냄
@@ -28,51 +24,25 @@ def index(request):
 
 
 def create(request):
+    # 1. new 에서 보낸 데이터 받기
+    title = request.POST.get('title')
+    content = request.POST.get('content')
 
-    # create 와 new를 한 개의 함수로 작성
+    # 2. db 에 저장 // 저장 전에 데이터가 유효한지 검증하고자하면 (3)번 방법 불가
+    # (1)
+    # article = Article()
+    # article.title = title
+    # article.content = content
+    # article.save()
 
-    # POST 일 때=create 기능
-    if request.method == 'POST':
-        # ArticleForm 의 내용인 title, content 가 form 에 저장된다
-        form = ArticleForm(request.POST)
-        # 유효성 검사 : is_valid() = TRUE = 안전한 데이터
-        if form.is_valid():
-            article = form.save()
-            return redirect('articles:detail', article.pk)
-        else:
-            return redirect('articles:new')
-    # GET 일때(= new 기능) 혹은 다른 method
-    else:
-        form = ArticleForm()
-    # 특이하게 이렇게 빼놨다 (유효성 검사 때문)
-    # form1 : POST 로 들어갔지만 유효성 검사에서 튕겨저 나온 것, error message 포함
-    # form2 : else 로 들어갔다 나온 GET의 form
-    context = {
-        'form': form,
-    }
-    return render(request, 'articles/create.html', context)
+    # (2)
+    article = Article(title=title, content=content)
+    article.save()
 
+    # (3)
+    # Article.objects.create(title=title, content=content)
 
-# def create(request):
-#     # 1. new 에서 보낸 데이터 받기
-#     title = request.POST.get('title')
-#     content = request.POST.get('content')
-
-#     # 2. db 에 저장 // 저장 전에 데이터가 유효한지 검증하고자하면 (3)번 방법 불가
-#     # (1)
-#     # article = Article()
-#     # article.title = title
-#     # article.content = content
-#     # article.save()
-
-#     # (2)
-#     article = Article(title=title, content=content)
-#     article.save()
-
-#     # (3)
-#     # Article.objects.create(title=title, content=content)
-
-#     return redirect('articles:detail', article.pk)
+    return redirect('articles:detail', article.pk)
 
 
 def detail(request, pk):

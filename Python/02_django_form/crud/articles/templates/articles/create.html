@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>NEW</h1>
+    <form action="{% url 'articles:create'%}" method="POST">
+        {% csrf_token %}
+        <h3>Version 1</h3>
+        {{ form.as_p }}
+
+        <hr>
+
+        {% comment %} <h3>Version 2</h3>
+        <div>
+            {{ form.title.errors }}
+            {{ form.title.label_tag }}
+            {{ form.title }}
+        </div>
+        <div>
+            {{ form.content.errors }}
+            {{ form.content.label_tag }}
+            {{ form.content }}
+        </div>
+
+        <hr>{% endcomment %}
+
+        <h3>Version 3</h3>
+        {% for field in form %}
+            <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            </div>
+        {% endfor %} 
+         <hr>
+        <button class="btn btn-primary">제출</button>
+    </form>
+{% endblock  %}

@@ -4,7 +4,12 @@
     <h1>NEW</h1>
     <form action="{% url 'articles:create'%}" method="POST">
         {% csrf_token %}
-        {{ form.as_p }} 
+         제목 :<br>
+        <input type="text" name="title"><br>
+        작성자 :<br>
+        <input type="text" name="writer"><br>
+        내용 :<br>
+        <textarea name="content" ></textarea>
         <button class="btn btn-primary">제출</button>
     </form>
 {% endblock  %}
