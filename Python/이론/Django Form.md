@@ -292,3 +292,122 @@
 
 - 참고 : https://pypi.org/project/django-bootstrap4/
 
+
+
+
+
+
+
+### review_django_form_01
+
+- 명령어
+
+  ```
+  cd review_django_form01
+  django_admin startproject form
+  cd form
+  python manage.py runserver(확인)
+  python manage.py startapp feeds
+  ```
+
+- setting 변경해주기
+
+  ```python
+  INSTALLED_APPS = [
+      'feeds', # 추가
+  ]
+  # 언어 및 시간 변경까지
+  ```
+
+  
+
+- 1. templates 나누어주기
+
+  - templates
+    - project 에
+      - templates 만 추가
+    - app 에
+      - templates/feeds
+
+  
+
+  2. `urls.py` 작성
+
+  - project
+
+    ```python
+    from django.urls import path, include # include추가
+    urlpatterns = [
+      	.
+      	.	# feed/ 추가
+        path('feeds/', include('feeds.urls')), 
+    ]
+    ```
+
+  
+
+  - app : 기본 import 및 **app_name 추가**
+
+    ```python
+    from django.urls import path
+    from . import views
+    
+    app_name = 'feeds'
+    urlpatterns = [
+    
+    ]
+    ```
+
+
+
+- `views.py` 에 미리 redirect 를 import 해주기
+
+  ```python
+  from django.shortcuts import render, redirect
+  ```
+
+
+
+- Templates 상속시키기
+
+  - `base.html` 작성 : {% block %} 처리, Bootstrap 적용
+
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        {% block css %}
+        {% endblock  %}
+    </head>
+    <body>
+        {% block content %}
+        {% endblock  %}
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    </body>
+    </html>
+    ```
+
+    
+
+  - `setting.py` - `TEMPLATES` - `DIRS` 에   추가
+
+    ```python
+    os.path.join(BASE_DIR, 'form', 'templates')
+    ```
+
+
+
+- ORM 시작 - `model.py` 작성
+
+  ```
+  
+  ```
+
+  
+
