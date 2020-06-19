@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <h1>영화 상세 정보</h1>
+    <hr>
+    <ul>
+        <li>제목(영문) : {{ movie.title }} ({{ movie.title_en }})</li>
+        <li>누적 관객수 : {{ movie.audience }}</li>
+        <li>개봉일 : {{ movie.open_date }}</li>
+        <li>장르 : {{ movie.genre }}</li>
+        <li>관람등급 : {{ movie.watch_grade }}</li>
+        <li>평점 : {{ movie.score }}</li>
+        <li>포스터 이미지 URL : <a href="{{ movie.poster_url }}">{{ movie.poster_url }}</a></li>
+        <li>상세 설명 : {{ movie.description }}</li>
+    </ul>    
+    <hr>
+    <form action="{% url 'movies:index'%}" method="GET">
+        {% csrf_token %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">목록</button>
+        {% endbuttons %}
+    </form>
+    <form action="{% url 'movies:update' movie.pk %}" method="GET">
+        {% csrf_token %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">수정</button>
+        {% endbuttons %}
+    </form>
+    <form action="{% url 'movies:delete' movie.pk %}" method="POST">
+        {% csrf_token %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">삭제</button>
+        {% endbuttons %}
+    </form>
+{% endblock  %}

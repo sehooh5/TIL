@@ -31,7 +31,7 @@
 - 그냥 실행 : `ipython`
 - 장고에서 실행 : `python manage.py shell`
 - Django extension 설치 : `pip install django-extensions`
-  - setting.py 에 INSTALLED_APPS 에 등록 :  'django_extensions',
+  - setting.py 에 INSTALLED_APPS 에 등록 :  **'django_extensions',**
   - <mark>shell plus 사용</mark> : `python manage.py shell_plus` (이거로 실행해야댐!)
 
 

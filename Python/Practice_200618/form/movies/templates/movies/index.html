@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <h1>Movie List</h1>
+    <a href="{% url 'movies:create' %}">새로운 영화 등록하기</a>
+    <hr>
+    <table>
+        <tr>
+            <th>영화제목</th>
+            <th>평점</th>
+        </tr>
+        {% for movie in movies %}
+        <tr>
+            <td><a href="{% url 'movies:detail' movie.pk%}" style="color:black">{{ movie.title }}</a></td>
+            <td>{{ movie.score }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock  %}

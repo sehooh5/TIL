@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <h1>영화 정보 입력</h1>
+    <hr>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">수정</button>
+        {% endbuttons %}
+    </form>
+{% endblock  %}
