@@ -33,4 +33,20 @@
             <button type="submit" class="btn btn-primary">삭제</button>
         {% endbuttons %}
     </form>
+    <hr>
+    <form action="{% url 'movies:comment_create' movie.pk %}" method="POST" name="comment">
+        {% csrf_token %}
+        {{ form }}
+        <button class="btn btn-primary">답글 달기</button>
+    </form>
+    <hr>
+    {% for comment in movie.comment_set.all %}
+        <p>
+        {{ comment.comment }}
+        <form action="{% url 'movies:comment_delete' movie.pk comment.pk %}" method="POST">
+            {% csrf_token %}
+            <button class='btn btn-danger'>삭제</button>
+        </form>
+        </p>
+    {% endfor %}
 {% endblock  %}

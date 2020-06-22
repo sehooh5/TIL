@@ -19,14 +19,14 @@
 
   <form action="{% url 'articles:comment_create' article.pk %}" method="POST">
     {% csrf_token %}
-    <input type="text" name="content">
+    {{ form }}
     <button class="btn btn-primary">작성</button>
   </form>
   <hr>
   {% for comment in article.comment_set.all %}
     <p>
       {{ comment.content }}
-      <form action="{% url 'articles:comment_delete' comment.pk %}" method="POST">
+      <form action="{% url 'articles:comment_delete' article.pk comment.pk %}" method="POST">
         {% csrf_token %}
         <button class="btn btn-danger">delete</button>
       </form>

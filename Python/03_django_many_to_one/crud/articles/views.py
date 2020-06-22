@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_POST
 from .models import Article, Comment
-from .forms import ArticleForm
+from .forms import ArticleForm, CommentForm
 
 # Create your views here.
 
@@ -31,8 +31,10 @@ def create(request):
 
 def detail(request, pk):
     article = Article.objects.get(pk=pk)
+    form = CommentForm()
     context = {
         'article': article,
+        'form': form,
     }
     return render(request, 'articles/detail.html', context)
 
@@ -60,16 +62,22 @@ def delete(request, pk):
     return redirect('articles:index')
 
 
+@require_POST
 def comment_create(request, pk):
     article = Article.objects.get(pk=pk)
-    content = request.POST.get('content')
-
-    Comment.objects.create(article=article, content=content)
-    return redirect('articles:detail', article.pk)
+    # content = request.POST.get('content')
+    # Comment.objects.create(article=article, content=content)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        # commit=False : 새로나온 변수 (객체는 만들어져있지만 DB에 반영이 안된 상태)
+        comment = form.save(commit=False)  # = Comment object (None)
+        comment.article = article
+        comment.save()
+        return redirect('articles:detail', article.pk)
 
 
 @require_POST
-def comment_delete(request, pk):
-    comment = Comment.objects.get(pk=pk)
+def comment_delete(request, article_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
     comment.delete()
-    return redirect('articles:detail', comment.article_id)
+    return redirect('articles:detail', article_pk)
