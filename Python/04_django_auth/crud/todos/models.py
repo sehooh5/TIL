@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings  # user 를 FK로 사용하기위해 import
 
 
-class todo(models.Model):
+class Todo(models.Model):
 
     content = models.CharField(max_length=100)
     due_date = models.DateField()

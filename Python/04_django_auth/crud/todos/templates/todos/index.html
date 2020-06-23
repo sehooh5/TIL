@@ -2,4 +2,21 @@
 
 {% block body %}
     <h1>index</h1>
+    <form action="{% url 'todos:create' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button class="btn btn-primary">저장</button>
+    </form>
+    <hr>
+    <!-- user는 html 에서 바로 사용 가능하다 -->
+    <!-- todo_set 은 1-N 에서 1이 N 불러올때 사용 -->
+    {% for todo in user.todo_set.all %} 
+        <h5>{{todo.content}}</h5>
+        <p>{{ todo.due_date }}</p>
+        <form action="{% url 'todos:delete' todo.pk %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger">삭제</button>
+            <hr>
+        </form>
+    {% endfor %}
 {% endblock  %}

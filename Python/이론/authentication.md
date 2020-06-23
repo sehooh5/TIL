@@ -1,5 +1,7 @@
 # authetication
 
+[]()
+
 - 기본적으로 Create 와 비슷하다
 - `models.py`  를 작성하지 않은채 `migrate` 를 실행하면 auth 가 자동으로 생긴다
   - django 는 이미 AbstractUser 라는 모델을 만들어서 사용하고 있다(git 참고)
@@ -14,3 +16,18 @@
   - cookies 의 sessionid 와 session_key 비교해서 똑같으면 good
 - base.html 에 항상 사용할 것 적용
 - signup 만 저장하는 기능이고 signin/logout 은 session 활용
+
+
+
+
+
+## 로그인을 해야만 사용가능하게 설정하기
+
+- 원하는 views.py의 함수에 `decorator` 추가 : `@login_required`
+
+  ```python
+  from django.contrib.auth.decorators import login_required
+  ```
+
+
+
