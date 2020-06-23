@@ -1,13 +1,13 @@
 # authetication
 
-[]()
+참고 : [04_django_auth](https://github.com/sehooh5/TIL/tree/master/Python/04_django_auth/crud)
 
 - 기본적으로 Create 와 비슷하다
 - `models.py`  를 작성하지 않은채 `migrate` 를 실행하면 auth 가 자동으로 생긴다
   - django 는 이미 AbstractUser 라는 모델을 만들어서 사용하고 있다(git 참고)
 - `forms.py` 또한 작성 되어있는 것을 참고하여 사용한다
   - [django doc 참고 : **class** **UserCreationForm**](https://docs.djangoproject.com/en/1.8/_modules/django/contrib/auth/forms/)
-  - `*from* django.contrib.auth.forms *import* UserCreationForm` : 장고가 만들어 놓은 form 을 사용한다
+  - `from django.contrib.auth.forms import UserCreationForm` : 장고가 만들어 놓은 form 을 사용한다
 - i18n : internationlization
 
 - cookies - sessionid
@@ -28,6 +28,12 @@
   ```python
   from django.contrib.auth.decorators import login_required
   ```
+
+
+
+# 04_django_auth
+
+### 1개의 프로젝트(crud) 2개의 기능 app(accounts, todos)로 구성
 
 
 
