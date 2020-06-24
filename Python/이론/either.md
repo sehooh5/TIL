@@ -1,4 +1,4 @@
-# either.io
+either.io
 
 - `either.io`  site 참고한 프로그램
 
@@ -14,12 +14,11 @@
 
    - 기본 : User - AbstractUser - AbstractBaseUser 식으로 상속 되어있고 UserCreationForm 도 연결되어서 사용이 가능했었다
 
-   - 1안 : AbstractUser 를 상속받아 CustomUser 생성, UserCreationForm 또한 새로 만들어줘서 사용 (<mark>Django는 CustomUser 를 사용하길 권장</mark>)
+   - 1안 : AbstractUser 를 상속받아 CustomUser 생성, UserCreationForm 또한 새로 만들어줘서 사용 (<mark>Django는 처음부터 CustomUser 를 사용하길 권장</mark>)
 
      - `models.py` 에 새로운 CustomUser 사용
 
      - ```python
-       
        from django.contrib.auth.models import AbstractUser
        # 기존 User 를 대체할 User 생성
        class User(AbstractUser):  
@@ -32,8 +31,78 @@
        AUTH_USER_MODEL = 'accounts.User'
        ```
 
+     - `forms.py` 를 작성해주는데 UserCreationForm 을 상속하여 사용
+
+       ```python
+       from django.contrib.auth.fomrs import UserCreationForm
+       from .models import User
+       from django.contrib.auth import get_user_model
        
+       # get_user_model() => AUTH_USER_MODEL 에 적용시킨 모델 클래스를 반환해줌
+       class CustomUserCreationForm(UserCreationForm):
+          class Meta: # Meta 로 Form의 방향을 새User로 지정
+               model = get_user_model()
+       ```
+
+     - 작성한 CustomUserCreationForm을 views.py에서 사용
 
    - 2안 : 저장하기 위한 새로운 class 를 만들어서 1 : 1 관계를 형성하여 만듬
 
-6. 
+6. choices 기능 사용하기
+
+   ![img](https://user-images.githubusercontent.com/58541635/85501571-9ef0a080-b620-11ea-9f08-f19e1b01215b.png)
+
+   - `models.py` 작성
+
+     ```python
+     from django.db import models
+     from django.conf import settings
+     # settings 에 AUTH_USER_MODEL 이 있다 이걸 user 정보로 사용
+     
+     
+     # 사용자가 질문하고 대답할 수 있는 페이지를 만들것
+     class Question(models.Model):
+         title = models.CharField(max_length=100)
+         answer_a = models.CharField(max_length=100)
+         answer_b = models.CharField(max_length=100)
+         user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                  on_delete=models.CASCADE)
+     
+     
+     # ForeignKey 가 2개인 모델
+     # User(1) - Question, Answer(N)
+     # Question(1) - Answer(N)
+     class Answer(models.Model):
+         CHOICES = [
+             ('a', '빨강'),
+             ('b', '파랑'),
+         ]
+         choice = models.CharField(
+             max_length=100, choices=CHOICES)  # 선택지를 두 개만 주는 기능
+         question = models.ForeignKey(Question, on_delete=models.CASCADE)  # 1-N관계
+         user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                  on_delete=models.CASCADE)
+     
+     ```
+
+     
+
+   
+
+
+
+
+
+
+
+
+
+## include를 사용하여 해당 html(반대방법)
+
+- 작성 후 불러와서 include 로 적용
+
+  ```python
+  {% include 'nav.html' %}
+  ```
+
+  seho you should've gone out here.
