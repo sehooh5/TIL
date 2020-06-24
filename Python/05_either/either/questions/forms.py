@@ -12,7 +12,14 @@ class QuestionForm(forms.ModelForm):
 
 class AnswerForm(forms.ModelForm):
 
+    CHOICES = [
+        ('a', 'RED'),
+        ('b', 'Blue'),
+    ]
+
+    choice = forms.ChoiceField(choices=CHOICES)
+
     class Meta:
         model = Answer
         fields = '__all__'
-        exclud = ('user', 'question',)
+        exclude = ('user', 'question',)

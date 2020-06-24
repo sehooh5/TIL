@@ -16,12 +16,7 @@ class Question(models.Model):
 # User(1) - Question, Answer(N)
 # Question(1) - Answer(N)
 class Answer(models.Model):
-    CHOICES = [
-        ('a', '빨강'),
-        ('b', '파랑'),
-    ]
-    choice = models.CharField(
-        max_length=100, choices=CHOICES)  # 선택지를 두 개만 주는 기능
+    choice = models.CharField(max_length=100)  # 선택지를 두 개만 주는 기능
     question = models.ForeignKey(Question, on_delete=models.CASCADE)  # 1-N관계
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)

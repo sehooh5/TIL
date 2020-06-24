@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>질문을 해봅니다잉~?</h1>
+    {{question.title}}
+    {{question.answer_a}}
+    {{question.answer_b}}
+    <hr>
+    <form action="{% url 'questions:answer_create' question.pk %}" method="POST">
+        {% csrf_token %}
+        {{answer_form}}
+        <button class="btn btn-primary">제출</button>
+    </form>
+{% endblock  %}
