@@ -1,12 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostForm
+from .models import Post
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 
 def index(request):
-    return render(request, 'posts/index.html')
+    posts = Post.objects.all()
+    context = {
+        'posts': posts
+    }
+    return render(request, 'posts/index.html', context)
 
 
 @login_required
@@ -29,3 +34,22 @@ def create(request):
         'form': form
     }
     return render(request, 'posts/form.html', context)
+
+# create 와 비슷하지만 조금 다르다
+
+
+def like(request, post_pk):
+    # 누가? 에 대한 정보
+    user = request.user
+    # 몇 번 글? 에 대한 정보
+    post = get_object_or_404(Post, pk=post_pk)
+    # user.like_posts = user 가 좋아요 버튼을 누른 게시물들
+    # user.like_users = post에 좋아요 버튼을 누른 유저들
+    # x in y(list) = x가 y 에 속하면 True
+    if post in user.like_posts.all():
+        # 이미 좋아요를 누른경우 -> 제거
+        user.like_posts.remove(post)
+    else:
+        # 아직 좋아요를 안누른경우 -> 추가
+        user.like_posts.add(post)
+    return redirect('posts:index')

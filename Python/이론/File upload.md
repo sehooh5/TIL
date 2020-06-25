@@ -2,7 +2,7 @@
 
 
 
-- N-N 관계설정
+- N:M 관계설정 (좋아요)
 - 사진 업로드
 - 좋아요
 
@@ -205,3 +205,199 @@
 
     
 
+16. card 형식의 html 만들어서 include 해줌 : card.html
+
+    ```
+    <div class="card" style="width: 18rem;">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+    ```
+
+
+
+17. views.py 에 index를 Post 모델 가져올 수 있게 변경
+
+    ```python
+    def index(request):
+        posts = Post.objects.all()
+        context = {
+            'posts': posts
+        }
+        return render(request, 'posts/index.html', context)
+    ```
+
+18. index.html 수정 : for 문
+
+    ```python
+    {% extends 'base.html' %}
+    {% block content %}
+      {% for post in posts %}
+          {% include 'posts/card.html' %}
+      {% endfor %}
+    {% endblock %}
+    ```
+
+19. card.html 수정 : post 내용 및 이미지 경로
+
+    ```python
+    <div class="card" style="width: 18rem;">
+    <!--***post.image(column 명).url = /media/파일경로 가 나옴 -->
+      <img src="{{ post.image.url }}" class="card-img-top" alt="...">
+      <div class="card-body">
+        {% comment %} <h5 class="card-title">Card title</h5> {% endcomment %}
+        <p class="card-text">{{ post.content }}</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+    ```
+
+20. bootstrap **Grid** 적용
+
+    - row 설정을 보여주는 페이지에서 설정 한 후
+    - col 설정을 칸을 차지할 내용에 설정해줌
+
+    ```python
+    # index.html - row 설정
+    <div class="row"> 
+    
+    # card.html - col 설정
+    <div class="card col-6 m-3" style="width: 18rem;"> 
+    ```
+
+21. 인스타그램처럼 꾸미기
+
+    - font awesome 사이트에서 `base.html` 에 추가해주기(icon 사용)
+
+      ```html
+      <script src="https://kit.fontawesome.com/a43482d4c5.js" crossorigin="anonymous"></script>
+      ```
+
+    - card.html
+
+    ```html
+    <div class="card col-6 m-3" style="width: 18rem;">
+    <!--post.image(column 명).url = /media/파일경로 가 나옴 -->
+      <h5 class="card-header">
+        <img src="https://lh3.googleusercontent.com/proxy/1k4GKg9JmioAHSgOuRZ64CHT3jcS5iixQnZvJTGExli9CygbrqPaYH5DevH5fa3SqlNd-JWiHrg7FQCjKVkqpvWhblo6cX4qOCHfOdr7erk9dVrBK_uCgkF1c5JHOGljVeUZ1n9M4ZWCdtU07AGi36UvCn51GVoXPWijZlumjgB61ZgL0ei_m7OAQLJmdKWIX-Ozy8-mngo8pPsc-R9jSHK98yM6mUxTBkj7jlWz5T9yuYsUX198JrsCuKUrzrbBoi71rZ84dfLBGz7GP-LIJj0RgWOA80DWb_vgI-BR-PV5RRnBEAvaNDWApXEdf5JdutZt4ZT1iRvzqN-C-2WsbJlctaxc4Jy0ZZCdFf2-zMDB9DdJOB-1SQtDO2DlcFEaFs5_HPA_rQSKV4IyQd51GC_WB0WykOM" width="50px" height="50px" class="rounded-circle">
+        {{ post.user.username }}
+      </h5>
+      <img src="{{ post.image.url }}" class="card-img-top" width="300px" height="300px">
+      <div class="card-body">
+        {% comment %} <h5 class="card-title">Card title</h5> {% endcomment %}
+        <p class="card-text">{{ post.content }}</p>
+        <p class="card-text">{{ post.created_at }}</p>
+      </div>
+    </div>
+    ```
+
+22. **image resizing** : django image kit
+
+    - 현업에서는 각 화면별로 이미지를 리사이징해서 분류해놓고 사용한다
+
+    ```python
+    1. download
+    pip intall django-imagekit
+    
+    2. settings.py 수정 : INATALLED_APP 추가
+    'imagekit',
+    
+    3. models.py 에 추가, image field 변경
+    from imagekit.models import ProcessedImageField
+    from imagekit.processors import ResizeToFill, ResizeToFit, ResizeCanvas, ResizeToCover # 다양한 종류의 설정
+    
+    image = ProcessedImageField(upload_to='media',
+                                    processors=[ResizeToFill(500, 500)],# ResizeToFill : 자르고 사이즈 맞춰줌
+                                    format='JPEG',
+                                    options={'quality': 80})
+    ```
+
+23. **좋아요 기능** : 버튼을 누르면 링크를 통해 <mark>**N:M 관계**</mark> 설정
+
+    - *N:M= (1:N) + (M:1)*
+    - 실제 django 는 새로운 테이블을 만들어서 처리한다(중계 모델)
+      - 컬럼명 : user_id, post_id
+
+    ```python
+    1. models.py 수정 : 좋아요를 저장한 사람에 대한 칼럼 추가
+    2. 여기서 두 user 의 post_set 의 이름이 겹쳐서 이름을 변경해준다
+    
+    from django.db import models
+    from django.conf import settings
+    from imagekit.models import ProcessedImageField
+    from imagekit.processors import ResizeToFill, ResizeToFit, ResizeCanvas, ResizeToCover
+    
+    # < 충돌이 일어나는 이유 >
+    # user, like_user 가 모두 post_set 을 만들어 User 와 연결하려한다
+    # 1. post_set from user(FK) : 어떤 유저가 작성한 글들
+    # 2. post_set from like_user(M2M) : 어떤 유저가 좋아요를 누른 글들 -> like_posts
+    # 두 개 이름이 같아서 충돌이 난다
+    # < 충돌 변경해주는 방법 >
+    # 두 개의 이름을 변경해준다
+    
+    
+    class Post(models.Model):
+        content = models.CharField(max_length=200)
+        #image = models.ImageField()
+        # 작성한 사람을 저장
+        user = models.ForeignKey(settings.AUTH_USER_MODEL,  # user 정보 가져오는 곳
+                                 on_delete=models.CASCADE)
+        created_at = models.DateTimeField(auto_now_add=True)
+        image = ProcessedImageField(upload_to='media',
+                                    processors=[ResizeToCover(500, 500)],
+                                    format='JPEG',
+                                    options={'quality': 80})
+        # 좋아요 버튼을 누른 사람들을 저장
+        # 여기서 like_posts는 User에 저장되는 컬럼명이 된다(기존 post_set)
+        like_users = models.ManyToManyField(
+            settings.AUTH_USER_MODEL, related_name='like_posts')
+    
+        class Meta:
+            # 정렬해주는 기능, 기본이 id 순으로 정렬하는데 - 값 주면 역순
+            ordering = ['-id']
+    
+    ```
+
+24. 좋아요 버튼을 누르고 링크를 적용 시켜줌 : card.html 
+
+    ```python
+    <a href="{% url 'posts:like' post.id %}"><i class="far fa-heart"></i></a>
+    ```
+
+25. 좋아요 함수 like 로직 만들기 : views.py
+
+    ```python
+    def like(request, post_pk):
+        # 누가? 에 대한 정보
+        user = request.user
+        # 몇 번 글? 에 대한 정보
+        post = get_object_or_404(Post, pk=post_pk)
+        # user.like_posts = user 가 좋아요 버튼을 누른 게시물들
+        # user.like_users = post에 좋아요 버튼을 누른 유저들
+        # x in y(list) = x가 y 에 속하면 True
+        if post in user.like_posts.all():
+            # 이미 좋아요를 누른경우 -> 제거
+            user.like_posts.remove(post)
+        else:
+            # 아직 좋아요를 안누른경우 -> 추가
+            user.like_posts.add(post)
+        return redirect('posts:index')
+    ```
+
+26. views.py 에 index를 Post 모델 가져올 수 있게 변경
+
+    ```python
+    
+    ```
+
+27. views.py 에 index를 Post 모델 가져올 수 있게 변경
+
+    ```python
+    
+    ```
+
+    
