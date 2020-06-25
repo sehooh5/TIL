@@ -1,0 +1,121 @@
+[
+{
+    "model": "posts.post",
+    "pk": 1,
+    "fields": {
+        "content": "\uc624",
+        "user": 1,
+        "created_at": "2020-06-25T01:34:57.737Z",
+        "image": "KakaoTalk_Photo_2020-05-01-21-51-05.png",
+        "like_users": [
+            2
+        ]
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 2,
+    "fields": {
+        "content": "\uc624",
+        "user": 1,
+        "created_at": "2020-06-25T01:35:23.529Z",
+        "image": "KakaoTalk_Photo_2020-05-01-21-51-05_dWnp37Q.png",
+        "like_users": []
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 3,
+    "fields": {
+        "content": "\uc548\ub155 \ub514\uc9c0\ubaac",
+        "user": 2,
+        "created_at": "2020-06-25T02:10:50.283Z",
+        "image": "sign.png",
+        "like_users": []
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 4,
+    "fields": {
+        "content": "\ub0b4\uc77c \ubb50\uba39\uc744\uc9c0 \ucc3e\uae30",
+        "user": 2,
+        "created_at": "2020-06-25T02:10:57.608Z",
+        "image": "discount.png",
+        "like_users": []
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 5,
+    "fields": {
+        "content": "mukbang",
+        "user": 3,
+        "created_at": "2020-06-25T02:30:27.491Z",
+        "image": "computer.png",
+        "like_users": []
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 6,
+    "fields": {
+        "content": "\ub0b4\uc77c \ubb50\uba39\uc744\uc9c0 \ucc3e\uae30",
+        "user": 3,
+        "created_at": "2020-06-25T04:31:37.179Z",
+        "image": "media/commerce.jpg",
+        "like_users": [
+            2
+        ]
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 7,
+    "fields": {
+        "content": "sale",
+        "user": 3,
+        "created_at": "2020-06-25T04:33:24.419Z",
+        "image": "media/unnamed.jpg",
+        "like_users": []
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 8,
+    "fields": {
+        "content": "re",
+        "user": 3,
+        "created_at": "2020-06-25T04:35:41.262Z",
+        "image": "media/unnamed_EVXqoE3.jpg",
+        "like_users": []
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 9,
+    "fields": {
+        "content": "re",
+        "user": 3,
+        "created_at": "2020-06-25T04:36:27.397Z",
+        "image": "media/unnamed_cQOuNGf.jpg",
+        "like_users": [
+            2
+        ]
+    }
+},
+{
+    "model": "posts.post",
+    "pk": 10,
+    "fields": {
+        "content": "ResizeToCover",
+        "user": 3,
+        "created_at": "2020-06-25T04:37:42.383Z",
+        "image": "media/unnamed_X9E0b3M.jpg",
+        "like_users": [
+            2,
+            3
+        ]
+    }
+}
+]

@@ -16,9 +16,9 @@
 
 3. runserver ,  /posts 확인
 
-4. <models.py > - posts
+4. `models.py` - Posts
 
-   ```
+   ```python
    from django.db import models
    from django.conf import settings
    
@@ -32,26 +32,25 @@
 
    
 
-- 작성하고 저장하면 에러 뜨는데, 
+- 작성하고 저장하면 에러 뜨는데, **pip install pillow**  라이브러리 설치
 
-  **pip install pillow**  라이브러리 설치
 
 5. makemigrations , migrate
 
 6. <nav.html> - insta 에 글쓰기 링크 추가하기 
 
-   ```
+   ```html
    <nav class="nav d-flex justify-content-center my-4">
      {% if user.is_authenticated %}
-       <a class="nav-link" href="{% url 'posts:create' %}">글쓰기</a>
-       <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
+   <a class="nav-link" href="{% url 'posts:create' %}">글쓰기</a>
+   <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
    ```
 
    
 
 7. <urls.py> - post에 글쓰기 path 설정
 
-   ```
+   ```python
     path('create/', views.create, name='create'),
    ```
 
@@ -59,7 +58,7 @@
 
 8. <forms.py>-post에  form 작성
 
-   ```
+   ```python
    from django import forms
    from .models import Post
    
@@ -74,7 +73,7 @@
 
 9. <views.py> - post 글쓰기  함수 작성
 
-   ```
+   ```python
    def create(request):
        if request.method == 'POST':
            pass
@@ -90,7 +89,7 @@
 
 10. <form.html> - post  출력되는 부분 작성
 
-    ```
+    ```html
     {% extends 'base.html' %}
     {% load bootstrap4 %}
     {% block content %}
@@ -109,7 +108,7 @@
 
     raise? 오류 뜨는거 확인할라고 추가하심
 
-    ```
+    ```python
     def create(request):
         if request.method == 'POST':
             raise 
@@ -133,7 +132,7 @@
 
     파일 data 전송된거 확인할 수 있음
 
-    ```
+    ```html
     {% extends 'base.html' %}
     {% load bootstrap4 %}
     {% block content %}
@@ -151,7 +150,7 @@
 
 13. Media 저장용 `settings.py` 내용 추가
 
-    ```
+    ```python
     # url 이름 정해주는 것(사람들에게 보여지는)
     MEDIA_URL = '/media/'
     # 실제 저장 장소
@@ -164,8 +163,6 @@
 
     ```python
     from django.contrib.auth.decorators import login_required
-    
-    
     
     @login_required
     def create(request):
@@ -388,16 +385,44 @@
         return redirect('posts:index')
     ```
 
-26. views.py 에 index를 Post 모델 가져올 수 있게 변경
+26. 좋아요 아이콘 눌림과 안눌림 구분하여 변경 : card.html
+
+    ```python
+    {% if post in user.like_posts.all %}
+          <a href="{% url 'posts:like' post.id %}"><i class="fas fa-heart" style="color:red"></i></a>
+        {% else %}
+          <a href="{% url 'posts:like' post.id %}"><i class="far fa-heart" style="color:black"></i></a>
+        {% endif %}
+    ```
+
+27. Follow기능 추가
 
     ```python
     
     ```
 
-27. views.py 에 index를 Post 모델 가져올 수 있게 변경
+28. views.py 에 index를 Post 모델 가져올 수 있게 변경
 
     ```python
     
     ```
 
+29. views.py 에 index를 Post 모델 가져올 수 있게 변경
+
+    ```python
     
+    ```
+
+30. views.py 에 index를 Post 모델 가져올 수 있게 변경
+
+    ```python
+    
+    ```
+
+31. views.py 에 index를 Post 모델 가져올 수 있게 변경
+
+    ```python
+    
+    ```
+
+32. 
