@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>질문을 해봅니다잉~?</h1>
-    {{question.title}}
+    <h1>{{question.title}}</h1>
+    
     {{question.answer_a}}
     {{question.answer_b}}
     <hr>
@@ -11,4 +11,12 @@
         {{answer_form}}
         <button class="btn btn-primary">제출</button>
     </form>
+    <hr>
+    {% for answer in question.answer_set.all %}
+        {{answer.choice}}
+    {% endfor %}
+    <hr>
+    {{answer_a}}
+    {{answer_b}}
+
 {% endblock  %}

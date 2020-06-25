@@ -1,6 +1,7 @@
-either.io
+# 05_either
 
 - `either.io`  site 참고한 프로그램
+- 참고 : [05_either](https://github.com/sehooh5/TIL/tree/master/Python/05_either/either)
 
 1. `either` project 생성
 
@@ -44,7 +45,7 @@ either.io
                model = get_user_model()
        ```
 
-     - 작성한 CustomUserCreationForm을 views.py에서 사용
+     - 작성한 CustomUserCreationForm을 `views.py`에서 사용
 
    - 2안 : 저장하기 위한 새로운 class 를 만들어서 1 : 1 관계를 형성하여 만듬
 
@@ -73,12 +74,7 @@ either.io
      # User(1) - Question, Answer(N)
      # Question(1) - Answer(N)
      class Answer(models.Model):
-         CHOICES = [
-             ('a', '빨강'),
-             ('b', '파랑'),
-         ]
-         choice = models.CharField(
-             max_length=100, choices=CHOICES)  # 선택지를 두 개만 주는 기능
+         choice = models.CharField(max_length=100)  # 선택지를 두 개만 주는 기능
          question = models.ForeignKey(Question, on_delete=models.CASCADE)  # 1-N관계
          user = models.ForeignKey(settings.AUTH_USER_MODEL,
                                   on_delete=models.CASCADE)
@@ -87,17 +83,11 @@ either.io
 
      
 
-   
 
 
 
 
-
-
-
-
-
-## include를 사용하여 해당 html(반대방법)
+### include를 사용하여 해당 html(반대방법)
 
 - 작성 후 불러와서 include 로 적용
 
@@ -105,4 +95,31 @@ either.io
   {% include 'nav.html' %}
   ```
 
-  seho you should've gone out here.
+
+
+### url_name 을 가져와 사용하는 방법
+
+```python
+# html파일에서
+    {% if request.resolver_match.url_name == 'signup' %}
+```
+
+
+
+### 로그인 시 이미 로그인 되어있으면 index 로 , 로그인 user 정보 (get_user())
+
+```python
+# views.py 에서
+if request.user.is_authenticated: # 인증되었으면 index 로 넘겨
+        return redirect('questions:index')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user() # user 정보 가져요기
+            auth_login(request, user)
+            return redirect('questions:index')
+```
+
+
+
+### 

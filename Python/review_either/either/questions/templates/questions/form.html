@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'nav.html' %}
+    <h1>질문</h1>
+    <hr>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{question_form.as_p}}
+        <button class="btn btn-primary">제출</button>
+    </form>
+{% endblock  %}
