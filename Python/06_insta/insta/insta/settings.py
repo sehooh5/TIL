@@ -119,6 +119,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+# 실제로 파일이 어디에있는지 나타내는 경로
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'accounts.User'
+
+# url 이름 정해주는 것(사람들에게 보여지는)
+MEDIA_URL = '/media/'
+# 실제 저장 장소
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

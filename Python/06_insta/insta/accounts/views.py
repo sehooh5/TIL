@@ -27,7 +27,7 @@ def signup(request):
 def login(request):
     if request.user.is_authenticated:
         return redirect('posts:index')
-        
+
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():

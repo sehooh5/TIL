@@ -26,4 +26,6 @@ def form(request):
 
 
 def detail(request, question_pk):
-    pass
+    if request.method == 'POSt':
+        pass
+    else:
