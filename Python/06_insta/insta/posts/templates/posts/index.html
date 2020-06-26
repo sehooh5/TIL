@@ -1,8 +1,44 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row row-cols-2"> 
-  {% for post in posts %}
-      {% include 'posts/card.html' %}
-  {% endfor %}
-</div>
+  <div class="row row-cols-2"> 
+    {% for post in posts %}
+        {% include 'posts/card.html' %}
+    {% endfor %}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    //1. 누구를 : 하트 전체값을 가져오기위해 querySelectorAll
+    var likeButtons = document.querySelectorAll('.fa-heart')
+    //console.log(likeButtons)
+    likeButtons.forEach(function(likeButton){
+      //console.log(likeButton)
+      //2. 어떻게 했을때
+      // 1.이벤트 2.~~를 작용해라
+      likeButton.addEventListener('click',function(event){
+        // console.log(event.target.dataset.id)
+        var targetId = event.target.dataset.id
+        // axios.get() : 괄호 안에(좋아요 버튼 요청 url) get요청을 한다
+        // then() : get 요청의 응답을 가지고 실행한다
+        // then = try = 성공 // catch = catch = 실패
+        axios.get(`/posts/${targetId}/like/`)
+        .then(function(res){
+          console.log(res.data.liked)
+          var liked = res.data.liked
+          if (liked){ 
+            // 좋아요를 누른경우
+            event.target.style.color = 'Red'
+            event.target.classList.remove('far')
+            event.target.classList.add('fas')
+          }else{
+            // 좋아요를 취소한 경우
+            event.target.style.color = 'Black'
+            event.target.classList.remove('fas')
+            event.target.classList.add('far')
+          }
+        })//.catch() 
+      })
+      
+    })
+    //3. 뭐뭐를 작용한다
+  </script>
 {% endblock %}

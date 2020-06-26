@@ -19,7 +19,7 @@ class Post(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,  # user 정보 가져오는 곳
                              on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = ProcessedImageField(upload_to='media',
+    image = ProcessedImageField(upload_to='posts',
                                 processors=[ResizeToCover(500, 500)],
                                 format='JPEG',
                                 options={'quality': 80})

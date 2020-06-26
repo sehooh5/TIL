@@ -8,4 +8,4 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         # 연결하고 싶은 모델이 들어간다. 바로 연결하지말고 이 함수로 연결하길 권장
         model = get_user_model()
-        fields = ('username', 'password1', 'password2', )
+        fields = ('username', 'password1', 'password2', 'image')

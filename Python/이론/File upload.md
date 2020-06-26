@@ -462,19 +462,205 @@ def profile(request, username):
 
 ```python
 # accounts - models.py
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+# Create your models here.
 
+
+class User(AbstractUser):
+    follow = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='follower')
+    # user_set 이 자동 생성되는데, 직관적으로 follower 로 변경해준다
+    
+ 
+# accounts - urls.py
+path('<int:user_pk>/follow/', views.follow, name='follow'),
+
+
+# accounts - views.py
+@login_required
+def follow(request, user_pk):
+    # 누가  누구를  팔로우 할 것인가
+    me = request.user  # 누가 : 로그인한 사람
+    you = get_object_or_404(get_user_model(), pk=user_pk)
+
+    if me == you:
+        return redirect('posts:index')
+
+    if me in you.follower.all():  # you 의 자동 생성된 follower에 속해있으면
+        # follower 해제
+        you.follower.remove(me)  # = me.follow.remove(you)
+    else:
+        # follower 추가
+        you.follower.add(me)  # = me.follow.add(you)
+    return redirect('accounts:profile', you.username)
+ 
+
+# profile.html
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- me = user // you = user_profile -->
+    <!-- jumbotron start -->
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                <img class="col-12" src="{{user_profile.image.url}}" alt="">
+                </div>
+            </div>
+            <div class="col-8">
+                <h5>{{user_profile.username}}</h5>
+                <p>follow {{user_profile.follow.count}} follower {{user_profile.follower.count}}</p>
+                {% if user != user_profile %}
+                    {% if user_profile in user.follow.all %}
+                        <!-- 보고있는 페이지의 user 를 팔로우하기에 그 id 가 필요 -->
+                        <a class="btn btn-primary" href="{% url 'accounts:follow' user_profile.id %}">unfollow</a>
+                    {% else %}
+                        <a class="btn btn-primary" href="{% url 'accounts:follow' user_profile.id %}">follow</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>    
+    <hr>
+        <div class="row row-cols-3">
+            {% for post in user_profile.post_set.all %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{post.image.url}}" alt="">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+{% endblock  %}
 ```
 
-29) views.py 에 index를 Post 모델 가져올 수 있게 변경
+29-31) views.py 에 index를 Post 모델 가져올 수 있게 변경
 
+    def index(request):
+        posts = Post.objects.all()
+        context = {
+            'posts': posts,
+        }
+        return render(request, 'posts/index.html', context)
+
+32. User 에 image 컬럼 추가해주기
+
+    ```python
+    # models.py - User class
     
+      # (image) 컬럼이 새로 생기면 default 값을 꼭 입력해줘야한다
+        image = ProcessedImageField(upload_to='accounts',
+                                    processors=[ResizeToFill(500, 500)],
+                                    format='JPEG',
+                                    options={'quality': 80},
+                                    default='tomas.png'
+                                    )
+    ```
 
-30) views.py 에 index를 Post 모델 가져올 수 있게 변경
+33. 회원가입 시 image 파일 주려면 encoding 해줘야함, views.py 도 수정
 
+    ```python
+    # accounts - form.html
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button class="btn btn-primary">저장</button>
+      </form>
+      
+      
+    # accounts - views.py - signup def : request.FILES
+     form = CustomUserCreationForm(request.POST, request.FILES)
     
+    ```
 
-31) views.py 에 index를 Post 모델 가져올 수 있게 변경
+34. ### 자바스크립트 적용 : card.html, index.html(script 쓰는곳)
 
+    - 작동 원리 : 1. 누구를 	2. (     ) 를 했을때 	3. (     ) 가 작용한다
+    - axios 사용
+
+    ```html
+    1. 자바스크립트 적용할 <a>태그들 지우기
+    2. 확실한 대상을 찾기위해 id 값주기 : post의 고유값 id 사용
+    <i data-id="{{post.id}}" class="fas fa-heart fa-2x" style="color:red"></i>
+    3. index에 <script></script> 작성
+    4. axios 사용
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 추가
+    <script>
+        //1. 누구를 : 하트 전체값을 가져오기위해 querySelectorAll
+        var likeButtons = document.querySelectorAll('.fa-heart')
+        //console.log(likeButtons)
+        likeButtons.forEach(function(likeButton){
+          //console.log(likeButton)
+          //2. 어떻게 했을때
+          // 1.이벤트 2.~~를 작용해라
+          likeButton.addEventListener('click',function(event){
+            // console.log(event.target.dataset.id)
+            var targetId = event.target.dataset.id
+            // axios.get() : 괄호 안에(좋아요 버튼 요청 url) get요청을 한다
+            // then() : get 요청의 응답을 가지고 실행한다
+            // then = try = 성공 // catch = catch = 실패
+            axios.get(`/posts/${targetId}/like/`)
+            .then(function(res){
+              console.log(res.data.liked)
+              var liked = res.data.liked
+              if (liked){ 
+                // 좋아요를 누른경우
+                event.target.style.color = 'Red'
+                event.target.classList.remove('far')
+                event.target.classList.add('fas')
+              }else{
+                // 좋아요를 취소한 경우
+                event.target.style.color = 'Black'
+                event.target.classList.remove('fas')
+                event.target.classList.add('far')
+              }
+            })//.catch() 
+          })
+          
+        })
+        //3. 뭐뭐를 작용한다
+      </script>
+    5. views.py 에 json응답 해주기
+    from django.http import JsonPesponse
     
+    6. like 함수 응답을 html 에서 Json으로 변경해줌
+      (추가)
+      context = {
+            'msg': '좋아요 기능이 동작했습니다',
+        }
+        return JsonResponse(context)
+    7. like 함수에서 liked 인자 추가
+          if post in user.like_posts.all():
+            # 이미 좋아요를 누른경우 -> 제거
+            user.like_posts.remove(post)
+            liked = False
+        else:
+            # 아직 좋아요를 안누른경우 -> 추가
+            user.like_posts.add(post)
+            liked = True
+        context = {
+            'msg': '좋아요 기능이 동작했습니다',
+            'liked': liked,
+        }
+    8.
+    ```
 
-32)
+35. User 에 image 컬럼 추가해주기
+
+    ```python
+    
+    ```
+
+36. User 에 image 컬럼 추가해주기
+
+    ```python
+    
+    ```
+
+37. 

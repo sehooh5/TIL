@@ -1,7 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>profile {{user_profile.username}}</h1>
-    <a href="">follower</a>
-    <a href="">follow</a>
+    <!-- me = user // you = user_profile -->
+    <!-- jumbotron start -->
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                <img class="col-12" src="{{user_profile.image.url}}" alt="">
+                </div>
+            </div>
+            <div class="col-8">
+                <h5>{{user_profile.username}}</h5>
+                <p>follow {{user_profile.follow.count}} follower {{user_profile.follower.count}}</p>
+                {% if user != user_profile %}
+                    {% if user_profile in user.follow.all %}
+                        <!-- 보고있는 페이지의 user 를 팔로우하기에 그 id 가 필요 -->
+                        <a class="btn btn-primary" href="{% url 'accounts:follow' user_profile.id %}">unfollow</a>
+                    {% else %}
+                        <a class="btn btn-primary" href="{% url 'accounts:follow' user_profile.id %}">follow</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>    
+    <hr>
+        <div class="row row-cols-3">
+            {% for post in user_profile.post_set.all %}
+            <div class="col">
+                <div class="card">
+                    <img src="{{post.image.url}}" alt="">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
 {% endblock  %}
