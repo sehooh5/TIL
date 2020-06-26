@@ -1,8 +1,7 @@
 <div class="card col-6 m-3" style="width: 18rem;">
 <!--post.image(column 명).url = /media/파일경로 가 나옴 -->
   <h5 class="card-header">
-    <img src="https://lh3.googleusercontent.com/proxy/1k4GKg9JmioAHSgOuRZ64CHT3jcS5iixQnZvJTGExli9CygbrqPaYH5DevH5fa3SqlNd-JWiHrg7FQCjKVkqpvWhblo6cX4qOCHfOdr7erk9dVrBK_uCgkF1c5JHOGljVeUZ1n9M4ZWCdtU07AGi36UvCn51GVoXPWijZlumjgB61ZgL0ei_m7OAQLJmdKWIX-Ozy8-mngo8pPsc-R9jSHK98yM6mUxTBkj7jlWz5T9yuYsUX198JrsCuKUrzrbBoi71rZ84dfLBGz7GP-LIJj0RgWOA80DWb_vgI-BR-PV5RRnBEAvaNDWApXEdf5JdutZt4ZT1iRvzqN-C-2WsbJlctaxc4Jy0ZZCdFf2-zMDB9DdJOB-1SQtDO2DlcFEaFs5_HPA_rQSKV4IyQd51GC_WB0WykOM" width="50px" height="50px" class="rounded-circle">
-    {{ post.user.username }}
+    <a href="{% url 'accounts:profile' post.user.username %}">{{ post.user.username }}</a>
   </h5>
   <img src="{{ post.image.url }}" class="card-img-top" >
   <div class="card-body">

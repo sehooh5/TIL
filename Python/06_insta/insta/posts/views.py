@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     posts = Post.objects.all()
     context = {
-        'posts': posts
+        'posts': posts,
     }
     return render(request, 'posts/index.html', context)
 
@@ -31,7 +31,7 @@ def create(request):
     else:
         form = PostForm()
     context = {
-        'form': form
+        'form': form,
     }
     return render(request, 'posts/form.html', context)
 

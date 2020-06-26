@@ -1,12 +1,8 @@
 # File upload (N-N)
 
-
-
 - N:M 관계설정 (좋아요)
 - 사진 업로드
 - 좋아요
-
-
 
 ## [Insta 만들기]
 
@@ -14,14 +10,14 @@
 
 2. migrate
 
-3. runserver ,  /posts 확인
+3. runserver , /posts 확인
 
 4. `models.py` - Posts
 
    ```python
    from django.db import models
    from django.conf import settings
-   
+
    # Create your models here.
    class Post(models.Model):
        content = models.CharField(max_length=200)
@@ -30,38 +26,32 @@
        created_at = models.DateTimeField(auto_now_add=True)
    ```
 
-   
-
-- 작성하고 저장하면 에러 뜨는데, **pip install pillow**  라이브러리 설치
-
+- 작성하고 저장하면 에러 뜨는데, **pip install pillow** 라이브러리 설치
 
 5. makemigrations , migrate
 
-6. <nav.html> - insta 에 글쓰기 링크 추가하기 
+6. `nav.html` - insta 에 글쓰기 링크 추가하기
 
    ```html
    <nav class="nav d-flex justify-content-center my-4">
      {% if user.is_authenticated %}
-   <a class="nav-link" href="{% url 'posts:create' %}">글쓰기</a>
-   <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
+     <a class="nav-link" href="{% url 'posts:create' %}">글쓰기</a>
+     <a class="nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
+   </nav>
    ```
 
-   
-
-7. <urls.py> - post에 글쓰기 path 설정
+7) `urls.py` - post에 글쓰기 path 설정
 
    ```python
     path('create/', views.create, name='create'),
    ```
 
-   
-
-8. <forms.py>-post에  form 작성
+8. `forms.py` -post에 form 작성
 
    ```python
    from django import forms
    from .models import Post
-   
+
    class PostForm(forms.ModelForm):
        class Meta:
            model = Post
@@ -69,9 +59,7 @@
            exclude = ('user',)
    ```
 
-   
-
-9. <views.py> - post 글쓰기  함수 작성
+9) <views.py> - post 글쓰기 함수 작성
 
    ```python
    def create(request):
@@ -85,33 +73,26 @@
        return render(request, 'posts/form.html', context)
    ```
 
-   
-
-10. <form.html> - post  출력되는 부분 작성
+10. <form.html> - post 출력되는 부분 작성
 
     ```html
-    {% extends 'base.html' %}
-    {% load bootstrap4 %}
-    {% block content %}
-        <form action="" method="POST" >
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            <!--부트스트랩 사용해서 form 출력-->
-            <button class ='btn btn-primary'>저장</button>
-        </form>
-    {% endblock  %}
+    {% extends 'base.html' %} {% load bootstrap4 %} {% block content %}
+    <form action="" method="POST">
+      {% csrf_token %} {% bootstrap_form form %}
+      <!--부트스트랩 사용해서 form 출력-->
+      <button class="btn btn-primary">저장</button>
+    </form>
+    {% endblock %}
     ```
 
-    
-
-11. <views.py>-post 에 POST 요청 부분에  raise 구문 추가
+11) <views.py>-post 에 POST 요청 부분에 raise 구문 추가
 
     raise? 오류 뜨는거 확인할라고 추가하심
-
+    
     ```python
     def create(request):
         if request.method == 'POST':
-            raise 
+            raise
             #일부러 오류뜨는거 확인할라고 작성하신것
             pass
         else:
@@ -121,32 +102,27 @@
         }
         return render(request, 'posts/form.html', context)
     ```
-
-    - raise 구문 작성후,  글쓰고  파일 업로드 해보고 오류를 확인하면 ,
-
+    
+    - raise 구문 작성후, 글쓰고 파일 업로드 해보고 오류를 확인하면 ,
+    
       FILES 부문에 No Files data 뜸
-
+    
       ![캡처](https://user-images.githubusercontent.com/63486972/85642189-bd5fa600-b6cb-11ea-8ae3-341079bb9f37.PNG)
 
-12. <form.html> - post 에 enctype="multipart/form-data" 추가 후 글 작성후, 에러 확인하면
+12) <form.html> - post 에 enctype="multipart/form-data" 추가 후 글 작성후, 에러 확인하면
 
     파일 data 전송된거 확인할 수 있음
-
-    ```html
-    {% extends 'base.html' %}
-    {% load bootstrap4 %}
-    {% block content %}
-        <form action="" method="POST" enctype="multipart/form-data">
-        <!--enctype="multipart/form-data" : 파일 data 전송-->
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            <!--부트스트랩 사용해서 form 출력-->
-            <button class ='btn btn-primary'>저장</button>
-        </form>
-    {% endblock  %}
-    ```
-
     
+    ```html
+    {% extends 'base.html' %} {% load bootstrap4 %} {% block content %}
+    <form action="" method="POST" enctype="multipart/form-data">
+      <!--enctype="multipart/form-data" : 파일 data 전송-->
+      {% csrf_token %} {% bootstrap_form form %}
+      <!--부트스트랩 사용해서 form 출력-->
+      <button class="btn btn-primary">저장</button>
+    </form>
+    {% endblock %}
+    ```
 
 13. Media 저장용 `settings.py` 내용 추가
 
@@ -157,9 +133,7 @@
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     ```
 
-    
-
-14. `views.py` 에 deco 추가 및 create 수정
+14) `views.py` 에 deco 추가 및 create 수정
 
     ```python
     from django.contrib.auth.decorators import login_required
@@ -186,12 +160,12 @@
         return render(request, 'posts/form.html', context)
     ```
 
-15. media 에 대한 경로 설정 : `/insta/urls.py`
+15) media 에 대한 경로 설정 : `/insta/urls.py`
 
-    - 기본적으로  `http://127.0.0.1:8000/media/KakaoTalk.png` 이렇게 뜸
+    - 기본적으로 `http://127.0.0.1:8000/media/KakaoTalk.png` 이렇게 뜸
     - ~/media/ 구조이면 실행을 요청하게 경로를 설정해줘야 한다
     - 이제 admin 페이지에서 파일을 누르면 브라우저에서 확인이 가능하다
-
+    
     ```python
     from django.conf.urls.static import static
     from django.conf import settings
@@ -199,8 +173,6 @@
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     
     ```
-
-    
 
 16. card 형식의 html 만들어서 include 해줌 : card.html
 
@@ -215,9 +187,7 @@
     </div>
     ```
 
-
-
-17. views.py 에 index를 Post 모델 가져올 수 있게 변경
+17) views.py 에 index를 Post 모델 가져올 수 있게 변경
 
     ```python
     def index(request):
@@ -228,7 +198,7 @@
         return render(request, 'posts/index.html', context)
     ```
 
-18. index.html 수정 : for 문
+18) index.html 수정 : for 문
 
     ```python
     {% extends 'base.html' %}
@@ -239,7 +209,7 @@
     {% endblock %}
     ```
 
-19. card.html 수정 : post 내용 및 이미지 경로
+19) card.html 수정 : post 내용 및 이미지 경로
 
     ```python
     <div class="card" style="width: 18rem;">
@@ -253,49 +223,64 @@
     </div>
     ```
 
-20. bootstrap **Grid** 적용
+20) bootstrap **Grid** 적용
 
     - row 설정을 보여주는 페이지에서 설정 한 후
     - col 설정을 칸을 차지할 내용에 설정해줌
-
+    
     ```python
     # index.html - row 설정
-    <div class="row"> 
+    <div class="row">
     
     # card.html - col 설정
-    <div class="card col-6 m-3" style="width: 18rem;"> 
+    <div class="card col-6 m-3" style="width: 18rem;">
     ```
 
-21. 인스타그램처럼 꾸미기
+21) 인스타그램처럼 꾸미기
 
     - font awesome 사이트에서 `base.html` 에 추가해주기(icon 사용)
-
+    
       ```html
-      <script src="https://kit.fontawesome.com/a43482d4c5.js" crossorigin="anonymous"></script>
+      <script
+        src="https://kit.fontawesome.com/a43482d4c5.js"
+        crossorigin="anonymous"
+      ></script>
       ```
-
+    
     - card.html
-
+    
     ```html
     <div class="card col-6 m-3" style="width: 18rem;">
-    <!--post.image(column 명).url = /media/파일경로 가 나옴 -->
+      <!--post.image(column 명).url = /media/파일경로 가 나옴 -->
       <h5 class="card-header">
-        <img src="https://lh3.googleusercontent.com/proxy/1k4GKg9JmioAHSgOuRZ64CHT3jcS5iixQnZvJTGExli9CygbrqPaYH5DevH5fa3SqlNd-JWiHrg7FQCjKVkqpvWhblo6cX4qOCHfOdr7erk9dVrBK_uCgkF1c5JHOGljVeUZ1n9M4ZWCdtU07AGi36UvCn51GVoXPWijZlumjgB61ZgL0ei_m7OAQLJmdKWIX-Ozy8-mngo8pPsc-R9jSHK98yM6mUxTBkj7jlWz5T9yuYsUX198JrsCuKUrzrbBoi71rZ84dfLBGz7GP-LIJj0RgWOA80DWb_vgI-BR-PV5RRnBEAvaNDWApXEdf5JdutZt4ZT1iRvzqN-C-2WsbJlctaxc4Jy0ZZCdFf2-zMDB9DdJOB-1SQtDO2DlcFEaFs5_HPA_rQSKV4IyQd51GC_WB0WykOM" width="50px" height="50px" class="rounded-circle">
+        <img
+          src="https://lh3.googleusercontent.com/proxy/1k4GKg9JmioAHSgOuRZ64CHT3jcS5iixQnZvJTGExli9CygbrqPaYH5DevH5fa3SqlNd-JWiHrg7FQCjKVkqpvWhblo6cX4qOCHfOdr7erk9dVrBK_uCgkF1c5JHOGljVeUZ1n9M4ZWCdtU07AGi36UvCn51GVoXPWijZlumjgB61ZgL0ei_m7OAQLJmdKWIX-Ozy8-mngo8pPsc-R9jSHK98yM6mUxTBkj7jlWz5T9yuYsUX198JrsCuKUrzrbBoi71rZ84dfLBGz7GP-LIJj0RgWOA80DWb_vgI-BR-PV5RRnBEAvaNDWApXEdf5JdutZt4ZT1iRvzqN-C-2WsbJlctaxc4Jy0ZZCdFf2-zMDB9DdJOB-1SQtDO2DlcFEaFs5_HPA_rQSKV4IyQd51GC_WB0WykOM"
+          width="50px"
+          height="50px"
+          class="rounded-circle"
+        />
         {{ post.user.username }}
       </h5>
-      <img src="{{ post.image.url }}" class="card-img-top" width="300px" height="300px">
+      <img
+        src="{{ post.image.url }}"
+        class="card-img-top"
+        width="300px"
+        height="300px"
+      />
       <div class="card-body">
-        {% comment %} <h5 class="card-title">Card title</h5> {% endcomment %}
+        {% comment %}
+        <h5 class="card-title">Card title</h5>
+        {% endcomment %}
         <p class="card-text">{{ post.content }}</p>
         <p class="card-text">{{ post.created_at }}</p>
       </div>
     </div>
     ```
 
-22. **image resizing** : django image kit
+22) **image resizing** : django image kit
 
     - 현업에서는 각 화면별로 이미지를 리사이징해서 분류해놓고 사용한다
-
+    
     ```python
     1. download
     pip intall django-imagekit
@@ -313,12 +298,12 @@
                                     options={'quality': 80})
     ```
 
-23. **좋아요 기능** : 버튼을 누르면 링크를 통해 <mark>**N:M 관계**</mark> 설정
+23) **좋아요 기능** : 버튼을 누르면 링크를 통해 <mark>**N:M 관계**</mark> 설정
 
-    - *N:M= (1:N) + (M:1)*
+    - _N:M= (1:N) + (M:1)_
     - 실제 django 는 새로운 테이블을 만들어서 처리한다(중계 모델)
       - 컬럼명 : user_id, post_id
-
+    
     ```python
     1. models.py 수정 : 좋아요를 저장한 사람에 대한 칼럼 추가
     2. 여기서 두 user 의 post_set 의 이름이 겹쳐서 이름을 변경해준다
@@ -335,8 +320,8 @@
     # 두 개 이름이 같아서 충돌이 난다
     # < 충돌 변경해주는 방법 >
     # 두 개의 이름을 변경해준다
-    
-    
+
+
     class Post(models.Model):
         content = models.CharField(max_length=200)
         #image = models.ImageField()
@@ -359,13 +344,13 @@
     
     ```
 
-24. 좋아요 버튼을 누르고 링크를 적용 시켜줌 : card.html 
+24) 좋아요 버튼을 누르고 링크를 적용 시켜줌 : card.html
 
     ```python
     <a href="{% url 'posts:like' post.id %}"><i class="far fa-heart"></i></a>
     ```
 
-25. 좋아요 함수 like 로직 만들기 : views.py
+25) 좋아요 함수 like 로직 만들기 : views.py
 
     ```python
     def like(request, post_pk):
@@ -385,7 +370,7 @@
         return redirect('posts:index')
     ```
 
-26. 좋아요 아이콘 눌림과 안눌림 구분하여 변경 : card.html
+26) 좋아요 아이콘 눌림과 안눌림 구분하여 변경 : card.html
 
     ```python
     {% if post in user.like_posts.all %}
@@ -395,34 +380,101 @@
         {% endif %}
     ```
 
-27. Follow기능 추가
+### [팔로우,팔로잉 만들기] : user(N) - user(M)
 
-    ```python
+1. <card.html>- posts   
+
+   - user 아이디와 프로필 사진 뜨는 부분을 클릭했을때 그 유저 프로필 페이지 보여줄 수 있도록 ,   a 태그로 감싸기 
+
+   - 누구의 프로필인지도 알려줘야 함 `post.user.username`
+
+     ```
+     <a href="{% url 'accounts:profile' post.user.username %}">{{ post.user.username }}</a>
+     ```
+
+     
+
+2. <urls.py>-accounts 에 프로필 페이지 보여주는 path 작성
+
+   - Restful : url에서 동사 형태 가지는 애들(Create, Read, Delete, Update) 을 넣지 말고, 따로 빼서 그 저장된 공간에서 동사를 의미하는 데이터를 넣어 주고 
+
+     url 에는 명사와 숫자 형태의 조합로만 구성하는 것 .
+
+     즉, 자원을 이름(자원의 표현)으로 구분하여 해당 자원의 상태(정보)를 주고 받는 모든 것을 의미한다.  ex) movies 라는 자원의 표현을 통해 해당 소프트 웨어가 영화에 대한 자원을 관리할 것임을 url 에 명시 시켜준다.
+
+   ![img](https://gmlwjd9405.github.io/images/network/rest.png)
+
+   1. 주문 => Create
+   2. 제조 , 준다 => Read
+   3. 반납 =>Delete
+   4. 리필 =>Update
+
+   
+
+   ```
+      path('<str:username>/', views.profile, name='profile'),
+   ```
+
+   
+
+- django url dispatcher 구글링
+
+  path converters  부분 :  url에 어떤 정보 넣을 수 있는지 확인하기
+
+### Path converters[¶](https://docs.djangoproject.com/en/3.0/topics/http/urls/#path-converters)
+
+The following path converters are available by default:
+
+- `str` - Matches any non-empty string, excluding the path separator, `'/'`. This is the default if a converter isn’t included in the expression.
+- `int` - Matches zero or any positive integer. Returns an `int`.
+- `slug` - Matches any slug string consisting of ASCII letters or numbers, plus the hyphen and underscore characters. For example, `building-your-1st-django-site`.
+- `uuid` - Matches a formatted UUID. To prevent multiple URLs from mapping to the same page, dashes must be included and letters must be lowercase. For example, `075194d3-6885-417e-a8a8-6c931e272f00`. Returns a [`UUID`](https://docs.python.org/3/library/uuid.html#uuid.UUID) instance.
+- `path` - Matches any non-empty string, including the path separator, `'/'`. This allows you to match against a complete URL path rather than a segment of a URL path as with `str`.
+
+3. <views.py>-accounts에  profile 함수 작성
+   - get_ user_ model :  내가 어떤 model을 가져올지 알려줌 ( 여기서는 accounts 앱의 User 모델 클래스)
+
+27) profile 기능 추가
+
+- get_user_model() 함수 사용 : AUTH_USER_MODEL 에 적용시킨 모델 클래스
+
+```python
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import get_user_model
+
+
+def profile(request, username):
+    # User = get_user_model()
+    # user_profile = User.objects.filter(username=username)
+
+    user_profile = get_object_or_404(get_user_model(), username=username)
+    context = {
+        'user_profile': user_profile,
+    }
+    return render(request, 'accounts/profile.html', context)
+```
+
+28) follow 의 개념
+
+- follow 컬럼을 M2M 로 새로 생성하면 `user_set`이 만들어지게 된다
+- `user_set` 을 좀더 직관적으로 표현하고자 한다 : `follower`
+
+```python
+# accounts - models.py
+
+```
+
+29) views.py 에 index를 Post 모델 가져올 수 있게 변경
+
     
-    ```
 
-28. views.py 에 index를 Post 모델 가져올 수 있게 변경
+30) views.py 에 index를 Post 모델 가져올 수 있게 변경
 
-    ```python
     
-    ```
 
-29. views.py 에 index를 Post 모델 가져올 수 있게 변경
+31) views.py 에 index를 Post 모델 가져올 수 있게 변경
 
-    ```python
     
-    ```
 
-30. views.py 에 index를 Post 모델 가져올 수 있게 변경
-
-    ```python
-    
-    ```
-
-31. views.py 에 index를 Post 모델 가져올 수 있게 변경
-
-    ```python
-    
-    ```
-
-32. 
+32)

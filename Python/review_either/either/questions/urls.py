@@ -6,5 +6,5 @@ app_name = 'questions'
 urlpatterns = [
     path('', views.index, name='index'),
     path('form/', views.form, name='form'),
-    path('detail/', views.detail, name='detail'),
+    path('<int:question_pk>/detail/', views.detail, name='detail'),
 ]

@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import CustomUserCreationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import get_user_model
 
 
 # Create your views here.
@@ -46,3 +47,14 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('accounts:login')
+
+
+def profile(request, username):
+    # User = get_user_model()
+    # user_profile = User.objects.filter(username=username)
+
+    user_profile = get_object_or_404(get_user_model(), username=username)
+    context = {
+        'user_profile': user_profile,
+    }
+    return render(request, 'accounts/profile.html', context)

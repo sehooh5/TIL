@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'nav.html' %}
+    <h1>{{ question.title }}</h1><hr>
+    <h5>a. {{ question.answer_a }}</h5>
+    <h5>b. {{ question.answer_b }}</h5>
+    <hr>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ answer_form.as_p }}
+        <button class="btn btn-primary">제출</button>
+    </form>
+    <hr>
+    {% for answer in question.answer_set.all %}
+        {{ answer.choice }}
+    {% endfor %}
+{% endblock  %}
