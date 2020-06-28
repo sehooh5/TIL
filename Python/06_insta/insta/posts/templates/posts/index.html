@@ -27,8 +27,8 @@
           if (liked){ 
             // 좋아요를 누른경우
             event.target.style.color = 'Red'
-            event.target.classList.remove('far')
-            event.target.classList.add('fas')
+            event.target.classList.remove('far')// 빈 하트 지우고
+            event.target.classList.add('fas')// 가득 찬 하트 더하고
           }else{
             // 좋아요를 취소한 경우
             event.target.style.color = 'Black'

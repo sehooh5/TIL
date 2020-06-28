@@ -651,16 +651,4 @@ def follow(request, user_pk):
     8.
     ```
 
-35. User 에 image 컬럼 추가해주기
-
-    ```python
-    
-    ```
-
-36. User 에 image 컬럼 추가해주기
-
-    ```python
-    
-    ```
-
-37. 
+35. 앞으로 할 것들 정리하기
