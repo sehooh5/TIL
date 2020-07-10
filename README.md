@@ -24,27 +24,35 @@
 
 ### Git
 
-
+- [git 을 처음 배울 때 사용한 특강 폴더](https://github.com/sehooh5/TIL/tree/master/Git)
 
 ### Language
 
-
-
-### Portfolio
-
-
+- [Java - Java 학습 폴더](https://github.com/sehooh5/TIL/tree/master/Language/Java)
+- [JavaWeb - Spring MVC](https://github.com/sehooh5/TIL/tree/master/Language/JavaWeb)
+- [Python - basic, django](https://github.com/sehooh5/TIL/tree/master/Language/Python)
+- [R](https://github.com/sehooh5/TIL/tree/master/Language/R)
+- [SQL](https://github.com/sehooh5/TIL/tree/master/Language/SQL)
+- [D3](https://github.com/sehooh5/TIL/tree/master/Language/D3)
+- [Hadoop](https://github.com/sehooh5/TIL/tree/master/Language/Hadoop)
+- [Linux](https://github.com/sehooh5/TIL/tree/master/Language/Linux)
+- [Spark](https://github.com/sehooh5/TIL/tree/master/Language/Spark)
 
 ### Project
 
-
+- Board_1 : 게시판 실습
+- MiniProject : 김세정의 골목상권 - 골목상권 정보제공 및 분석 프로젝트(지도사용)
+- MainProject : 편의점 마스터, 김편복 - 편의점 행사상품 정보 및 인스타그램 분석
+- Ideathon : PythonProject 를 위한 아이디어 경진 대회
+- PythonProject :  i.hub - 공공 데이터 API 제공 상태 및 백업 파일 제공
 
 ### Seminar
 
-
+- []()
 
 ### etc
 
-
+- []()
 
 
 
