@@ -39,9 +39,9 @@
 
 ### 
 
-### [Board_1](https://github.com/sehooh5/TIL/tree/master/Project/Board_1)
+### [Board_1](https://github.com/sehooh5/TIL/tree/master/Project/board_1)
 
-- Java Sprint MVC 를 처음으로 활용하여 기본 게시판을 구현한 프로젝트
+- Java Sprint MVC 를 처음으로 활용하여 게시판을 구현한 프로젝트
 
 
 
