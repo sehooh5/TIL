@@ -18,7 +18,7 @@
 
 ## 2. 사용 기술 
 
-**Python, Django, HTML, JS, AJAX, BootStrap**
+`
 
 
 
