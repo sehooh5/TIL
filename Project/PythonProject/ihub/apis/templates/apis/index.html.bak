@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block link %}
+  <link rel="stylesheet" href="{% static 'vendors/iconfonts/mdi/css/materialdesignicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+{% endblock  %}
+
+
+{% block content %}
+  {% include 'nav.html' %}
+
+    <div class="container-fluid page-body-wrapper">
+      <!-- Main Panel Start -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <!-- All Status Box -->
+          <div class="row" style="paddig-right:50px">
+            <div class="col-md-4 stretch-card grid-margin">
+              <div class="card bg-gradient-primary card-img-holder text-white" style='height:150px;'>
+                <div class="card-body">
+                  <img src="{% static 'images/circle.svg' %}" class="card-img-absolute" alt="circle-image"/>
+                  <h4 class="font-weight-normal mb-3">API 
+                    <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                    <br> All
+                  </h4>
+                  <h2 class="mb-5" id="total_apis"></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin">
+              <div class="card bg-gradient-success card-img-holder text-white" style='height:150px;'>
+                <div class="card-body">
+                  <img src="{% static 'images/circle.svg' %}" class="card-img-absolute" alt="circle-image"/>                  
+                  <h4 class="font-weight-normal mb-3">API 
+                    <i class="mdi mdi-emoticon mdi-24px float-right"></i>
+                    <br> Good Status
+                  </h4>
+                  <h2 class="mb-5" id="good_apis"></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin">
+              <div class="card bg-gradient-danger card-img-holder text-white" style='height:150px;'>
+                <div class="card-body">
+                  <img src="{% static 'images/circle.svg' %}" class="card-img-absolute" alt="circle-image"/>                                    
+                  <h4 class="font-weight-normal mb-3">API
+                    <i class="mdi mdi-emoticon-sad mdi-24px float-right"></i>
+                    <br> Bad Status
+                  </h4>
+                  <h2 class="mb-5" id="bad_apis"></h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Status Table -->
+          <div class="col-12 grid-margin">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Recent Status</h4>
+                <div class="row d-flex justify-content-end" style="margin-right: 20px; margin-bottom: 30px;">
+                  <div class="search-field">
+                    <div class="input-group">
+                      <form autocomplete="off">
+                        <input id="myInput" type="text" class="border-primary form-control bg-transparent autocomplete" style="width:300px; height:46px;" placeholder="API명을 입력하세요">
+                      </form>
+                        <div class="input-group-prepend bg-transparent">
+                          <a id="userSearch" href=""><i class="input-group-text bg-primary border-0 mdi mdi-magnify" style="color:#fff"></i></a>               
+                        </div>
+                    </div>
+                  </div>
+                  
+                  {% comment %} <div class="select-bar col-3">
+                    <form action="" method="GET">
+                      <select class="form-control bg-transparent" style="height:45px; font-family: 'Noto Sans KR', sans-serif;" name="순서">
+                        <option value="">Select</option>
+                        <option value="이름순">이름순</option>
+                        <option value="최신순">최신순</option>
+                        <option value="다운로드순">다운로드순</option>
+                      </select>
+                    </form>
+                  </div> {% endcomment %}
+                </div>
+                <div class="table-responsive d-flex justify-content-center">
+                  <table class="table" style="text-align:center; width:95%;">
+                    <thead>
+                      <tr>
+                        <th>
+                          API Name
+                        </th>
+                        <th>
+                          Condition
+                        </th>
+                        <th>
+                          Last Update
+                        </th>
+                        <th>
+                          Download
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for api in apis %}
+                        <tr>
+                          <td class="text-left">
+                            <a href="" class="text-decoration-none" data-toggle="modal" data-target="#modal-detail" id="detail" data-id="{{ api.pk }}">{{ api.api_name }}</a>
+                          </td>
+                          <td>
+                            <label><span id="api{{ api.pk }}"></span></label>
+                          </td>
+                          <td>
+                            {{ api.latest_modified_date }}
+                          </td>
+                          <td>
+                            <a href="{% url 'apis:download' api.pk %}" download>
+                              <i class="mdi mdi-arrow-down-bold-circle-outline text-primary" style="font-size:25px"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+                 {% if apis.has_other_pages %}
+
+                    <ul class="pagination">
+
+                      {% if apis.has_previous %}
+
+                        <li><a class="page-link text-body" aria-label="Previous" href="?page={{ apis.previous_page_number }}">&laquo;</a></li>
+                      
+                      {% else %}
+
+                        <li class="disabled page-link"><span>&laquo;</span></li>
+
+                      {% endif %}
+                      {% for i in apis.paginator.page_range %}
+                        {% if apis.number == i %}
+
+                          <li class="active page-link"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+
+                        <!--현재 페이지를 기준으로 양 옆으로 네개 -->
+                        {% elif i > apis.number|add:'-4' and i < apis.number|add:'4' %}
+
+                          <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+
+                        {% endif %}
+                      {% endfor %}
+                      {% if apis.has_next %}
+
+                        <li class="page-item"><a class="page-link" aria-label="Next" href="?page={{ apis.next_page_number }}">&raquo;</a></li>
+                      
+                      {% else %}
+
+                        <li class="disabled page-link"><span>&raquo;</span></li>
+
+                      {% endif %}
+                    </ul>
+                  {% endif %}
+                </nav>
+              </div>
+            </div>
+          </div>
+        {% include 'apis/modal.html' %}
+        {% include 'apis/ranking.html' %}
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        {% include 'footer.html' %}
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+
+    <!-- ranking-->
+    <div id="ranking"></div>
+
+    <!-- ranking detail 연결(0703) -->
+    <script>
+      function test(api_name){
+        console.log(api_name)
+        axios.get(`/apis/search/${api_name}/`)
+              .then(res => {
+                  console.log(res.data.api_pk);
+                  let targetId = res.data.api_pk;
+                  axios.get(`/apis/${targetId}/detail/`)
+                  .then(res => {
+                      console.log(res.data)
+                      document.querySelector('.modal-body-div').innerHTML =''
+                      document.querySelector('#chartdiv').innerHTML =''
+                      document.querySelector('.modal-title').innerHTML = res.data.api_name
+                      document.querySelector('.modal-body-div').innerHTML = 
+                      '<div>최종수정일 : ' + res.data.latest_modified_date + '</div>' +
+                      '<div>저작권자명 : ' + res.data.copyright + '</div>' +
+                      '<div>라이센스 : ' + res.data.copyright_range + '</div>' +
+                      '<div>다운로드수 : ' + res.data.download_count + '</div>'
+                      
+                  })
+                })
+      }
+    </script>
+
+
+{% comment %} js 파일 {% endcomment %}
+{% include 'apis/status-js.html' %}
+
+{% endblock %}
+
+{% block script %}
+  <!-- plugins:js -->
+  <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+  <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+  <script src="{% static 'vendors/js/vendor.bundle.addons.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{% static 'js/ranking.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
+  <script src="{% static 'js/search.js' %}"></script>
+{% endblock  %}

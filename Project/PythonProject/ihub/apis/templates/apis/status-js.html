@@ -1,0 +1,65 @@
+<!-- All status box -->
+<script>
+  document.querySelector('#total_apis').innerHTML = {{ total_apis }}
+  document.querySelector('#good_apis').innerHTML = {{ good_apis }}
+  document.querySelector('#bad_apis').innerHTML = {{ bad_apis }}
+</script>
+
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!--
+
+update statuses_status set status='IHUB-ERROR' where id=24948;
+
+-->
+<!-- Search Status -->
+<script>
+  let api_pk = '';
+  {% for api in apis %}
+      document.querySelector('#api{{ api.pk }}').innerHTML = '';
+      // 방법 2. DB에서 status 가져오기
+      api_pk = {{ api.pk }};
+      axios.get(`/apis/${api_pk}/status/`)
+      .then(res => {
+        let status_code = res.data.latest_status
+
+        //데모용 데이터
+        if({{ api.pk }}==0){
+          status_code = 'ERROR-500'
+        }
+        if({{ api.pk }}==1){
+          status_code = 'IHUB-ERROR'
+        }
+        //if({{ api.pk }}==3){
+        //  status_code = 'ERROR-500'
+        //}
+
+        if(status_code == 'INFO-000'){
+          api_status = 'GOOD';
+          document.querySelector('#api{{ api.pk }}').setAttribute('class','badge badge-gradient-success')
+        } else if(status_code == 'INFO-100' ){
+            //api_status = 'KEY ERROR'
+            api_status = 'ERROR'           
+            document.querySelector('#api{{ api.pk }}').setAttribute('class','badge badge-gradient-danger')
+        } else if(status_code == 'ERROR-500' ){
+            api_status = 'ERROR'
+            //api_status = 'SERVER ERROR'
+            document.querySelector('#api{{ api.pk }}').setAttribute('class','badge badge-gradient-danger')
+        } else if(status_code == 'ERROR-600'){
+            api_status = 'ERROR'
+            //api_status = 'DB ERROR'
+            document.querySelector('#api{{ api.pk }}').setAttribute('class','badge badge-gradient-danger')
+        } else if(status_code == 'ERROR-601'){
+            api_status = 'ERROR'
+            //api_status = 'SQL ERROR'
+            document.querySelector('#api{{ api.pk }}').setAttribute('class','badge badge-gradient-danger')
+        } else {
+            api_status = 'WARNING'
+            document.querySelector('#api{{ api.pk }}').setAttribute('class','badge badge-gradient-warning')
+        }
+          document.querySelector('#api{{ api.pk }}').innerHTML = api_status;
+      })
+  {% endfor %}
+</script>

@@ -1,0 +1,30 @@
+{% load static %}
+
+<!-- The Modal -->
+<div class="modal fade" id="modal-detail" style="font-family: 'Noto Sans KR', sans-serif;">
+    <div class="modal-dialog modal-dialog-centered modal-lg"><!--modal-lg-->
+        <div class="modal-content" style="padding:50px;">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">API 명을 정확히 입력해주세요.</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="modal-body-div"></div>
+                <div id="chartdiv"></div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+
+            {% if user.is_authenticated %}
+                <a id="download" href="" download><button id="download" type="button" class="btn btn-primary" style="width:150px">Download</button></a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}"><button type="button" class="btn btn-primary" style="width:150px">Login</button></a>
+            {% endif %}    
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="width:150px">Close</button>
+            </div>
+        </div>
+    </div>
+</div>          

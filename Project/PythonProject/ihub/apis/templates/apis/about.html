@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block link %}
+  <link rel="stylesheet" href="{% static 'vendors/iconfonts/mdi/css/materialdesignicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+{% endblock  %}
+
+{% block content %}
+    {% include 'nav.html' %}
+    <div class="container-fluid page-body-wrapper">
+        <div class="main-panel">
+            <div class="content-wrapper" style="height:100%">
+                <div class="row d-flex justify-content-center">
+                    <div class="card" style="width:90%">
+                        <div class="card-body text-center">
+                            <h1 class="text-primary" style="margin-bottom:30px">About  &nbsp;  I . hub ?</h1>
+                            <hr style="margin-bottom:30px">
+                            <img src="{% static 'images/platform.png' %}" width='70%' style="margin-bottom:30px" alt="">
+                            <h4 class="text-center">저희 I. Hub는 공공 API를 적재해 API를 필요로 하는 사용자가 
+                                <br> 편리하게 사용할 수 있도록 제공하는 서비스 웹페이지입니다.</h4>
+                            <img src="{% static 'images/ranking.png' %}" width='70%' style="margin-top:30px; margin-bottom:30px;" alt="">
+                            <h4 class="text-center">현재 사용하는 API 중 조회수 / 다운로드수 별 랭킹을 제공합니다.</h4>
+                            <h4 class="text-center">또한 원하는 API 검색이 가능하며, 해당 데이터를 Json형식으로 적재시켜
+                                <br>사용자가 적재된 데이터를 활용할 수 있게끔 합니다. </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+{% endblock %}
+
+{% block script %}
+  <!-- plugins:js -->
+  <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+  <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+  <script src="{% static 'vendors/js/vendor.bundle.addons.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+{% endblock  %}
