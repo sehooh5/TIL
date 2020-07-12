@@ -15,7 +15,7 @@
 
 
 
-### [PythonProject](https://github.com/sehooh5/TIL/tree/master/Project/board_1)
+### [PythonProject](https://github.com/sehooh5/TIL/tree/master/Project/PythonProject)
 
 - Python Django 를 활용한 공공 데이터 API 정보 및 백업파일 제공하는 플랫폼
 
