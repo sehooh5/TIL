@@ -21,7 +21,7 @@
 
 ## 2. 사용 기술 
 
-**JAVA Spring MVC, JSP, Oracle DB, JS, AJAX, Bootstrap, R Selenium, Leaflet, d3.js **
+**JAVA Spring MVC, JSP, Oracle DB, JS, AJAX, Bootstrap, Leaflet, d3.js **
 
 
 
