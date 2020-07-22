@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resource.BoardMapper">
+<!-- 	0309 jung select mapper  --><select id="select" resultType="vo.BoardVO"> 
+		select board_id, title, content, to_char(writedate,'rrrr-mm-dd') writedate, 
+		cnt, writer from board </select>
+
+<!-- 0316  메퍼 테스트 -->
+<!-- 	<select id="select" resultType="vo.BoardVO">
+		select board_id, title, content, to_char(writedate,'rrrr-mm-dd') writedate,
+		cnt, writer, rnum
+		from(select board_id, title, content, writedate, cnt, writer, rownum rnum from
+		board)
+		where rnum between #{startList} and #{listSize}
+	</select> -->
+	
+	
+	<select id="BoardListCnt" resultType="_int">
+	select 
+	count(*) as listCnt
+	from board
+	</select>
+	
+	<!--0309 jung read mapper -->
+	<select id="read" resultType="vo.BoardVO">
+		select board_id, title, content, to_char(writedate,'rrrr-mm-dd') writedate,
+		cnt, writer from board where board_id = #{board_id}
+	</select>
+	<!--0309 jung cntup mapper -->
+	<update id="Cntup" parameterType="vo.BoardVO">
+		update board set
+		cnt = cnt + 1
+		where board_id = #{board_id}
+	</update>
+	<!--0309 jung selectwriter mapper -->
+	<select id="selectWriter" parameterType="string"
+		resultType="vo.BoardVO">
+		select board_id, title, content, to_char(writedate,'rrrr-mm-dd') writedate,
+		cnt, writer from board where writer = #{writer}
+	</select>
+	<!--0309 jung insert mapper -->
+	<insert id="insert" parameterType="vo.BoardVO">
+		<selectKey resultType="int" keyProperty="board_id"
+			order="BEFORE">
+			select board_seq.nextval from dual
+		</selectKey>
+		insert into board (board_id , title , content, writedate, cnt, writer)
+		values(#{board_id}, #{title} , #{content}
+		,to_date(sysdate,'rrrr-mm-dd'), 0, #{writer} )
+	</insert>
+	<!--0309 jung search mapper -->
+	<select id="search" parameterType="java.util.HashMap"
+		resultType="vo.BoardVO">
+		select board_id, title, content, to_char(writedate,'rrrr-mm-dd') writedate,
+		cnt, writer
+		from board where ${searchType} like '%'||#{keyword}||'%'
+	</select>
+	<!--0309 jung delete mapper -->
+	<delete id="delete" parameterType="_int">
+		delete from board where board_id = #{board_id}
+	</delete>
+	<!--0309 jung update mapper -->
+	<update id="update" parameterType="vo.BoardVO">
+		update board set title =
+		#{title}, content= #{content}, writer = #{writer}
+		where board_id = #{board_id}
+	</update>
+</mapper>

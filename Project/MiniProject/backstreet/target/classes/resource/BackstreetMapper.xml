@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="resource.BackstreetMapper">
+<!-- change -->
+    <select id="changeConsulting1"  resultType="vo.changeVO">
+       select change_coname from change where area_id= #{area_id} and q_id=2
+    </select><!-- 다이나믹 -->
+    
+     <select id="changeConsulting2"  resultType="vo.changeVO">
+       select oper_month from change where area_id= #{area_id} and q_id=2
+    </select><!-- 영업개월  -->
+    
+     <select id="changeConsulting3"  resultType="vo.changeVO">
+       select close_month from change where area_id= #{area_id} and q_id=2
+    </select><!-- 폐업 개월 -->
+<!-- change 끝-->
+ 
+<!-- area -->
+    <select id="areaConsulting1"  resultType="vo.areaVO">
+       select area_coname from area where area_id= #{area_id}
+    </select><!-- 지역명  -->
+ 
+     <select id="areaConsulting2"  resultType="vo.changeVO">
+       select change_id from change where area_id= #{area_id} and q_id=2
+    </select><!-- 4가지 상권 구분 1~4 -->
+<!-- area 끝-->
+  
+<!-- service -->
+     <select id="serviceConsulting1"  resultType="vo.serviceVO">
+       select serv_coname from service where serv_id= #{serv_id}
+    </select>
+<!-- service 끝-->
+    
+<!-- job -->
+   <select id="jobConsulting1" resultType="vo.jobVO">
+      select all_job_num from job where area_id= #{area_id} and q_id=2
+   </select>
+<!-- job 끝 -->
+
+<!-- living population -->
+   <select id="livingPopulationConsulting1" resultType="vo.livingPopulationVO">
+      select all_living_num from living_population where area_id = #{area_id} and q_id=2
+   </select><!-- 상권의 총 상주인구 수 -->
+<!-- living population 끝-->
+
+<!-- apartment -->
+    <select id="apartmentConsulting1" resultType="vo.apartmentVO">
+       select apart_num from apartment where area_id = #{area_id} and q_id=2
+    </select><!-- 상권의 아파트 단지수 -->
+<!-- apartment 끝 -->
+
+<!-- store -->
+   <select id="storeConsulting1" resultType="vo.storeVO">
+      select store_num from store where q_id = 2 and serv_id = #{serv_id} and area_id = #{area_id}
+   </select> <!-- 상권의 점포수 -->
+   
+   <select id="storeConsulting2" resultType="vo.storeVO">
+      select sim_store_num from store where q_id = 2 and serv_id = #{serv_id} and area_id = #{area_id}
+   </select> <!-- 유사한 업종의 점포수 -->
+   
+   <select id="storeConsulting3" resultType="vo.storeVO">
+      select start_rate from store where q_id = 2 and serv_id = #{serv_id} and area_id = #{area_id}
+   </select> <!-- 개업률 -->
+   
+   <select id="storeConsulting4" resultType="vo.storeVO">
+      select start_store_num from store where q_id = 2 and serv_id = #{serv_id} and area_id = #{area_id}
+   </select> <!-- 개업 점포 수 -->
+   
+   <select id="storeConsulting5" resultType="vo.storeVO">
+      select close_rate from store where q_id = 2 and serv_id = #{serv_id} and area_id = #{area_id}
+   </select> <!-- 폐업률 -->
+   
+   <select id="storeConsulting6" resultType="vo.storeVO">
+      select close_store_num from store where q_id = 2 and serv_id = #{serv_id} and area_id = #{area_id}
+   </select> <!-- 폐업 점포 수 -->
+<!-- store 끝 -->
+
+<!--View -->
+    <select id="changeViewConsulting1" resultType="_float">
+       select oper_month_avg from change_view
+    </select> <!-- 영업개월 평균 -->
+    
+     <select id="changeViewConsulting2" resultType="_float">
+       select close_month_avg from change_view
+    </select> <!-- 폐업개월 평균 -->
+    
+    <select id="jobViewConsulting1" resultType="_int">
+       select all_job_num_avg from job_view
+    </select><!-- 골목상권의 평균 총 직장인구 수 -->
+    
+     <select id="livingPopulationViewConsulting1" resultType="_int">
+       select all_living_num_avg from living_population_view
+    </select><!-- 총인구수 평균 -->
+    
+    <select id="apartmentViewConsulting1" resultType="_int">
+       select apart_num_avg from apartment_view
+    </select><!-- 골목상권의 평균 총 아파트 단지 수 -->
+    
+    
+    <select id="storeViewConsulting1" resultType="_int">
+       select start_rate_avg from store_view
+    </select>
+    
+     <select id="storeViewConsulting2" resultType="_float">
+       select start_store_num_avg from store_view
+    </select>
+    
+     <select id="storeViewConsulting3" resultType="_int">
+       select close_rate_avg from store_view
+    </select>
+    
+     <select id="storeViewConsulting4" resultType="_float">
+       select close_store_num_avg from store_view
+    </select>
+    
+ 
+<!-- View 끝 -->
+    
+
+ 	
+<!-- 상권분석 내용 -->
+ 	<select id="sales_1Area1"  resultType="vo.salesVO">
+ 		select month_sal_money, month_sal_num, wday_sal_money, wkend_sal_money,m_sal_money, w_sal_money from sales_1 where area_id= #{area_id} and serv_id=#{serv_id} and q_id=2
+ 	</select>
+ 	
+ 	<select id="sales_2Area1"  resultType="vo.salesVO">
+ 		select sal_money_10, sal_money_20, sal_money_30, sal_money_40, sal_money_50, sal_money_60 from sales_2 where area_id= #{area_id} and serv_id=#{serv_id} and q_id=2
+ 	</select>
+ 	
+ 	 <select id="sales_3Area1"  resultType="vo.salesVO">
+ 		select wday_sal_num,wkend_sal_num, m_sal_num, w_sal_num from sales_3 where area_id= #{area_id} and serv_id=#{serv_id} and q_id=2
+ 	</select>
+ 	
+ 	<select id="sales_4Area1"  resultType="vo.salesVO">
+ 		select sal_num_10, sal_num_20, sal_num_30, sal_num_40, sal_num_50, sal_num_60 from sales_4 where area_id= #{area_id} and serv_id=#{serv_id} and q_id=2
+ 	</select>
+ 	
+ 	<select id="area_Area1"  resultType="vo.areaVO">
+ 		select area_coname from area where area_id= #{area_id}
+ 	</select>
+
+ 	<select id="service_Area1"  resultType="vo.serviceVO">
+ 		select serv_coname from service where serv_id= #{serv_id}
+ 	</select>
+</mapper>
+
+
+
+
+

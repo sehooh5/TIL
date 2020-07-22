@@ -1,0 +1,103 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>이지스퍼블리싱 신간</title>
+	
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<link href="css/jquery.fullPage.css" rel="stylesheet">
+</head>
+<body>
+	<!-- 0311 jung main page 메뉴막대 부분, 한섹션식 스크롤 되도록 설정 -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="navbar-header">
+		<!-- 0311 jung 메뉴 토글 부분 -->
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<!-- 0311 jung 로고 클릭시 메인화면으로 다시 불러오기 -->
+			<a href="http://localhost:8000/backstreet/resources/mainpage.html" class="navbar-brand"><img src="images/logo.png" width="30%" alt="김세정의 골목상권 로고"></a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="#">사용가이드</a></li>
+				<li><a href="#">골목상권 분석</a></li>						
+				<li><a href="#">창업 컨설팅</a></li>
+				<li><a href="#">트랜드</a></li>			
+				<li><a href="/backstreet/boardmain">문의 게시판</a></li>
+				<li><a href="#">로그인</a></li>
+			</ul>
+		</div>
+	</nav>
+	<!-- 0311 jung 한세션씩 스크롤하기 위해 class 속성에 section을 추가해준다. -->
+	<!-- 0311 jung fullpage.js 플러그인을 적용하기 위해 메뉴막대를 제외한 내용 전체를 감싸는 태그를 삽입 id=fullpage -->		
+	<div id="fullpage">
+		<div id="book1" class="book-container section">				
+			<div class="container">
+			<br>
+			<br>
+				<h1>된다! 맥북 &amp; 아이맥 - 맥OS 하이 시에라 판</h1>
+				<div class="row">
+					<div class="col-md-6 col-sm-6">
+						<img src="images/book1.png" class="cover-image">
+					</div>
+					<div class="col-md-6 col-sm-6">
+						<ul>
+							<li>저자:김기백, 조영빈, 이민호</li>
+							<li>발행일 : 2017-11-10</li>
+							<li>ISBN-13 : 979-11-88612-07-9, 13000</li>
+							<li>페이지 : 352쪽</li>
+							<li>정가 : 15,800원</li>
+						</ul>
+					</div>	
+				</div>				
+				<div class="book-desc">
+					<p class="accent">하루 만에 익혀 당당히 들고 나가자!<br>55만 팔로워 ‘맥가이버’ 운영진이 엄선한 맥 입문 핫코스!</p>
+					<p> &lt;된다! 맥북&amp;아이맥&gt;가 가장 최신판인 맥OS 하이 시에라 판에 맞춰 전면 개정되었다.  
+						맥을 위해 고시 공부하듯 많은 시간을 투자하는 것은 넌센스이다. 55만 팔로워를 돌파한 네이버 포스트 ‘맥가이버’ 운영진이 공개한 비법으로, 독자들은 순서대로 이 책을 보기만 해도 최단 기간에 세련된 애플 사용자가 될 수 있다. </p>
+					</div>
+				</div>
+		</div>	
+			
+		<div id="book2" class="book-container section">				
+				<div class="container">
+					<h1>Do it! 웹사이트 기획 입문</h1>
+					<div class="row">
+						<div class="col-md-6 col-sm-6">
+							<img src="images/book2.png" class="cover-image">
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<ul>
+								<li>저자:이정원</li>
+								<li>발행일 : 2017-08-29</li>
+								<li>ISBN-13 : 979-11-87370-98-7, 13000</li>
+								<li>페이지 : 392쪽</li>
+								<li>정가 : 23,000원</li>
+							</ul>
+						</div>
+					</div>
+					<div class="book-desc">
+						<p class="accent">고객은 못 보는 관리자용 화면 정의서까지, 쇼핑몰 설계도를 모두 공개!<br>
+							실무 2년보다 이 책 한 권이 낫다! 꼭꼭 눌러 담은 웹 기획의 정석을 만나라! </p>						
+							<p>글로 배워서는 자전거를 탈 수 없다. 기획도 마찬가지. 저자는 기획이란 누구나 배워 익힐 수 있는 실무적인 기술이기 때문에 직접 해 보는 것이 가장 효과적인 학습 방법이라고 주장한다. 이 책에서는 기획자가 쓰는 문서 양식과 쇼핑몰 웹 사이트를 만드는 전 과정과 공개했다. 한 단계씩 순차적으로 실습하면 진짜 웹 기획자의 일을 구체적으로 배울 수 있도록 설계한 것이다. </p>			
+						</div>
+					</div>
+		</div>
+				
+		
+	</div>
+					<script src="js/jquery-2.2.4.min.js"></script>
+					<script src="js/bootstrap.min.js"></script>			
+					<script src="js/jquery.fullPage.js"></script>	
+					
+					<script>
+						$(document).ready(function() {
+							$("#fullpage").fullpage();
+						});
+					</script>
+				</body>
+				</html>

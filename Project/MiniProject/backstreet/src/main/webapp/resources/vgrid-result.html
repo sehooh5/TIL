@@ -1,0 +1,71 @@
+﻿<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-wdidth; init-scale=1.0; user-scaclable=no">
+		<title>vGrid 플러그인</title>
+		<style>
+			* {
+				margin:0;
+				padding:0;
+      }
+			#container div {				
+				width:200px;
+				height:100px;
+				background:#fff;
+				box-shadow: 0px 1px 1px #aaa;
+				padding:15px;
+				padding-bottom:15px;
+				margin:15px;				
+			}		
+			#container div img {
+				width:100%;
+				padding-bottom:15px;
+				margin-bottom:5px;
+			}
+			#container div h2 {
+				font-size:1em;
+				color:black;
+			}
+			#container div p {
+				font-family:"맑은 고딕", 돋움;
+				font-size:0.8em;
+				color:#222;
+				margin:0;
+				padding:10px;
+			}			
+    </style>     
+	</head>
+	<body>
+		<div id="container">
+				<div>					
+					<h2>골목상권 분석</h2>			
+					<p>분석</p>
+				
+			</div>
+				<div>					
+					<h2>골목상권 분석</h2>			
+					<p>분석 </p>
+				</div>
+				<div>					
+					<h2>골목상권 분석</h2>			
+					<p>분석</p>
+				</div>
+				<div>					
+					<h2>골목상권 분석</h2>			
+					<p>분석</p>
+				</div>
+			</div>						
+
+
+		<script src="js/jquery-2.2.4.min.js"></script>
+    <script src="js/jquery.vgrid.min.js"></script>  
+    <script>
+        $('#container').vgrid({
+          time:400,
+          delay:30,
+          wait:500
+        });
+      </script>
+	</body>
+</html>

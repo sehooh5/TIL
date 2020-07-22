@@ -1,0 +1,25 @@
+{
+"type": "FeatureCollection",
+"name": "area_for_json",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "area_id": "1001050", "area_coname": "교대역", "latitude": 37.4934705, "longitude": 127.0142285, "description": "대한민국 6대 혼잡 전철역. 통칭 '헬게이트'" }, "geometry": { "type": "Point", "coordinates": [ 127.0142285, 37.4934705 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001060", "area_coname": "가락시장", "latitude": 37.4928569, "longitude": 127.1148684, "description": "서울 시내 최대 농수산물 종합 유통도매시장" }, "geometry": { "type": "Point", "coordinates": [ 127.1148684, 37.4928569 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001082", "area_coname": "선릉역", "latitude": 37.504487, "longitude": 127.048957, "description": "수 많은 기업체와 밤유흥의 메카" }, "geometry": { "type": "Point", "coordinates": [ 127.048957, 37.504487 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001085", "area_coname": "서울 서초구 강남역", "latitude": 37.49795, "longitude": 127.027637, "description": "일 평균 23만명 이용. 누구나 아는 도심속 도심" }, "geometry": { "type": "Point", "coordinates": [ 127.027637, 37.49795 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001095", "area_coname": "강남구 논현역", "latitude": 37.511206, "longitude": 127.021728, "description": "수 많은 기업체와 밤유흥의 메카" }, "geometry": { "type": "Point", "coordinates": [ 127.021728, 37.511206 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001107", "area_coname": "방이동 먹자골목", "latitude": 37.5140158, "longitude": 127.1087638, "description": "송파구 유흥상권으로 다양한 음식점 즐비" }, "geometry": { "type": "Point", "coordinates": [ 127.1087638, 37.5140158 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001127", "area_coname": "서울 영등포구 여의도역", "latitude": 37.5215695, "longitude": 126.9243115, "description": "한국의 맨해튼, 많은 회사와 직원들" }, "geometry": { "type": "Point", "coordinates": [ 126.9243115, 37.5215695 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001135", "area_coname": "신사동 가로수길", "latitude": 37.5205636, "longitude": 127.0229273, "description": "서울 3대 상권이라 불릴 정도의 거대한 상권" }, "geometry": { "type": "Point", "coordinates": [ 127.0229273, 37.5205636 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001182", "area_coname": "홍익대학교 주변", "latitude": 37.5555188, "longitude": 126.9237664, "description": "외국, 내국인 최다 관광 상권 중 한 곳" }, "geometry": { "type": "Point", "coordinates": [ 126.9237664, 37.5555188 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001185", "area_coname": "서울 서대문구 신촌역", "latitude": 37.559778, "longitude": 126.942325, "description": "주변에 밀집된 대학생과 관광상권" }, "geometry": { "type": "Point", "coordinates": [ 126.942325, 37.559778 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001200", "area_coname": "남대문 시장", "latitude": 37.5591786, "longitude": 126.9776692, "description": "시청역과 남대문 시장이 있는 최고의 상권" }, "geometry": { "type": "Point", "coordinates": [ 126.9776692, 37.5591786 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001213", "area_coname": "종각역 젊음의 거리", "latitude": 37.5693454, "longitude": 126.9857462, "description": "주변 회사밀집도가 높고 상권 발달" }, "geometry": { "type": "Point", "coordinates": [ 126.9857462, 37.5693454 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001227", "area_coname": "종로구청", "latitude": 37.5727864, "longitude": 126.9791778, "description": "경복궁과 정부 및 민간 회사 밀집" }, "geometry": { "type": "Point", "coordinates": [ 126.9791778, 37.5727864 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001230", "area_coname": "인사동", "latitude": 37.5716555, "longitude": 126.9862326, "description": "전통 관광 상권으로 발달" }, "geometry": { "type": "Point", "coordinates": [ 126.9862326, 37.5716555 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001493", "area_coname": "동대문패션타운 관광특구", "latitude": 37.5676999, "longitude": 127.0088414, "description": "대한민국 대표 관광 상권이자 산업의 중심" }, "geometry": { "type": "Point", "coordinates": [ 127.0088414, 37.5676999 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001494", "area_coname": "종로 청계 관광특구", "latitude": 37.5715, "longitude": 126.9912475, "description": "청계천을 중심으로 발전된 관광 특구" }, "geometry": { "type": "Point", "coordinates": [ 126.9912475, 37.5715 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001495", "area_coname": "잠실 관광특구", "latitude": 37.5061273, "longitude": 127.0842945, "description": "롯데월드, 호수를 중심으로 발전된 관광 특구" }, "geometry": { "type": "Point", "coordinates": [ 127.0842945, 37.5061273 ] } },
+{ "type": "Feature", "properties": { "area_id": "1001492", "area_coname": "명동 거리", "latitude": 37.55998, "longitude": 126.9858296, "description": "명실상부 최고의 상권!" }, "geometry": { "type": "Point", "coordinates": [ 126.9858296, 37.55998 ] } }
+]
+}
